@@ -31,8 +31,8 @@ md5sums=('75bbf3e0c33d0d7f4e09e9a5489691ff'
         "1c55857c4ab27651ce4db065814df1f0"
         "768f565556b2a8bb92696cb16565e06a"
 
-        "05124dd7026d6a7c2c9fe7dc70c22ee4"
-        "b46be67cdc617d5aff42d13308d9ef91"
+        "d0ae4ee0249809481dab7ede4df44a42"
+        "08e386e460d763171e1aed033f8d53e1"
 )
 package() {
     # Install images
