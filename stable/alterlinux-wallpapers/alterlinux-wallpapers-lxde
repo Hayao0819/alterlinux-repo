@@ -19,6 +19,6 @@ image="${1}"
 replace="${2}"
 
 # Replace wallpaper.
-remove 
+remove "/usr/share/lxde/wallpapers/lxde_${image}.jpg"
 ln -s "/usr/share/backgrounds/${replace}.png" "/usr/share/lxde/wallpapers/lxde_${image}.jpg"
 chmod 644 "/usr/share/backgrounds/${replace}.png"

@@ -6,8 +6,8 @@ Operation = Remove
 Target = usr/share/lxde/wallpapers/lxde_blue.jpg
 
 [Action]
-Description = Optimizing wallpaper (xfce-blue) ...
+Description = Optimizing wallpaper (lxde-blue) ...
 When = PostTransaction
 Depends=alterlinux-wallpapers
-Exec = /usr/share/libalpm/scripts/alterlinux-wallpapers-lxde blue alter
+Exec = /usr/share/libalpm/scripts/alterlinux-wallpapers-lxde alter blue
 NeedsTargets

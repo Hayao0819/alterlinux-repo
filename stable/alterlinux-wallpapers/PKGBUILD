@@ -3,7 +3,7 @@
 
 pkgname=alterlinux-wallpapers
 pkgver=5.0
-pkgrel=1
+pkgrel=2
 pkgdesc='AlterLinux wallpapers'
 arch=('any')
 url='https:/fascode.net'
