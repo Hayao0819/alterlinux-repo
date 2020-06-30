@@ -1,7 +1,7 @@
 pkgbase = alterlinux-wallpapers
 	pkgdesc = AlterLinux wallpapers
 	pkgver = 5.0
-	pkgrel = 2
+	pkgrel = 3
 	url = https:/fascode.net
 	arch = any
 	source = alter.png
@@ -22,8 +22,8 @@ pkgbase = alterlinux-wallpapers
 	md5sums = e05b85d07afede613e2a3f7e8e5ee2d4
 	md5sums = 1c55857c4ab27651ce4db065814df1f0
 	md5sums = 768f565556b2a8bb92696cb16565e06a
-	md5sums = 05124dd7026d6a7c2c9fe7dc70c22ee4
-	md5sums = b46be67cdc617d5aff42d13308d9ef91
+	md5sums = d0ae4ee0249809481dab7ede4df44a42
+	md5sums = 08e386e460d763171e1aed033f8d53e1
 
 pkgname = alterlinux-wallpapers
 
