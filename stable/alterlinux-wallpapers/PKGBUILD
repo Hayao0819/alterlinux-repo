@@ -1,7 +1,8 @@
 # Maintainer : Yamada Hayao <development@fascode.net>
 # Maintainer : lap1sid <development@fascode.net>
+
 pkgname=alterlinux-wallpapers
-pkgver=4.0
+pkgver=5.0
 pkgrel=1
 pkgdesc='AlterLinux wallpapers'
 arch=('any')
@@ -14,7 +15,12 @@ source=("alter.png"
         "alterlinux-wallpapers-xfce"
         "alterlinux-wallpapers-xfce-blue.hook"
         "alterlinux-wallpapers-xfce-stripes.hook"
-        "alterlinux-wallpapers-xfce-teal.hook")
+        "alterlinux-wallpapers-xfce-teal.hook"
+
+        "alterlinux-wallpapers-lxde"
+        "alterlinux-wallpapers-lxde-blue.hook"
+        )
+    
 md5sums=('75bbf3e0c33d0d7f4e09e9a5489691ff'
         '42b477468bc5d88825b41e8522552ad3'
         'ca58c394911aa211c5712fabbad23fe2'
@@ -23,16 +29,29 @@ md5sums=('75bbf3e0c33d0d7f4e09e9a5489691ff'
         "845f106696fbac435126babebd728185"
         "e05b85d07afede613e2a3f7e8e5ee2d4"
         "1c55857c4ab27651ce4db065814df1f0"
-        "768f565556b2a8bb92696cb16565e06a")
+        "768f565556b2a8bb92696cb16565e06a"
+
+        "05124dd7026d6a7c2c9fe7dc70c22ee4"
+        "b46be67cdc617d5aff42d13308d9ef91"
+)
 package() {
+    # Install images
     cd "${srcdir}"
-    install -Dm644 "${srcdir}/alter.png" "${pkgdir}/usr/share/backgrounds/alter.png"
-    install -Dm644 "${srcdir}/alter-old.png" "${pkgdir}/usr/share/backgrounds/alter-old.png"
-    install -Dm644 "${srcdir}/alter-jiju.png" "${pkgdir}/usr/share/backgrounds/alter-jiju.png"
-    install -Dm644 "${srcdir}/alter-nochr.png" "${pkgdir}/usr/share/backgrounds/alter-nochr.png"
+    for image in $(ls ${srcdir}/alter-*.png); do
+       install -Dm644 "${srcdir}/$(basename ${image})" "${pkgdir}/usr/share/backgrounds/$(basename ${image})"
+    done
 
+    # OLD CODE
+    #install -Dm644 "${srcdir}/alter.png" "${pkgdir}/usr/share/backgrounds/alter.png"
+    #install -Dm644 "${srcdir}/alter-old.png" "${pkgdir}/usr/share/backgrounds/alter-old.png"
+    #install -Dm644 "${srcdir}/alter-jiju.png" "${pkgdir}/usr/share/backgrounds/alter-jiju.png"
+    #install -Dm644 "${srcdir}/alter-nochr.png" "${pkgdir}/usr/share/backgrounds/alter-nochr.png"
+
+    # Install Scripts
     install -Dm755 "${srcdir}/alterlinux-wallpapers-xfce" "${pkgdir}/usr/share/libalpm/scripts/alterlinux-wallpapers-xfce"
+    install -Dm755 "${srcdir}/alterlinux-wallpapers-lxde" "${pkgdir}/usr/share/libalpm/scripts/alterlinux-wallpapers-lxde"
 
+    # Install hooks
     local hook
     for hook in $(ls ${srcdir}/*.hook); do
         install -Dm644 "${srcdir}/$(basename ${hook})" "${pkgdir}/usr/share/libalpm/hooks/$(basename ${hook})"
