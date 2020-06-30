@@ -35,14 +35,15 @@ md5sums=('75bbf3e0c33d0d7f4e09e9a5489691ff'
         "08e386e460d763171e1aed033f8d53e1"
 )
 package() {
-    # Install images
     cd "${srcdir}"
+    
+    # Install images
+    install -Dm644 "${srcdir}/alter.png" "${pkgdir}/usr/share/backgrounds/alter.png"
     for image in $(ls ${srcdir}/alter-*.png); do
        install -Dm644 "${srcdir}/$(basename ${image})" "${pkgdir}/usr/share/backgrounds/$(basename ${image})"
     done
 
     # OLD CODE
-    #install -Dm644 "${srcdir}/alter.png" "${pkgdir}/usr/share/backgrounds/alter.png"
     #install -Dm644 "${srcdir}/alter-old.png" "${pkgdir}/usr/share/backgrounds/alter-old.png"
     #install -Dm644 "${srcdir}/alter-jiju.png" "${pkgdir}/usr/share/backgrounds/alter-jiju.png"
     #install -Dm644 "${srcdir}/alter-nochr.png" "${pkgdir}/usr/share/backgrounds/alter-nochr.png"
