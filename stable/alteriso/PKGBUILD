@@ -2,7 +2,7 @@
 
 pkgname=alteriso-git
 _pkgname=alterlinux
-pkgver=20Q1.2.0.r266.g40049e7
+pkgver=20Q1.2.0.r506.g3539cf2
 pkgrel=1
 pkgdesc=' ArchLinux-derived OS made in Japan aimed at being usable by anyone'
 arch=('any')
