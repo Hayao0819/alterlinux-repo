@@ -55,6 +55,6 @@ package() {
     # Install hooks
     local hook
     for hook in "${srcdir}"/*.hook; do
-        install -Dm644 ${srcdir}/$(basename ${hook})" "${pkgdir}/usr/share/libalpm/hooks/$(basename ${hook})"
+        install -Dm644 "${srcdir}/$(basename ${hook})" "${pkgdir}/usr/share/libalpm/hooks/$(basename ${hook})"
     done
 }
