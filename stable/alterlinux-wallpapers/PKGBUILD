@@ -39,7 +39,7 @@ package() {
 
     # Install images
     install -Dm644 "${srcdir}/alter.png" "${pkgdir}/usr/share/backgrounds/alter.png"
-    for image in $(ls ${srcdir}/alter-*.png); do
+    for image in "${srcdir}"/alter-*.png; do
        install -Dm644 "${srcdir}/$(basename ${image})" "${pkgdir}/usr/share/backgrounds/$(basename ${image})"
     done
 
@@ -54,7 +54,7 @@ package() {
 
     # Install hooks
     local hook
-    for hook in $(ls ${srcdir}/*.hook); do
-        install -Dm644 "${srcdir}/$(basename ${hook})" "${pkgdir}/usr/share/libalpm/hooks/$(basename ${hook})"
+    for hook in "${srcdir}"/*.hook; do
+        install -Dm644 ${srcdir}/$(basename ${hook})" "${pkgdir}/usr/share/libalpm/hooks/$(basename ${hook})"
     done
 }
