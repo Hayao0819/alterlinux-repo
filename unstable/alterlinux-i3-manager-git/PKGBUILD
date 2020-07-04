@@ -26,5 +26,5 @@ build() {
 
 package() {
     cd "${srcdir}/${_pkgname}"
-    make -e INSTALL_ROOT="${pkgdir}" install
+    make -e DESTDIR="${pkgdir}" install
 }
