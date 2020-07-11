@@ -2,7 +2,7 @@
 
 pkgname=alteriso-git
 _pkgname=alterlinux
-pkgver=20Q1.2.0.r506.g3539cf2
+pkgver=20Q1.2.0.r524.ge6e4677
 pkgrel=1
 pkgdesc=' ArchLinux-derived OS made in Japan aimed at being usable by anyone'
 arch=('any')
@@ -28,6 +28,9 @@ depends=(
     "xz"
     "zlib"
     "zstd"
+    "ninja"
+    "cmake"
+    "qt5-base"
 )
 
 pkgver() {
@@ -45,6 +48,7 @@ package() {
 
     # mkalteriso
     mkdir -p "${pkgdir}/usr/bin"
+    make -C "${srcdir}/alterlinux/" mkalteriso
     cp "${srcdir}/alterlinux/system/mkalteriso" "${pkgdir}/usr/bin"
 
     # build.sh
@@ -72,9 +76,12 @@ package() {
     # system
     cp -r "${srcdir}/alterlinux/system" "${pkgdir}/usr/share/alteriso/"
 
-    # config
-    cp "${srcdir}/alterlinux/config" "${pkgdir}/usr/share/alteriso/"
-    echo "mkalteriso=\"/usr/bin/mkalteriso\"" >> "${pkgdir}/usr/share/alteriso/config"
+    # clean build
+    rm -rf "${pkgdir}/usr/share/alteriso/system/cpp-src/mkalteriso/build"
+
+    # default.conf
+    cp "${srcdir}/alterlinux/default.conf" "${pkgdir}/usr/share/alteriso/"
+    echo "mkalteriso=\"/usr/bin/mkalteriso\"" >> "${pkgdir}/usr/share/alteriso/default.conf"
 
     # replace code
     sed -i "s@script_path=".*"@script_path="/usr/share/alteriso"@g" "${pkgdir}/usr/share/alteriso/build.sh"
