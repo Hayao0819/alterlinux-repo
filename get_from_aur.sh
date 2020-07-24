@@ -13,7 +13,8 @@ script_name=$(basename ${0})
 script_path="$(readlink -f ${0%/*})"
 arch="x86_64"
 debug=false
-
+force=false
+skip=false
 
 set -e
 
@@ -23,7 +24,9 @@ _usage() {
     echo
     echo " General options:"
     echo
-    echo "    -a | --arch <arch>        Specify the architecture."
+    echo "    -a | --arch <arch>        Specify the architecture"
+    echo "    -f | --force              Overwrite existing directory"
+    echo "    -s | --skip               Skip if PKGBUILD already exists"
     echo "    -r | --repo <repo>        Specify the repository name"
     echo "    -h | --help               This help messageExecuted via administrator web and Yama D Saba APIs"
 
@@ -217,6 +220,14 @@ while :; do
             arch="${2}"
             shift 2
             ;;
+        --force | -f)
+            force=true
+            shift 1
+            ;;
+        --skip | -s)
+            skip=true
+            shift 1
+            ;;
         --) 
             shift 1
             break
@@ -231,6 +242,16 @@ done
 echo ${@}
 
 for pkg in ${@}; do
+    if [[ "${force}" = true ]]; then
+        rm -rf "${script_path}/${repo}/${arch}/${pkg}"
+    elif [[ -d "${script_path}/${repo}/${arch}/${pkg}" ]]; then
+        _msg_error "Hoge has already been added."
+        if [[ "${skip}" = true ]]; then
+            continue
+        else
+            exit 1
+        fi
+    fi
     mkdir -p "${script_path}/${repo}/${arch}/${pkg}"
     git clone "https://aur.archlinux.org/${pkg}.git" "${script_path}/${repo}/${arch}/${pkg}"
     rm -rf "${script_path}/${repo}/${arch}/${pkg}/.git"
