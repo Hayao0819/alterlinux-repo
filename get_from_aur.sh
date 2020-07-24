@@ -193,8 +193,8 @@ if [[ -z "${@}" ]]; then
     _usage 0
 fi
 
-_opt_short="h,r:,a:"
-_opt_long="help,repo:,arch:"
+_opt_short="h,r:,a:sf"
+_opt_long="help,repo:,arch:,skip,force"
 
 OPT=$(getopt -o ${_opt_short} -l ${_opt_long} -- "${@}")
 if [[ ${?} != 0 ]]; then
