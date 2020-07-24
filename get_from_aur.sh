@@ -245,7 +245,7 @@ for pkg in ${@}; do
     if [[ "${force}" = true ]]; then
         rm -rf "${script_path}/${repo}/${arch}/${pkg}"
     elif [[ -d "${script_path}/${repo}/${arch}/${pkg}" ]]; then
-        _msg_error "Hoge has already been added."
+        _msg_error "${pkg} has already been added."
         if [[ "${skip}" = true ]]; then
             continue
         else
