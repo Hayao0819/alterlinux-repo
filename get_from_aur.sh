@@ -12,6 +12,7 @@ script_name=$(basename ${0})
 
 script_path="$(readlink -f ${0%/*})"
 arch="x86_64"
+repo="alter-stable"
 debug=false
 force=false
 skip=false
