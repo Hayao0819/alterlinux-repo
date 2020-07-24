@@ -1,0 +1,21 @@
+pkgbase = tlpui-git
+	pkgdesc = A GTK user interface for TLP written in Python
+	pkgver = 1.2.r13.g14396b2
+	pkgrel = 1
+	epoch = 2
+	url = https://github.com/d4nj1/TLPUI
+	arch = any
+	license = GPL2
+	makedepends = git
+	makedepends = python-setuptools
+	depends = tlp
+	depends = python-gobject
+	provides = tlpui
+	conflicts = tlpui
+	source = tlpui::git+https://github.com/d4nj1/TLPUI.git
+	source = tlpui.desktop
+	sha256sums = SKIP
+	sha256sums = a8f7a4a3d1c66c27383f75b092fa71c3e7cd72b8240a06ed00ad56be3b5338ea
+
+pkgname = tlpui-git
+

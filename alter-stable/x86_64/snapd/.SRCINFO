@@ -1,0 +1,34 @@
+pkgbase = snapd
+	pkgdesc = Service and tools for management of snap packages.
+	pkgver = 2.45.2
+	pkgrel = 1
+	url = https://github.com/snapcore/snapd
+	install = snapd.install
+	arch = x86_64
+	arch = i686
+	arch = armv7h
+	arch = aarch64
+	license = GPL3
+	makedepends = git
+	makedepends = go
+	makedepends = go-tools
+	makedepends = libseccomp
+	makedepends = libcap
+	makedepends = systemd
+	makedepends = xfsprogs
+	makedepends = python-docutils
+	makedepends = apparmor
+	depends = squashfs-tools
+	depends = libseccomp
+	depends = libsystemd
+	depends = apparmor
+	optdepends = bash-completion: bash completion support
+	optdepends = xdg-desktop-portal: desktop integration
+	conflicts = snap-confine
+	options = !strip
+	options = emptydirs
+	source = snapd-2.45.2.tar.xz::https://github.com/snapcore/snapd/releases/download/2.45.2/snapd_2.45.2.vendor.tar.xz
+	sha256sums = ebc084aa4f9a4a8595e6308e5fca55cbcd4622032aa22a635f9d44b8300737de
+
+pkgname = snapd
+

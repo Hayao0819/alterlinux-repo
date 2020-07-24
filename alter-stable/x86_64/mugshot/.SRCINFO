@@ -1,0 +1,24 @@
+pkgbase = mugshot
+	pkgdesc = Program to update personal user details
+	pkgver = 0.4.2
+	pkgrel = 1
+	url = https://github.com/bluesabre/mugshot
+	arch = any
+	license = GPLv3
+	makedepends = python-distutils-extra
+	makedepends = intltool
+	depends = gtk3
+	depends = python-pexpect
+	depends = python-dbus
+	depends = python-cairo
+	depends = python-gobject
+	depends = accountsservice
+	optdepends = cheese: webcam support
+	optdepends = pidgin: update buddy icon
+	optdepends = libreoffice: update user details
+	options = !emptydirs
+	source = mugshot-0.4.2.tar.gz::https://github.com/bluesabre/mugshot/archive/mugshot-0.4.2.tar.gz
+	sha256sums = 05698a36494405b5a76be0bf92e89a87fec4e3e6e6168378833de160c9741c84
+
+pkgname = mugshot
+

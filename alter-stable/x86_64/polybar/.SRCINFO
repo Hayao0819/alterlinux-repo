@@ -1,0 +1,36 @@
+pkgbase = polybar
+	pkgdesc = A fast and easy-to-use status bar
+	pkgver = 3.4.3
+	pkgrel = 2
+	url = https://github.com/polybar/polybar
+	install = polybar.install
+	arch = i686
+	arch = x86_64
+	license = MIT
+	makedepends = cmake
+	makedepends = git
+	makedepends = python
+	makedepends = pkg-config
+	makedepends = python-sphinx
+	makedepends = i3-wm
+	depends = cairo
+	depends = xcb-util-image
+	depends = xcb-util-wm
+	depends = xcb-util-xrm
+	depends = xcb-util-cursor
+	depends = alsa-lib
+	depends = libpulse
+	depends = libmpdclient
+	depends = libnl
+	depends = jsoncpp
+	depends = curl
+	optdepends = i3-wm: i3 module support
+	optdepends = ttf-unifont: Font used in example config
+	optdepends = siji-git: Font used in example config
+	optdepends = xorg-fonts-misc: Font used in example config
+	conflicts = polybar-git
+	source = https://github.com/polybar/polybar/releases/download/3.4.3/polybar-3.4.3.tar
+	sha256sums = d4ed121c1d3960493f8268f966d65a94d94c4646a4abb131687e37b63616822f
+
+pkgname = polybar
+
