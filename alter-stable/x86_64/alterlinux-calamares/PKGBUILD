@@ -1,7 +1,7 @@
 # Maintainer: lap1sid <development@fascode.net>
 
 pkgname=alterlinux-calamares
-pkgver=3.2.25
+pkgver=3.2.27
 pkgrel=1
 _pkgrel='b2'
 pkgdesc='Distribution-independent installer framework'
