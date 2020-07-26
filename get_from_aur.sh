@@ -16,6 +16,7 @@ repo="alter-stable"
 debug=false
 force=false
 skip=false
+nocolor=false
 
 set -e
 
@@ -108,7 +109,11 @@ _msg_info() {
         esac
     done
     shift $((OPTIND - 1))
-    echo ${echo_opts} "$( echo_color -t '36' "[${script_name}]")    $( echo_color -t '32' 'Info') ${*}"
+    if [[ "${nocolor}" = true ]]; then
+        echo ${echo_opts} "[${script_name}]    Info ${*}"
+    else
+        echo ${echo_opts} "$( echo_color -t '36' "[${script_name}]")    $( echo_color -t '32' 'Info') ${*}"
+    fi
 }
 
 
@@ -125,7 +130,11 @@ _msg_warn() {
         esac
     done
     shift $((OPTIND - 1))
-    echo ${echo_opts} "$( echo_color -t '36' "[${script_name}]") $( echo_color -t '33' 'Warning') ${*}" >&2
+    if [[ "${nocolor}" = true ]]; then
+        echo ${echo_opts} "[${script_name}] Warning ${*}"
+    else
+        echo ${echo_opts} "$( echo_color -t '36' "[${script_name}]") $( echo_color -t '33' 'Warning') ${*}" >&2
+    fi
 }
 
 
@@ -143,7 +152,11 @@ _msg_debug() {
     done
     shift $((OPTIND - 1))
     if [[ "${debug}" = true ]]; then
-        echo ${echo_opts} "$( echo_color -t '36' "[${script_name}]")   $( echo_color -t '35' 'Debug') ${*}"
+        if [[ "${nocolor}" = true ]]; then
+            echo ${echo_opts} "[${script_name}]   Debug ${*}"
+        else
+            echo ${echo_opts} "$( echo_color -t '36' "[${script_name}]")   $( echo_color -t '35' 'Debug') ${*}"
+        fi
     fi
 }
 
@@ -163,7 +176,11 @@ _msg_error() {
         esac
     done
     shift $((OPTIND - 1))
-    echo ${echo_opts} "$( echo_color -t '36' "[${script_name}]")   $( echo_color -t '31' 'Error') ${1}" >&2
+    if [[ "${nocolor}" = true ]]; then
+        echo ${echo_opts} "[${script_name}]   Error ${1}"
+    else
+        echo ${echo_opts} "$( echo_color -t '36' "[${script_name}]")   $( echo_color -t '31' 'Error') ${1}" >&2
+    fi
     if [[ -n "${2:-}" ]]; then
         exit ${2}
     fi
@@ -195,7 +212,7 @@ if [[ -z "${@}" ]]; then
 fi
 
 _opt_short="h,r:,a:sf"
-_opt_long="help,repo:,arch:,skip,force"
+_opt_long="help,repo:,arch:,skip,force,nocolor"
 
 OPT=$(getopt -o ${_opt_short} -l ${_opt_long} -- "${@}")
 if [[ ${?} != 0 ]]; then
@@ -227,6 +244,10 @@ while :; do
             ;;
         --skip | -s)
             skip=true
+            shift 1
+            ;;
+        --nocolor)
+            nocolor=true
             shift 1
             ;;
         --) 
