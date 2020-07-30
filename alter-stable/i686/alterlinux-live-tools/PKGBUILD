@@ -1,0 +1,14 @@
+# Maintaoner: Yamada Hayao <hayao@fascode.net>
+
+pkgname="alterlinux-welcome-page"
+_reponame="alterlinux-live-tools"
+pkgver=1.0
+pkgrel=1
+pkgdesc="Scripts required for live environment (meta package)"
+arch=('any')
+url="https://github.com/FascodeNet/${_reponame}"
+license=('SUSHI-WARE')
+depends=(
+        'alterlinux-gtk-bookmarks'
+        'alterlinux-welcome-page'
+)
