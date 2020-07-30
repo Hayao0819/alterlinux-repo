@@ -1,7 +1,7 @@
 # Maintaoner: Yamada Hayao <hayao@fascode.net>
 
-pkgname="alterlinux-welcome-page"
-_reponame="alterlinux-live-tools"
+pkgname="alterlinux-live-tools"
+_reponame="${pkgname}"
 pkgver=1.0
 pkgrel=1
 pkgdesc="Scripts required for live environment (meta package)"
