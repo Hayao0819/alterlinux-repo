@@ -2,7 +2,7 @@
 
 pkgname="alterlinux-welcome-page"
 _reponame="alterlinux-live-tools"
-pkgver=1.0
+pkgver=1.1
 pkgrel=1
 pkgdesc="A simple script to open the official AlterLinux website"
 arch=('any')
