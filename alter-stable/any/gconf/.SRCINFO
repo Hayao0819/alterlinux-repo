@@ -1,7 +1,7 @@
 pkgbase = gconf
 	pkgdesc = An obsolete configuration database system
 	pkgver = 3.2.6+11+g07808097
-	pkgrel = 6
+	pkgrel = 9
 	url = https://projects-old.gnome.org/gconf/
 	install = gconf.install
 	arch = x86_64
