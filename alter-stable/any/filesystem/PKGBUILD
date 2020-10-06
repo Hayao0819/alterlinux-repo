@@ -4,7 +4,7 @@
 
 pkgname=filesystem
 pkgver=2020.09.29
-pkgrel=1
+pkgrel=2
 pkgdesc='Base Arch Linux files'
 arch=('x86_64' 'i686')
 license=('GPL')
@@ -67,10 +67,10 @@ source=(
 
 md5sums=(
     $(
-        local i
         for i in ${source[*]}; do
             echo -e "SKIP "
         done
+        unset i
     )
 )
 
