@@ -2,7 +2,7 @@
 
 pkgname=alteriso-git
 _pkgname=alterlinux
-pkgver=20Q1.2.0.r524.ge6e4677
+pkgver=rc1.alpha4.r1417.g5b553f96
 pkgrel=1
 pkgdesc=' ArchLinux-derived OS made in Japan aimed at being usable by anyone'
 arch=('any')
@@ -10,11 +10,12 @@ url='https://github.com/FascodeNet/alterlinux'
 branch="dev"
 source=("git+https://github.com/FascodeNet/alterlinux.git#branch=${branch}")
 md5sums=('SKIP')
-depends=(
+dependence=(
 #   "alterlinux-keyring"
 #   "archiso"
     "arch-install-scripts"
     "curl"
+    "cmake"
     "dosfstools"
     "git"
     "libburn"
@@ -22,14 +23,13 @@ depends=(
     "lz4"
     "lzo"
     "make"
+    "ninja"
     "squashfs-tools"
     "libisoburn"
- #  "lynx"
+#   "lynx"
     "xz"
     "zlib"
     "zstd"
-    "ninja"
-    "cmake"
     "qt5-base"
 )
 
@@ -38,55 +38,75 @@ pkgver() {
     git describe --long --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
 }
 
+function remove () {
+    local _list
+    local _file
+    _list=($(echo "$@"))
+    for _file in "${_list[@]}"; do
+        if [[ -f ${_file} ]]; then
+            rm -f "${_file}"
+        elif [[ -d ${_file} ]]; then
+            rm -rf "${_file}"
+        fi
+        echo "${_file} was deleted."
+    done
+}
 
 package() {
+    local _dir _script _other _filename
+    set -x
+
     # Doc
     mkdir -p "${pkgdir}/usr/share/doc/alteriso"
-    cp -r "${srcdir}/alterlinux/docs/" "${pkgdir}/usr/share/doc/alteriso/"
-    cp -r "${srcdir}/alterlinux/images/" "${pkgdir}/usr/share/doc/alteriso/"
+    for _dir in "docs" "images"; do
+        cp -r "${srcdir}/alterlinux/${_dir}" "${pkgdir}/usr/share/doc/alteriso/"
+        remove "${srcdir}/alterlinux/${_dir}"
+    done
+    cp -r "${srcdir}/alterlinux/LICENSE" "${pkgdir}/usr/share/doc/alteriso/"
+    remove "${srcdir}/alterlinux/LICENSE"
     chmod 644 -R "${pkgdir}/usr/share/doc/alteriso"
 
     # mkalteriso
     mkdir -p "${pkgdir}/usr/bin"
     make -C "${srcdir}/alterlinux/" mkalteriso
-    cp "${srcdir}/alterlinux/system/mkalteriso" "${pkgdir}/usr/bin"
-
-    # build.sh
-    mkdir -p "${pkgdir}/usr/share/alteriso"
-    cp "${srcdir}/alterlinux/build.sh" "${pkgdir}/usr/share/alteriso/build.sh"
-
-    # keyring.sh
-    cp "${srcdir}/alterlinux/keyring.sh" "${pkgdir}/usr/share/alteriso/keyring.sh"
-
-    # wizard.sh
-    cp "${srcdir}/alterlinux/wizard.sh" "${pkgdir}/usr/share/alteriso/wizard.sh"
-
-    # channels
-    cp -r "${srcdir}/alterlinux/channels" "${pkgdir}/usr/share/alteriso/"
-
-    # efiboot
-    cp -r "${srcdir}/alterlinux/efiboot" "${pkgdir}/usr/share/alteriso/"
-
-    # mkinitcpio
-    cp -r "${srcdir}/alterlinux/mkinitcpio" "${pkgdir}/usr/share/alteriso/"
-
-    # syslinux
-    cp -r "${srcdir}/alterlinux/syslinux" "${pkgdir}/usr/share/alteriso/"
-
-    # system
-    cp -r "${srcdir}/alterlinux/system" "${pkgdir}/usr/share/alteriso/"
-
-    # clean build
-    rm -rf "${pkgdir}/usr/share/alteriso/system/cpp-src/mkalteriso/build"
+    cp "${srcdir}/alterlinux/system/mkalteriso" "${pkgdir}/usr/bin/"
 
     # default.conf
+    mkdir -p "${pkgdir}/usr/share/alteriso/"
     cp "${srcdir}/alterlinux/default.conf" "${pkgdir}/usr/share/alteriso/"
     echo "mkalteriso=\"/usr/bin/mkalteriso\"" >> "${pkgdir}/usr/share/alteriso/default.conf"
 
+    # Scripts
+    mkdir -p "${pkgdir}/usr/share/alteriso"
+    for _script in "${srcdir}/alterlinux/"*".sh"; do
+        _filename="$(basename "${_script}")"
+        cp "${srcdir}/alterlinux/${_filename}" "${pkgdir}/usr/share/alteriso/${_filename}"
+    done
+
+    # Dirs
+    for _dir in $(ls -l "${srcdir}/alterlinux" | awk '$1 ~ /d/ {print $9 }');do
+        cp -r "${srcdir}/alterlinux/${_dir}" "${pkgdir}/usr/share/alteriso/"
+    done
+
+    # Other files
+    for _other in "Dockerfile" "Makefile"; do
+        cp -r "${srcdir}/alterlinux/${_other}" "${pkgdir}/usr/share/alteriso/"
+    done
+
+    # clean build
+    remove "${pkgdir}/usr/share/alteriso/system/cpp-src/mkalteriso/build"
+
     # replace code
-    sed -i "s@script_path=".*"@script_path="/usr/share/alteriso"@g" "${pkgdir}/usr/share/alteriso/build.sh"
-    sed -i "s@script_path=".*"@script_path="/usr/share/alteriso"@g" "${pkgdir}/usr/share/alteriso/wizard.sh"
-    sed -i "s@script_path=".*"@script_path="/usr/share/alteriso"@g" "${pkgdir}/usr/share/alteriso/keyring.sh"
+    for _script in "${srcdir}/alterlinux/tools/"*".sh" ; do
+        _filename="$(basename "${_script}")"
+        sed -i "s@script_path=".*"@script_path="/usr/share/alteriso"@g" "${pkgdir}/usr/share/alteriso/tools/${_filename}"
+    done
+    for _script in "build.sh" "allarch.sh"; do
+        sed -i "s@script_path=".*"@script_path="/usr/share/alteriso"@g" "${pkgdir}/usr/share/alteriso/${_script}"
+    done
+
+    # Remove no supported file
+    remove remove "${pkgdir}/usr/share/alteriso/tools/build_helper.py"
 
     # link
     ln -s /usr/share/alteriso/build.sh "${pkgdir}/usr/bin/alteriso"
