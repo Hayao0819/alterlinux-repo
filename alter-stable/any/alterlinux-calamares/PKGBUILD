@@ -2,7 +2,7 @@
 
 pkgname=alterlinux-calamares
 pkgver=3.2.32
-pkgrel=1
+pkgrel=2
 _pkgrel='b2'
 pkgdesc='Distribution-independent installer framework'
 arch=('i686' 'x86_64')
@@ -12,7 +12,7 @@ license=('LGPL')
 depends=('kconfig' 'kcoreaddons' 'kiconthemes' 'ki18n' 'kio' 'solid' 'yaml-cpp' 'kpmcore'
          'boost-libs' 'hwinfo' 'qt5-svg' 'polkit-qt5' 'gtk-update-icon-cache' 'plasma-framework'
          'qt5-xmlpatterns' 'squashfs-tools' 'ckbcomp' 'libffi')
-makedepends=('extra-cmake-modules' 'qt5-tools' 'qt5-translations' 'git' 'boost')
+makedepends=('extra-cmake-modules' 'qt5-tools' 'qt5-translations' 'git' 'boost' 'ninja')
 backup=('usr/share/calamares/modules/bootloader.conf'
         'usr/share/calamares/modules/displaymanager.conf'
         'usr/share/calamares/modules/initcpio.conf'
@@ -45,11 +45,12 @@ build() {
               -DCMAKE_INSTALL_LIBDIR=lib \
               -DWITH_PYTHONQT:BOOL=ON \
               -DBoost_NO_BOOST_CMAKE=ON \
+              -GNinja \
               -DSKIP_MODULES="tracking webview interactiveterminal initramfs \
                               initramfscfg dracut dracutlukscfg \
                               dummyprocess dummypython dummycpp \
                               dummypythonqt services-openrc"
-        make
+        ninja
 }
 
 package() {
