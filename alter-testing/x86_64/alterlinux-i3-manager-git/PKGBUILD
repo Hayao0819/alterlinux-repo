@@ -9,6 +9,7 @@ arch=('x86_64' 'i686')
 url="https://github.com/FascodeNet/alterlinux-i3-manager"
 license=('GPLv3')
 depends=('qt5-base')
+makedepends=('clang')
 optdepends=()
 source=("git+https://github.com/FascodeNet/alterlinux-i3-manager.git") 
 md5sums=('SKIP')
