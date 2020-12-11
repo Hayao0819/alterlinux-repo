@@ -1,0 +1,19 @@
+pkgbase = eg-installer-git
+	pkgdesc = zenityとbashで書かれた項目の追加が簡単なパッケージインストーラー
+	pkgver = v1.10.r2.3a8a651
+	pkgrel = 1
+	url = https://github.com/Hayao0819/EG-Installer
+	arch = any
+	license = MIT
+	depends = zenity
+	depends = bash
+	depends = pacman
+	depends = eg-installer-scripts-git
+	conflicts = eg-installer
+	source = git+https://github.com/Hayao0819/EG-Installer.git
+	source = config
+	md5sums = SKIP
+	md5sums = SKIP
+
+pkgname = eg-installer-git
+

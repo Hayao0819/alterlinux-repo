@@ -4,6 +4,7 @@ pkgbase = powerline-go
 	pkgrel = 2
 	url = https://github.com/justjanne/powerline-go
 	arch = x86_64
+	arch = i686
 	license = GPL3
 	makedepends = go-pie
 	makedepends = git

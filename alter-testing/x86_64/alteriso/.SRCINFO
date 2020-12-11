@@ -1,0 +1,11 @@
+pkgbase = alteriso-git
+	pkgdesc = ArchLinux-derived OS made in Japan aimed at being usable by anyone
+	pkgver = rc1.alpha4.r1417.g5b553f96
+	pkgrel = 1
+	url = https://github.com/FascodeNet/alterlinux
+	arch = any
+	source = git+https://github.com/FascodeNet/alterlinux.git#branch=dev
+	md5sums = SKIP
+
+pkgname = alteriso-git
+

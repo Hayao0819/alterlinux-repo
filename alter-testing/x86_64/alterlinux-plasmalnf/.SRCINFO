@@ -1,0 +1,11 @@
+pkgbase = alterlinux-plasmalnf
+	pkgdesc = AlterLinux Plasma Settings
+	pkgver = 1.0
+	pkgrel = 1
+	url = https:/fascode.net
+	arch = any
+	depends = alterlinux-wallpapers
+	source = 
+
+pkgname = alterlinux-plasmalnf
+

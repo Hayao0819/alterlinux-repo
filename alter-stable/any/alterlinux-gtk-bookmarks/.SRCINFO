@@ -1,0 +1,13 @@
+pkgbase = alterlinux-gtk-bookmarks
+	pkgdesc = Simple script to automatically generate GTK bookmarks
+	pkgver = 1.1
+	pkgrel = 1
+	url = https://github.com/FascodeNet/alterlinux-live-tools/tree/master/alterlinux-gtk-bookmarks
+	arch = any
+	license = SUSHI-WARE
+	depends = xdg-user-dirs
+	source = https://github.com/FascodeNet/alterlinux-live-tools/archive/v1.1.zip
+	md5sums = SKIP
+
+pkgname = alterlinux-gtk-bookmarks
+

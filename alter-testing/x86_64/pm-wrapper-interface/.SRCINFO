@@ -1,0 +1,16 @@
+pkgbase = pm-wrapper-interface
+	pkgdesc = pm-wrapper-interface Library
+	pkgver = 20201121T160751+0900
+	pkgrel = 1
+	url = https://github.com/FascodeNet/pm-wrapper-interface
+	arch = x86_64
+	arch = i686
+	license = GPLv3
+	makedepends = clang
+	makedepends = ninja
+	makedepends = cmake
+	source = git+https://github.com/FascodeNet/pm-wrapper-interface.git
+	md5sums = SKIP
+
+pkgname = pm-wrapper-interface
+

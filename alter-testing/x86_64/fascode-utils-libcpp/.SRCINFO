@@ -1,0 +1,16 @@
+pkgbase = fascode-utils-libcpp
+	pkgdesc = Fascode Library
+	pkgver = 20201115T133658+0900
+	pkgrel = 1
+	url = https://github.com/FascodeNet/fascode-utils-libcpp
+	arch = x86_64
+	arch = i686
+	license = GPLv3
+	makedepends = clang
+	makedepends = ninja
+	makedepends = cmake
+	source = git+https://github.com/FascodeNet/fascode-utils-libcpp.git
+	md5sums = SKIP
+
+pkgname = fascode-utils-libcpp
+

@@ -1,0 +1,14 @@
+pkgbase = alterlinux-i3-manager
+	pkgdesc = A i3 setting manager for Alter Linux
+	pkgver = 1.4
+	pkgrel = 1
+	url = https://github.com/FascodeNet/alterlinux-i3-manager
+	arch = x86_64
+	arch = i686
+	license = GPLv3
+	depends = qt5-base
+	source = https://github.com/FascodeNet/alterlinux-i3-manager/archive/1.4.zip
+	md5sums = 382e739cd2a9c60d50417ec026a1ccfd
+
+pkgname = alterlinux-i3-manager
+

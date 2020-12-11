@@ -1,0 +1,14 @@
+pkgbase = alterlinux-xfce-conf-git
+	pkgdesc = AlterLinux Xfce Settings
+	pkgver = r5.dc1952b
+	pkgrel = 1
+	url = https:/fascode.net
+	arch = any
+	depends = alterlinux-wallpapers
+	conflicts = alterlinux-xfce-conf
+	conflicts = nerd-fonts-source-code-pro
+	source = git+https://github.com/SereneTeam/alterlinux-xfce-conf.git
+	sha256sums = SKIP
+
+pkgname = alterlinux-xfce-conf-git
+

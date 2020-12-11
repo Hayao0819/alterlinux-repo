@@ -1,0 +1,15 @@
+pkgbase = alterlinux_tui_installer
+	pkgdesc = Alter Linux TUI Installer
+	pkgver = 0.0.1.202012112146
+	pkgrel = 1
+	arch = any
+	makedepends = python-setuptools
+	depends = python
+	depends = dialog
+	depends = python-pythondialog
+	depends = gptfdisk
+	source = git+https://github.com/FascodeNet/AlterLinux-TUI-Installer.git
+	sha512sums = SKIP
+
+pkgname = alterlinux_tui_installer
+
