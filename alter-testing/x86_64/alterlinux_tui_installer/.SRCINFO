@@ -1,6 +1,6 @@
 pkgbase = alterlinux_tui_installer
 	pkgdesc = Alter Linux TUI Installer
-	pkgver = 0.0.1.202012112146
+	pkgver = 0.0.1.202012121755
 	pkgrel = 1
 	arch = any
 	makedepends = python-setuptools

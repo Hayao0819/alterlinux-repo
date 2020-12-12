@@ -8,7 +8,7 @@ pkgdesc='AlterLinux Xfce Settings'
 arch=('any')
 url='https:/fascode.net'
 source=("https://github.com/FascodeNet/${pkgname}/archive/v${pkgver}.zip")
-depends=('alterlinux-wallpapers' 'nerd-fonts-source-code-pro')
+depends=('alterlinux-wallpapers')
 conflicts=("alterlinux-xfce-conf-git")
 md5sums=('c5410c3e83c7b36c2196a6c395c030ba')
 
