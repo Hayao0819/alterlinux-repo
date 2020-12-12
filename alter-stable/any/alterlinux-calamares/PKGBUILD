@@ -55,7 +55,7 @@ build() {
 
 package() {
     cd ${srcdir}/${pkgver}-${pkgrel}/build
-    make DESTDIR="$pkgdir" install
+    DESTDIR="$pkgdir" ninja install
     install -Dm755 "../data/final-process" "$pkgdir/usr/share/calamares/final-process"
     install -Dm644 "../data/alter-icon.svg" "$pkgdir/usr/share/icons/hicolor/scalable/apps/calamares.svg"
     install -Dm644 "../data/calamares.desktop" "$pkgdir/usr/share/applications/calamares.desktop"
