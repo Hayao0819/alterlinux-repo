@@ -7,6 +7,11 @@
 
 PKGBUILD for AlterLinux original package.
 
-`unstable` in development version.
+## Dependent packages
+The management script depends on the following packages.
 
-`stable` in stable version.
+- asp
+- base-devel
+- curl
+- git
+- jq
