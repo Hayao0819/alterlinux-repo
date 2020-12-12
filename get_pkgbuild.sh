@@ -283,6 +283,6 @@ for pkg in ${@}; do
     else
         mkdir -p "${script_path}/${repo}/${arch}/${pkg}"
         git clone "https://aur.archlinux.org/${pkg}.git" "${script_path}/${repo}/${arch}/${pkg}"
+        rm -rf "${script_path}/${repo}/${arch}/${pkg}/.git"
     fi
-    rm -rf "${script_path}/${repo}/${arch}/${pkg}/.git"
 done
