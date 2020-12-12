@@ -274,7 +274,15 @@ for pkg in ${@}; do
             exit 1
         fi
     fi
-    mkdir -p "${script_path}/${repo}/${arch}/${pkg}"
-    git clone "https://aur.archlinux.org/${pkg}.git" "${script_path}/${repo}/${arch}/${pkg}"
+    if [[ ! "$(curl -sL "https://www.archlinux.org/packages/search/json/?name=${pkg}" | jq .results)" = "[]" ]]; then
+        mkdir -p "${script_path}/${repo}/${arch}/"
+        (
+            cd "${script_path}/${repo}/${arch}/"
+            asp export "${pkg}"
+        )
+    else
+        mkdir -p "${script_path}/${repo}/${arch}/${pkg}"
+        git clone "https://aur.archlinux.org/${pkg}.git" "${script_path}/${repo}/${arch}/${pkg}"
+    fi
     rm -rf "${script_path}/${repo}/${arch}/${pkg}/.git"
 done
