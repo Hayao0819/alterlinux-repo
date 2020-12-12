@@ -1,31 +1,27 @@
-# Maintainer: Yamada Hayao <hayao@fascode.net>
+# Maintainer: Yamada Hayao <shun819.mail@gmail.com>
 # Contributor: YamaD <yamad.linuxer@gmail.com>
 
 pkgname=plymouth-theme-alter-logo-git
-_themename=alter-logo
-_pkgname=plymouth-theme-alter
-_nogitname=plymouth-theme-${_themename}
-
 pkgver=1.0.0
 pkgrel=1
 pkgdesc="AlterLinux用のplymouthテーマ"
 arch=('any')
-url=https://github.com/yamad-linuxer/${_pkgname}
+url=https://github.com/yamad-linuxer/plymouth-theme-alter
 license=('GPL')
 depends=('plymouth')
 optdepends=()
-source=("git+${url}.git")
+source=("git+https://github.com/yamad-linuxer/plymouth-theme-alter.git")
 md5sums=('SKIP')
-conflicts=("${_nogitname}")
+conflicts=('plymouth-theme-alter-logo')
 
 pkgver() {
-    cd "${_pkgname}"
+    cd "plymouth-theme-alter"
 
     git describe --tags | sed 's/-/.r/; s/-g/./'
 }
 
 build () {
-    cd "${_pkgname}"
+    cd "plymouth-theme-alter"
 
     rm -rf alter-pp
     rm LICENSE
@@ -33,16 +29,16 @@ build () {
     rm install.sh
     rm -rf .git/
 
-    mkdir -p ./usr/share/plymouth/themes/${_themename}/
-    cp -r ./${_themename}/intro/* ./usr/share/plymouth/themes/${_themename}/
-    cp -r ./${_themename}/loop/* ./usr/share/plymouth/themes/${_themename}/
-    cp -r ./${_themename}/misc/* ./usr/share/plymouth/themes/${_themename}/
+    mkdir -p ./usr/share/plymouth/themes/alter-logo/
+    cp -r ./alter-logo/intro/* ./usr/share/plymouth/themes/alter-logo/
+    cp -r ./alter-logo/loop/* ./usr/share/plymouth/themes/alter-logo/
+    cp -r ./alter-logo/misc/* ./usr/share/plymouth/themes/alter-logo/
 
-    rm -rf ${_themename}
+    rm -rf alter-logo
 
     mv ./usr/ ..
     cd ..
-    rm -rf ./${_pkgname}
+    rm -rf ./plymouth-theme-alter/
 
 }
 

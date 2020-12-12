@@ -66,7 +66,7 @@ _makenconfig=
 ### IMPORTANT: Do no edit below this line unless you know what you're doing
 
 pkgbase=linux-xanmod-lts
-pkgver=5.4.68
+pkgver=5.4.82
 _major=5.4
 _branch=5.x
 xanmod=1
@@ -78,7 +78,6 @@ arch=(x86_64)
 license=(GPL2)
 makedepends=(
   xmlto kmod inetutils bc libelf cpio
-  python-sphinx python-sphinx_rtd_theme graphviz imagemagick
 )
 options=('!strip')
 _srcname="linux-${pkgver}-xanmod${xanmod}"
@@ -101,7 +100,7 @@ done
 
 sha256sums=('bf338980b1670bca287f9994b7441c2361907635879169c64ae78364efc5f491'
             'SKIP'
-            'cfbd41031ee7c4a68d8730a3b187860b02be4f5fd52cf1e2c95d253881d09fcb'
+            'ecc8b8723e7ef4625c83c00c9ce7e7a6c304125dd4626e3dcbfbaf9cff2e0468'
             '2c7369218e81dee86f8ac15bda741b9bb34fa9cefcb087760242277a8207d511'
             '9c507bdb0062b5b54c6969f7da9ec18b259e06cd26dbe900cfe79a7ffb2713ee')
 
@@ -167,8 +166,8 @@ prepare() {
   # If it's a full config, will be replaced
   # If not, you should use scripts/config commands, one by line
   if [ -f "${startdir}/myconfig" ]; then
-    if [ $(wc -l < "${startdir}/myconfig") -gt 5000 ]; then
-      # myconfig is a full config file. Replace it
+    if ! grep -q 'scripts/config' "${startdir}/myconfig"; then
+      # myconfig is a full config file. Replacing default .config
       msg2 "Using user CUSTOM config..."
       cp -f "${startdir}"/myconfig .config
     else
@@ -219,7 +218,6 @@ _package() {
   depends=(coreutils kmod initramfs)
   optdepends=('crda: to set the correct wireless channels of your country'
               'linux-firmware: firmware images needed for some devices')
-  provides=('linux')
 
   cd linux-${_major}
   local kernver="$(<version)"
@@ -245,7 +243,6 @@ _package() {
 
 _package-headers() {
   pkgdesc="Header files and scripts for building modules for Xanmod Linux kernel"
-  provides=('linux-headers')
 
   cd linux-${_major}
   local builddir="$pkgdir/usr/lib/modules/$(<version)/build"
