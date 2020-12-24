@@ -1,6 +1,6 @@
 pkgbase = alterlinux-mirrorlist
 	pkgdesc = AlterLinux repository mirrorlists
-	pkgver = 20200426
+	pkgver = 20201224
 	pkgrel = 1
 	url = https:/fascode.net
 	arch = any
