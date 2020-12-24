@@ -34,6 +34,9 @@ pkgbase = alterlinux-calamares
 	backup = usr/share/calamares/modules/displaymanager.conf
 	backup = usr/share/calamares/modules/initcpio.conf
 	backup = usr/share/calamares/modules/unpackfs.conf
+	backup = usr/share/calamares/modules/removeuser.conf
+	backup = usr/share/calamares/modules/users.conf
+	backup = usr/share/calamares/branding/alter/branding.desc
 	source = https://github.com/SereneTeam/alterlinux-calamares/archive/3.2.35-2.tar.gz
 	sha256sums = SKIP
 

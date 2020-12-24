@@ -13,10 +13,15 @@ depends=('kconfig' 'kcoreaddons' 'kiconthemes' 'ki18n' 'kio' 'solid' 'yaml-cpp' 
          'boost-libs' 'hwinfo' 'qt5-svg' 'polkit-qt5' 'gtk-update-icon-cache' 'plasma-framework'
          'qt5-xmlpatterns' 'squashfs-tools' 'ckbcomp' 'libffi')
 makedepends=('extra-cmake-modules' 'qt5-tools' 'qt5-translations' 'git' 'boost' 'ninja')
-backup=('usr/share/calamares/modules/bootloader.conf'
+backup=(
+        'usr/share/calamares/modules/bootloader.conf'
         'usr/share/calamares/modules/displaymanager.conf'
         'usr/share/calamares/modules/initcpio.conf'
-        'usr/share/calamares/modules/unpackfs.conf')
+        'usr/share/calamares/modules/unpackfs.conf'
+        'usr/share/calamares/modules/removeuser.conf'
+        'usr/share/calamares/modules/users.conf'
+        'usr/share/calamares/branding/alter/branding.desc'
+)
 
 source+=("$url/archive/$pkgver-$pkgrel.tar.gz")
 #source+=("$url/archive/$pkgver-$_pkgrel.tar.gz")
