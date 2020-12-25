@@ -2,7 +2,7 @@
 
 pkgname=alterlinux-calamares
 pkgver=3.2.35
-pkgrel=2
+pkgrel=3
 _pkgrel='b2'
 pkgdesc='Distribution-independent installer framework'
 arch=('i686' 'x86_64')
