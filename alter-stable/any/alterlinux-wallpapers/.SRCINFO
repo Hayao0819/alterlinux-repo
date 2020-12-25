@@ -12,6 +12,7 @@ pkgbase = alterlinux-wallpapers
 	source = alterlinux-wallpapers-xfce-blue.hook
 	source = alterlinux-wallpapers-xfce-stripes.hook
 	source = alterlinux-wallpapers-xfce-teal.hook
+	source = alterlinux-wallpapers-xfce-verticals.hook
 	source = alterlinux-wallpapers-lxde
 	source = alterlinux-wallpapers-lxde-blue.hook
 	md5sums = 75bbf3e0c33d0d7f4e09e9a5489691ff
@@ -22,6 +23,7 @@ pkgbase = alterlinux-wallpapers
 	md5sums = e05b85d07afede613e2a3f7e8e5ee2d4
 	md5sums = 1c55857c4ab27651ce4db065814df1f0
 	md5sums = 768f565556b2a8bb92696cb16565e06a
+	md5sums = d7d6d27ac3e8f278b11179485cb7edc1
 	md5sums = d0ae4ee0249809481dab7ede4df44a42
 	md5sums = 08e386e460d763171e1aed033f8d53e1
 
