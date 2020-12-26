@@ -1,13 +1,13 @@
 pkgbase = alterlinux-live-tools
 	pkgdesc = Scripts required for live environment
-	pkgver = 1.2
+	pkgver = 1.3
 	pkgrel = 1
 	url = https://github.com/FascodeNet/alterlinux-live-tools
 	arch = any
 	license = SUSHI-WARE
 	depends = xdg-user-dirs
 	depends = bash
-	source = https://github.com/FascodeNet/alterlinux-live-tools/archive/v1.2.zip
+	source = https://github.com/FascodeNet/alterlinux-live-tools/archive/v1.3.zip
 	md5sums = SKIP
 
 pkgname = alterlinux-live-tools
