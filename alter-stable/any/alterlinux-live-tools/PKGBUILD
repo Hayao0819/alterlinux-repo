@@ -22,8 +22,8 @@ _pkgname=(
 
 pkgname=(${_pkgname[@]})
 _reponame="alterlinux-live-tools"
-pkgver=1.3
-pkgrel=1
+pkgver="1.5"
+pkgrel="1"
 pkgdesc="Scripts required for live environment"
 arch=('any')
 url="https://github.com/FascodeNet/${_reponame}"
@@ -32,7 +32,7 @@ depends=(
     "xdg-user-dirs"
     "bash"
 )
-md5sums=("SKIP")
+md5sums=("51fb1547fa86383dd22b04e03092c88f")
 source=("${url}/archive/v${pkgver}.zip")
 
 extracted="${_reponame}-${pkgver}"
