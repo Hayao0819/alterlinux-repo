@@ -1,6 +1,6 @@
 pkgbase = alterlinux-live-tools-git
 	pkgdesc = Scripts required for live environment
-	pkgver = v1.1.r6.g98d307d
+	pkgver = v1.5.1.r0.g80f281a
 	pkgrel = 1
 	url = https://github.com/FascodeNet/alterlinux-live-tools
 	arch = any

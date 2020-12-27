@@ -21,7 +21,7 @@ _pkgname=(
     "alterlinux-desktop-file"
 )
 _reponame="alterlinux-live-tools"
-pkgver=v1.1.r6.g98d307d
+pkgver=v1.5.1.r0.g80f281a
 pkgrel=1
 pkgdesc="Scripts required for live environment"
 arch=('any')
