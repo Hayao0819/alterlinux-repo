@@ -32,7 +32,7 @@ depends=(
     "xdg-user-dirs"
     "bash"
 )
-md5sums=("7f1eca0f4d5cf5433c01729b7db9779e")
+md5sums=("d40792128fbae0f0e1607aca548f948a")
 source=("${url}/archive/v${pkgver}.zip")
 
 extracted="${_reponame}-${pkgver}"
