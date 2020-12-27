@@ -106,6 +106,7 @@ package_alterlinux-desktop-file-git() {
 
     cd "${srcdir}/${extracted}/"
     install -m 755 -D "${srcdir}/${extracted}/${pkgname%-git}/calamares.desktop" "${pkgdir}/usr/share/alterlinux/desktop-file/calamares.desktop"
+    install -m 755 -D "${srcdir}/${extracted}/${pkgname%-git}/welcome-to-alter.desktop" "${pkgdir}/usr/share/alterlinux/desktop-file/welcome-to-alter.desktop"
 
     install_license
 }

@@ -97,6 +97,7 @@ package_alterlinux-desktop-file() {
 
     cd "${srcdir}/${extracted}/"
     install -m 755 -D "${srcdir}/${extracted}/${pkgname}/calamares.desktop" "${pkgdir}/usr/share/alterlinux/desktop-file/calamares.desktop"
+    install -m 755 -D "${srcdir}/${extracted}/${pkgname}/welcome-to-alter.desktop" "${pkgdir}/usr/share/alterlinux/desktop-file/welcome-to-alter.desktop"
 
     install_license
 }
