@@ -18,11 +18,12 @@ _pkgname=(
     "alterlinux-welcome-page"
     "alterlinux-plasma-bookmarks"
     "alterlinux-desktop-file"
+    "alterlinux-live-info"
 )
 
 pkgname=(${_pkgname[@]})
 _reponame="alterlinux-live-tools"
-pkgver="1.5.1"
+pkgver="1.6"
 pkgrel="1"
 pkgdesc="Scripts required for live environment"
 arch=('any')
@@ -32,7 +33,7 @@ depends=(
     "xdg-user-dirs"
     "bash"
 )
-md5sums=("d40792128fbae0f0e1607aca548f948a")
+md5sums=("762511b53ac1e449c0c19fae36552e83")
 source=("${url}/archive/v${pkgver}.zip")
 
 extracted="${_reponame}-${pkgver}"
@@ -99,5 +100,12 @@ package_alterlinux-desktop-file() {
     install -m 755 -D "${srcdir}/${extracted}/${pkgname}/calamares.desktop" "${pkgdir}/usr/share/alterlinux/desktop-file/calamares.desktop"
     install -m 755 -D "${srcdir}/${extracted}/${pkgname}/welcome-to-alter.desktop" "${pkgdir}/usr/share/alterlinux/desktop-file/welcome-to-alter.desktop"
 
+    install_license
+}
+
+# alterlinux-live-info
+package_alterlinux-live-info() {
+    pkgdesc="Display version information of live environment"
+    install_files
     install_license
 }
