@@ -1,14 +1,14 @@
 pkgbase = alterlinux-live-tools
 	pkgdesc = Scripts required for live environment
-	pkgver = 1.5.1
+	pkgver = 1.6
 	pkgrel = 1
 	url = https://github.com/FascodeNet/alterlinux-live-tools
 	arch = any
 	license = SUSHI-WARE
 	depends = xdg-user-dirs
 	depends = bash
-	source = https://github.com/FascodeNet/alterlinux-live-tools/archive/v1.5.1.zip
-	md5sums = 7f1eca0f4d5cf5433c01729b7db9779e
+	source = https://github.com/FascodeNet/alterlinux-live-tools/archive/v1.6.zip
+	md5sums = 762511b53ac1e449c0c19fae36552e83
 
 pkgname = alterlinux-live-tools
 	pkgdesc = Scripts required for live environment (meta package)
@@ -19,6 +19,7 @@ pkgname = alterlinux-live-tools
 	depends = alterlinux-welcome-page
 	depends = alterlinux-plasma-bookmarks
 	depends = alterlinux-desktop-file
+	depends = alterlinux-live-info
 	provides = alterlinux-live-tools
 	conflicts = alterlinux-live-tools
 
@@ -36,4 +37,7 @@ pkgname = alterlinux-plasma-bookmarks
 
 pkgname = alterlinux-desktop-file
 	pkgdesc = Place the Calamares icon on your desktop
+
+pkgname = alterlinux-live-info
+	pkgdesc = Display version information of live environment
 

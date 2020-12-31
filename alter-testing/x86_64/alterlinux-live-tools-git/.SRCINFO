@@ -1,6 +1,6 @@
 pkgbase = alterlinux-live-tools-git
 	pkgdesc = Scripts required for live environment
-	pkgver = v1.5.1.r0.g80f281a
+	pkgver = v1.6.r0.g8e25520
 	pkgrel = 1
 	url = https://github.com/FascodeNet/alterlinux-live-tools
 	arch = any
@@ -15,7 +15,7 @@ pkgname = alterlinux-live-tools-git
 	pkgdesc = Scripts required for live environment (meta package)
 	depends = xdg-user-dirs
 	depends = bash
-	depends = alterlinux-desktop-file
+	depends = alterlinux-live-info
 	provides = alterlinux-live-tools
 	conflicts = alterlinux-live-tools
 
@@ -33,4 +33,7 @@ pkgname = alterlinux-plasma-bookmarks-git
 
 pkgname = alterlinux-desktop-file-git
 	pkgdesc = Place the Calamares icon on your desktop
+
+pkgname = alterlinux-live-info-git
+	pkgdesc = Display version information of live environment
 

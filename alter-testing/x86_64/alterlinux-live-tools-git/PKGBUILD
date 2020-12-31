@@ -19,9 +19,10 @@ _pkgname=(
     "alterlinux-welcome-page"
     "alterlinux-plasma-bookmarks"
     "alterlinux-desktop-file"
+    "alterlinux-live-info"
 )
 _reponame="alterlinux-live-tools"
-pkgver=v1.5.1.r0.g80f281a
+pkgver=v1.6.r0.g8e25520
 pkgrel=1
 pkgdesc="Scripts required for live environment"
 arch=('any')
@@ -110,3 +111,11 @@ package_alterlinux-desktop-file-git() {
 
     install_license
 }
+
+# alterlinux-live-info
+package_alterlinux-live-info-git() {
+    pkgdesc="Display version information of live environment"
+    install_files
+    install_license
+}
+
