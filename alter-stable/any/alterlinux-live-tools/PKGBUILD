@@ -23,7 +23,7 @@ _pkgname=(
 
 pkgname=(${_pkgname[@]})
 _reponame="alterlinux-live-tools"
-pkgver="1.6.1"
+pkgver="1.6.2"
 pkgrel="1"
 pkgdesc="Scripts required for live environment"
 arch=('any')
@@ -33,7 +33,7 @@ depends=(
     "xdg-user-dirs"
     "bash"
 )
-md5sums=("5a8767e1d81422f452adf179cdc0f6fb")
+md5sums=("2778b1b2d4ee7b165323d4288d54950f")
 source=("${url}/archive/v${pkgver}.zip")
 
 extracted="${_reponame}-${pkgver}"
