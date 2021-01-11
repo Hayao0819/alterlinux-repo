@@ -1,17 +1,17 @@
-##
-## Alter Linux repository mirrorlist
-##
-## (c) 2019-2020 Fascode Network.
-##
+#
+# Alter Linux repository mirrorlist
+#
+# (c) 2019-2021 Fascode Network.
+#
+
+# OSDN-AlterLinux
+Server = https://osdn.dl.osdn.net/storage/g/a/al/alterlinux/repo/$repo/$arch
+
+# OSDN-SereneLinux
+Server = https://osdn.dl.osdn.net/storage/g/s/se/serene/repo/$repo/$arch
 
 # YamaD new repository
 Server = https://repo.dyama.net/$repo/$arch
 
 # YamaD old repository
-#Server = https://xn--d-8o2b.com/repo/$repo/$arch
-
-# OSDN-SereneLinux
-Server = https://osdn.dl.osdn.net/storage/g/s/se/serene/repo/$repo/$arch
-
-# OSDN-AlterLinux
-Server = https://osdn.dl.osdn.net/storage/g/a/al/alterlinux/repo/$repo/$arch
+Server = https://xn--d-8o2b.com/repo/$repo/$arch
