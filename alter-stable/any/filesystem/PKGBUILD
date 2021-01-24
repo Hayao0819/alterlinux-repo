@@ -3,9 +3,9 @@
 # Contributor: Tom Gundersen <teg@jklm.no>
 
 pkgname=filesystem
-pkgver=2020.09.29
-pkgrel=2
-pkgdesc='Base Arch Linux files'
+pkgver=2021.01.24
+pkgrel=1
+pkgdesc='Base Alter Linux files'
 arch=('x86_64' 'i686')
 license=('GPL')
 url='https://fascode.net/en/projects/linux/alter/'
@@ -66,17 +66,39 @@ source=(
 )
 
 md5sums=(
-    $(
-        for i in ${source[*]}; do
-            echo -e "SKIP "
-        done
-        unset i
-    )
+    'c1a04758ef1c439a9a4056ba321384ee'
+    '5fa6674df7645d7f5895f2d12b4ef4e9'
+    '2b0344e9639f35f3c0d5637a23556089'
+    'e33f6dfdd61978fcb3ddf1431286e05a'
+    '7fed1e1fb855e41a6d64d41f8521d69a'
+    '1c1e3b08acfa286f4b417c49de3e4366'
+    '7d119a9cce152aa182fb3392ddeecea7'
+    'a1315ea3e2b64d197b6efaf9c14ff778'
+    '7813c481156f6b280a3ba91fc6236368'
+    '216e9a52537055eb4a72eb0015f81dcc'
+    '5deb9f890a4d08a245e9752ede77271e'
+    '580cf8b59eebfaac4fad373ffadc9912'
+    'd41d8cd98f00b204e9800998ecf8427e'
+    '01e5664cd59ca4740d68165145e174b9'
+    'b7a39469ebdcaec2ce5331d3d69466cc'
+    '5182ac38a0de85da8ade93ef71975ca4'
+    '448fe7cbcb566e8d318dc0db0c9cb710'
+    '0ee015fad07732676d9488ae498eed41'
+    'f04bcb2803afc4dcb95670fe87343b4d'
+    '815652599be54fd3607cf276e89a0a19'
+    '5765dc3a42c6d312d217a31bd2dd273e'
+    'a51847c012555c843dbdf8df0da171d3'
+    'af7832eabaac9804c22f1f2b53816a49'
+    '0267a3a463f35eec8a31f40a720dfd86'
+    'b610496b9168804ff039b836c4b86209'
+    '6cb6f48787a243c85b5bdbacbb5546e8'
+    'd97567df3fea5f0c48f421a2b533a465'
+    '6f9f95e264037be09dea524d47055c02'
 )
 
-pkgver() {
-    echo -ne "$(date "+%Y.%m.%d")"
-}
+#pkgver() {
+#    echo -ne "$(date "+%Y.%m.%d")"
+#}
 
 package() {
     cd "$pkgdir"
