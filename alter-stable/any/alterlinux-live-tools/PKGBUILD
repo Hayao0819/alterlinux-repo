@@ -94,6 +94,7 @@ package_alterlinux-plasma-bookmarks() {
 # alterlinux-desktop-file
 package_alterlinux-desktop-file() {
     pkgdesc="Place the Calamares icon on your desktop"
+    depends+=("glib2")
     install_files
 
     cd "${srcdir}/${extracted}/"
