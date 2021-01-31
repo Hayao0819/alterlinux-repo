@@ -21,7 +21,7 @@ _pkgname=(
     "alterlinux-desktop-file"
     "alterlinux-live-info"
 )
-_reponame="alterlinux-live-tools"
+_reponame="fascode-live-tools"
 pkgver=v1.6.r0.g8e25520
 pkgrel=1
 pkgdesc="Scripts required for live environment"

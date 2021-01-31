@@ -22,7 +22,7 @@ _pkgname=(
 )
 
 pkgname=(${_pkgname[@]})
-_reponame="alterlinux-live-tools"
+_reponame="fascode-live-tools"
 pkgver="1.6.2"
 pkgrel="1"
 pkgdesc="Scripts required for live environment"
