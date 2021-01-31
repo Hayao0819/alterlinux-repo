@@ -76,8 +76,11 @@ package_alterlinux-live-tools-git() {
 # alterlinux-gtk-bookmarks-git
 package_alterlinux-gtk-bookmarks-git() {
     pkgdesc="Simple script to automatically generate GTK bookmarks"
-    install_files
-    ln -s /usr/bin/fascode-gtk-bookmarks  "${pkgdir}/usr/bin/alterlinux-gtk-bookmarks"
+    
+    _pkgname="${pkgname%-git}"
+    cd "${srcdir}/${extracted}/fascode-gtk-bookmarks"
+    install -m 755 -D "fascode-gtk-bookmarks" "${pkgdir}/usr/bin/fascode-gtk-bookmarks"
+    ln -s /usr/bin/fascode-gtk-bookmarks "${pkgdir}/usr/bin/alterlinux-gtk-bookmarks"
     install_license
 }
 
