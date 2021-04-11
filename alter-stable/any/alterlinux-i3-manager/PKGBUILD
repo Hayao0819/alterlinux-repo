@@ -1,7 +1,7 @@
 # Maintainer: Yamada Hayao <hayao@fascode.net>
 
 pkgname=alterlinux-i3-manager
-pkgver=1.50
+pkgver=1.51
 pkgrel=1
 pkgdesc="A i3 setting manager for Alter Linux"
 arch=('x86_64' 'i686')
@@ -10,7 +10,7 @@ license=('GPLv3')
 depends=('qt5-base')
 optdepends=()
 source=("https://github.com/FascodeNet/alterlinux-i3-manager/archive/${pkgver}.zip")
-md5sums=('1ffb238d6bf9a01cccab5dbacfe80c43')
+md5sums=('7c2a001d6d1cd8fd581a8c00d061b12b')
 conflicts=()
 
 build() {
