@@ -1,10 +1,9 @@
 pkgbase = alterlinux-fcitx-conf
 	pkgdesc = AlterLinux fcitx Settings
 	pkgver = 1.1
-	pkgrel = 1
+	pkgrel = 2
 	url = https:/fascode.net
 	arch = any
-	depends = alterlinux-wallpapers
 	conflicts = alterlinux-fcitx-conf-git
 	source = https://github.com/SereneTeam/alterlinux-fcitx-conf/archive/v1.1.zip
 	sha256sums = SKIP

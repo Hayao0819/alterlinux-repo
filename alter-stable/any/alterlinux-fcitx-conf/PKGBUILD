@@ -3,12 +3,11 @@
 
 pkgname=alterlinux-fcitx-conf
 pkgver=1.1
-pkgrel=1
+pkgrel=2
 pkgdesc='AlterLinux fcitx Settings'
 arch=('any')
 url='https:/fascode.net'
 source=("https://github.com/SereneTeam/${pkgname}/archive/v${pkgver}.zip")
-depends=('alterlinux-wallpapers')
 conflicts=("alterlinux-fcitx-conf-git")
 sha256sums=('SKIP')
 
