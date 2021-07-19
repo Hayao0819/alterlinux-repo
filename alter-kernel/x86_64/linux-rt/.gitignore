@@ -1,8 +1,0 @@
-*.log*
-*.log.*
-*.pkg
-*.sign
-*.xz
-*.zst
-*.sig
-*/*
