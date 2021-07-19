@@ -10,4 +10,3 @@ pkgbase = alterlinux-fcitx-conf-git
 	sha256sums = SKIP
 
 pkgname = alterlinux-fcitx-conf-git
-

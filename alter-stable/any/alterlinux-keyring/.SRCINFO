@@ -11,4 +11,3 @@ pkgbase = alterlinux-keyring
 	sha256sums = SKIP
 
 pkgname = alterlinux-keyring
-

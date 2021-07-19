@@ -37,4 +37,3 @@ pkgbase = alterlinux-calamares-git
 	sha256sums = SKIP
 
 pkgname = alterlinux-calamares-git
-

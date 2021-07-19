@@ -2,13 +2,13 @@ pkgbase = alterlinux-live-tools-git
 	pkgdesc = Scripts required for live environment
 	pkgver = v1.6.r0.g8e25520
 	pkgrel = 1
-	url = https://github.com/FascodeNet/alterlinux-live-tools
+	url = https://github.com/FascodeNet/fascode-live-tools
 	arch = any
 	license = SUSHI-WARE
 	makedepends = git
 	depends = xdg-user-dirs
 	depends = bash
-	source = git+https://github.com/FascodeNet/alterlinux-live-tools.git
+	source = git+https://github.com/FascodeNet/fascode-live-tools.git
 	md5sums = SKIP
 
 pkgname = alterlinux-live-tools-git
@@ -36,4 +36,3 @@ pkgname = alterlinux-desktop-file-git
 
 pkgname = alterlinux-live-info-git
 	pkgdesc = Display version information of live environment
-

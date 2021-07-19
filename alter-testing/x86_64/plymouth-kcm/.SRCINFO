@@ -22,4 +22,3 @@ pkgbase = plymouth-kcm
 	sha256sums = SKIP
 
 pkgname = plymouth-kcm
-
