@@ -1,7 +1,7 @@
 # Maintainer : Yamada Hayao <development@fascode.net>
 # Maintainer : lap1sid <development@fascode.net>
 pkgname=alterlinux-mirrorlist
-pkgver=20210719
+pkgver=20210720
 pkgrel=1
 pkgdesc='AlterLinux repository mirrorlists'
 arch=('any')

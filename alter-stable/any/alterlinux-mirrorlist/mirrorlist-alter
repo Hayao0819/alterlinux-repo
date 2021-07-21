@@ -5,13 +5,14 @@
 #
 
 # OSDN-AlterLinux
+Server = https://ftp.jaist.ac.jp/pub/sourceforge.jp/storage/g/a/al/alterlinux/repo/$repo/$arch
+Server = https://ftp.iij.ad.jp/pub/osdn.jp/storage/g/a/al/alterlinux/repo/$repo/$arch
 Server = https://osdn.dl.osdn.net/storage/g/a/al/alterlinux/repo/$repo/$arch
 
 # OSDN-SereneLinux
+Server = https://ftp.jaist.ac.jp/pub/sourceforge.jp/storage/g/s/se/serene/repo/$repo/$arch
+Server = https://ftp.iij.ad.jp/pub/osdn.jp/storage/g/s/se/serene/repo/$repo/$arch
 Server = https://osdn.dl.osdn.net/storage/g/s/se/serene/repo/$repo/$arch
 
-# YamaD new repository
-#Server = https://repo.dyama.net/$repo/$arch
-
-# YamaD old repository
-#Server = https://xn--d-8o2b.com/repo/$repo/$arch
+# GitHub
+Server = https://fascodenet.github.io/$repo/$arch/
