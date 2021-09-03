@@ -3,13 +3,14 @@
 # Contributor: Tom Gundersen <teg@jklm.no>
 
 pkgname=filesystem
-pkgver=2021.08.21
+pkgver=2021.09.03
 pkgrel=1
 pkgdesc='Base Alter Linux files'
 arch=('x86_64' 'i686')
 license=('GPL')
 url='https://alter.fascode.net'
 depends=('iana-etc')
+provides=("alterlinux-${pkgname}")
 backup=('etc/crypttab' 'etc/fstab' 'etc/group' 'etc/gshadow' 'etc/host.conf'
         'etc/hosts' 'etc/issue' 'etc/ld.so.conf' 'etc/motd' 'etc/nsswitch.conf'
         'etc/passwd' 'etc/profile' 'etc/resolv.conf' 'etc/securetty'
