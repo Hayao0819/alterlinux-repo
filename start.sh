@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -Eeu
 
+#-- Help document --#
+HelpDoc(){
+    echo "usage: start.sh [command] [args]"
+}
+
 #-- Initialize --#
 CurrentDir="$(cd "$(dirname "${0}")" || exit 1 ; pwd)"
 LibDir="$CurrentDir/scripts/lib"
@@ -34,5 +39,5 @@ DOCKER_RUN_OPT+=(--rm --privileged "$DockerName:latest")
 
 #-- Run --#
 docker build "${DOCKER_BUILD_OPT[@]}" 
-exec docker run "${DOCKER_RUN_OPT[@]}" "${Main_OPT[@]}"
+exec docker run "${DOCKER_RUN_OPT[@]}" "${Main_OPT[@]}" "${@}"
 
