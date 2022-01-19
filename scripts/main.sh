@@ -9,4 +9,6 @@ MainDir="$CurrentDir/../"
 ReposDir="$CurrentDir/../repos"
 source "${LibDir}/loader.sh"
 
-
+#-- Debug Message --#
+ShowVariable ALTER_WORK_DIR
+ShowVariable ALTER_OUT_DIR

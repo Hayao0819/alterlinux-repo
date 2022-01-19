@@ -10,3 +10,7 @@ PrintArray(){
 GetFileName(){
     xargs -L 1 basename
 }
+
+ShowVariable(){
+    MsgDebug "${1}=$(env "echo \"\${${1}}\"")"
+}

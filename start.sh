@@ -29,6 +29,8 @@ DockerPassEnv(){
 #-- Configure --#
 DockerMountDir "${OutDir}" "/Repo/"
 DockerMountDir "$CurrentDir" "/Main"
+DockerPassEnv  "ALTER_WORK_DIR" "/Main"
+DockerPassEnv "ALTER_OUT_DIR" "/Repo/"
 
 # 
 DOCKER_BUILD_OPT+=(-t "$DockerName:latest" "${CurrentDir}")
