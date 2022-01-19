@@ -12,5 +12,5 @@ GetFileName(){
 }
 
 ShowVariable(){
-    MsgDebug "${1}=$(env "echo \"\${${1}}\"")"
+    MsgDebug "${1}=$(eval "echo \"\${${1}}\"")"
 }
