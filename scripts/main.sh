@@ -12,3 +12,15 @@ source "${LibDir}/loader.sh"
 #-- Debug Message --#
 ShowVariable ALTER_WORK_DIR
 ShowVariable ALTER_OUT_DIR
+
+#-- Function --#
+Main(){
+    local _repo
+    while read -r _repo; do
+        MsgDebug "Found repository: $_repo"
+        RunBuildAllPkg "${ReposDir}/${_repo}"
+    done < <(GetRepoList)
+}
+
+#-- Run --#
+Main

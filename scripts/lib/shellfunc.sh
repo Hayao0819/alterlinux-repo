@@ -7,7 +7,7 @@ PrintArray(){
     printf "%s\n" "${@}"
 }
 
-GetFileName(){
+GetBaseName(){
     xargs -L 1 basename
 }
 
