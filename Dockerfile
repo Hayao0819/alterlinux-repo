@@ -9,5 +9,5 @@ RUN reflector --protocol https -c Japan --sort rate --save /etc/pacman.d/mirrorl
 ENV ALTER_WORK_DIR="/Main" ALTER_OUT_DIR="/Repo"
 
 WORKDIR /Main
-ENTRYPOINT ["/Main/scripts/main.sh"]
-CMD []
+ENTRYPOINT []
+CMD ["/Main/scripts/main.sh"]
