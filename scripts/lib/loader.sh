@@ -26,11 +26,16 @@ WorkInProgress(){
 
 #-- Start --#
 
-# Load message functions
-LoadShellFIles "${LibDir}/msg.sh"
-
 # Load libs
-readarray -t Libraries < <(find "${LibDir}" -name "*.sh" 2> /dev/null)
+Libraries=(
+  "${LibDir}/msg.sh"
+  "${LibDir}/readlink.sh"
+  "${LibDir}/shellfunc.sh"
+  "${LibDir}/parsecmdopt.sh"
+
+  "${LibDir}/chroot.sh"
+  "${LibDir}/pkgbuild.sh"
+)
 LoadShellFIles "${Libraries[@]}"
 
 # Show bash version
