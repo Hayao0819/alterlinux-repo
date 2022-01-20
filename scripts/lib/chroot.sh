@@ -1,6 +1,6 @@
 SetupChroot_x86_64(){
     local CHROOT="$WorkDir/x86_64/"
-    mkdir -p "$CHROOT/root"
+    mkdir -p "$CHROOT"
 
     # Create chroot
     mkarchroot \

@@ -16,7 +16,8 @@ BuildArch=("x86_64")
 #-- Debug Message --#
 ShowVariable ALTER_WORK_DIR
 ShowVariable ALTER_OUT_DIR
-WorkDir="$ALTER_WORK_DIR" OutDir="$ALTER_OUT_DIR"
+MainDir="$ALTER_MAIN_DIR" OutDir="$ALTER_OUT_DIR"
+WorkDir="$ALTER_WORK_DIR"
 
 #-- Function --#
 Main(){
