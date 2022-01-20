@@ -9,7 +9,7 @@ RUN pacman -Sy --noconfirm devtools
 # Setup environment
 WORKDIR /Main
 COPY . /Main
-ENV ALTER_MAIN_DIR="/Main" ALTER_OUT_DIR="/Repo" ALTER_WORK_DIR="/Work
+ENV ALTER_MAIN_DIR="/Main" ALTER_OUT_DIR="/Repo" ALTER_WORK_DIR="/Work"
 
 # Run
 ENTRYPOINT []
