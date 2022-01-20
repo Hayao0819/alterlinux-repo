@@ -4,6 +4,7 @@ FROM archlinux:latest
 RUN echo 'Server = https://mirrors.kernel.org/archlinux/$repo/os/$arch' > /etc/pacman.d/mirrorlist
 RUN pacman -Sy --noconfirm reflector
 RUN reflector --protocol https -c Japan --sort rate --save /etc/pacman.d/mirrorlist
+RUN pacman -Sy devtools
 
 # Setup environment
 WORKDIR /Main
