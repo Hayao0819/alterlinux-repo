@@ -22,10 +22,10 @@ WorkDir="$ALTER_WORK_DIR"
 #-- Function --#
 Main(){
     # Add alterlinux-keyring
+        pacman-key --init
     curl -Lo - "http://repo.dyama.net/fascode.pub" | pacman-key -a -
     pacman-key --lsign-key development@fascode.net
     pacman --config "$MainDir/configs/pacman-x86_64.conf" -Sy --noconfirm alter-stable/alterlinux-keyring
-    pacman-key --init
     pacman-key --populate alterlinux
 
     # Start
