@@ -24,7 +24,7 @@ Main(){
     while read -r _repo; do
         MsgDebug "Found repository: $_repo"
         for _Arch in "${BuildArch[@]}"; do
-            RunBuildAllPkg "${ReposDir}/${_repo}"" $_Arch"
+            RunBuildAllPkg "${ReposDir}/${_repo}" "$_Arch"
         done
     done < <(GetRepoList)
 }
