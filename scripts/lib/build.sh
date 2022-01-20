@@ -13,7 +13,9 @@ RunBuildAllPkg(){
     eval "SetupChroot_$_Arch"
 
     # Run makepkg
-    
+    while read -r _Pkg; do
+        BuildPkg "$_Arch" "$_Pkg"
+    done < <(GetPkgbuildList)
 
     # Update repo
 }
