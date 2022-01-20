@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# 参考: 
 
 set -Eeu
 
@@ -9,16 +10,22 @@ MainDir="$CurrentDir/../"
 ReposDir="$CurrentDir/../repos"
 source "${LibDir}/loader.sh"
 
+#-- Config --#
+BuildArch=("x86_64")
+
 #-- Debug Message --#
 ShowVariable ALTER_WORK_DIR
 ShowVariable ALTER_OUT_DIR
+WorkDir="$ALTER_WORK_DIR" OutDir="$ALTER_OUT_DIR"
 
 #-- Function --#
 Main(){
-    local _repo
+    local _repo _Arch
     while read -r _repo; do
         MsgDebug "Found repository: $_repo"
-        RunBuildAllPkg "${ReposDir}/${_repo}"
+        for _Arch in "${BuildArch[@]}"; do
+            RunBuildAllPkg "${ReposDir}/${_repo}"" $_Arch"
+        done
     done < <(GetRepoList)
 }
 
