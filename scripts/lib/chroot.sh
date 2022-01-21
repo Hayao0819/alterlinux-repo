@@ -2,6 +2,8 @@ SetupChroot_x86_64(){
     local CHROOT="$WorkDir/x86_64/"
     mkdir -p "$CHROOT"
 
+    [[ -e "$CHROOT/root" ]] && return 0
+
     # Create chroot
     mkarchroot \
         -C "$MainDir/configs/pacman-x86_64.conf" \
