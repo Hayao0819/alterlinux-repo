@@ -21,5 +21,5 @@ RunBuildAllPkg(){
     done < <(GetPkgbuildList "$(basename "$_Repo")")
 
     # Update repo
-    UpdateRepoDb "$_Repo"
+    UpdateRepoDb "$(basename "$_Repo")"
 }
