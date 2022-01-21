@@ -35,7 +35,7 @@ DockerMountDir "$CurrentDir" "/Main"
 
 # 
 DOCKER_BUILD_OPT+=(-t "$DockerName:latest" "${CurrentDir}")
-DOCKER_RUN_OPT+=(--rm --privileged -it "$DockerName:latest")
+DOCKER_RUN_OPT+=(--rm --privileged=true -it "$DockerName:latest")
 
 #-- Run --#
 docker build "${DOCKER_BUILD_OPT[@]}" 
