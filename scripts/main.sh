@@ -30,7 +30,7 @@ Main(){
     pacman-key --populate alterlinux
 
     # Setup user
-    useradd -m -g root -s /bin/bash "$ChrootUser"
+    UserCheck "$ChrootUser" || useradd -m -g root -s /bin/bash "$ChrootUser"
     chmod 775 -R "$ReposDir"
 
     # Start

@@ -14,3 +14,7 @@ GetBaseName(){
 ShowVariable(){
     MsgDebug "${1}=$(eval "echo \"\${${1}}\"")"
 }
+
+UserCheck(){
+    cut -d ":" -f 1 < "/etc/passwd" | grep -qx "$1"
+}
