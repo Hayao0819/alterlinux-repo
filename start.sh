@@ -16,6 +16,7 @@ source "${LibDir}/loader.sh"
 
 #-- Configs --#
 OutDir="${HOME}/repo/"
+WorkDir="$CurrentDir/work"
 DockerName="alterlinux-repo-build"
 DOCKER_RUN_OPT=()
 DOCKER_BUILD_OPT=()
@@ -30,8 +31,9 @@ DockerMountDir(){
 
 #-- Configure --#
 # Do not edit path
-#DockerMountDir "${OutDir}" "/Repo/"
-DockerMountDir "$CurrentDir" "/Main"
+DockerMountDir "${OutDir}" "/Repo/"
+DockerMountDir "$WorkDir" "/Work"
+#DockerMountDir "$CurrentDir" "/Main"
 
 # 
 DOCKER_BUILD_OPT+=(-t "$DockerName:latest" "${CurrentDir}")
