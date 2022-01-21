@@ -30,10 +30,10 @@ BuildPkg(){
     makechrootpkg "${MakeChrootPkg_Args[@]}" -- "${Makepkg_Args[@]}"
 }
 
-# MovePkgToPool <PKGBUILD Path>
+# MovePkgToPool <ARCH> <REPO NAME> <PKGBUILD Path>
 MovePkgToPool(){
-    local _Pool="${ReposDir}/pool/packages"
-    local _Arch="$1" _Pkgbuild="$2" _PkgFile
+    local _Arch="$1" _Repo="$2" _Pkgbuild="$3" _PkgFile
+    local _Pool="${OutDir}/$_Repo/pool/packages"
 
     # Move to dir
     cd "$(dirname "$_Pkgbuild")" || {

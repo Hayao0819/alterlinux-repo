@@ -17,8 +17,9 @@ RunBuildAllPkg(){
     while read -r _Pkg; do
         # Update repo
         BuildPkg "$_Arch" "$_Pkg"
-        MovePkgToPool "$_Arch" "$_Pkg"
+        MovePkgToPool "$_Arch" "$_Repo" "$_Pkg"
     done < <(GetPkgbuildList "$(basename "$_Repo")")
 
     # Update repo
+
 }
