@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # 参考: 
 
-set -Eeu
+set -Eeuxv
 
 #-- Initialize --#
 CurrentDir="$(cd "$(dirname "${0}")" || exit 1 ; pwd)"

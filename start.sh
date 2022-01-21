@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -Eeu
+set -Eeuxv
 
 #-- Help document --#
 HelpDoc(){
