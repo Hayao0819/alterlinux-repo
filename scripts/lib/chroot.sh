@@ -34,11 +34,15 @@ MovePkgToPool(){
     local _Arch="$1" _Pkgbuild="$2" _PkgFile
 
     # Move to dir
-    cd "$(dirname "$Pkgbuild")" || {
+    cd "$(dirname "$_Pkgbuild")" || {
         MsgError "Failed to move the PKGBUILD's directory."
         return 1
     }
 
+    # Make dir
+    mkdir -p "$_Pool"
+
+    # Move
     while read -r _PkgFile; do
         for __File in "$_PkgFile" "$_PkgFile.sig"; do
             [[ -e "$__File" ]] && {
