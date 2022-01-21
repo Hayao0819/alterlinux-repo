@@ -5,6 +5,7 @@ RUN echo 'Server = https://mirrors.kernel.org/archlinux/$repo/os/$arch' > /etc/p
 RUN pacman -Sy --noconfirm reflector
 RUN reflector --protocol https -c Japan --sort rate --save /etc/pacman.d/mirrorlist
 RUN pacman -Sy --noconfirm devtools
+RUN systemd-machine-id-setup
 
 # Setup environment
 WORKDIR /Main
