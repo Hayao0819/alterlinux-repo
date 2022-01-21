@@ -16,8 +16,8 @@ BuildArch=("x86_64")
 #-- Debug Message --#
 ShowVariable ALTER_WORK_DIR
 ShowVariable ALTER_OUT_DIR
-MainDir="${ALTER_MAIN_DIR-"${CurrentDir}"}" OutDir="${ALTER_OUT_DIR-"${CurrentDir}/out"}"
-WorkDir="${ALTER_WORK_DIR-"${CurrentDir}/work"}"
+MainDir="${ALTER_MAIN_DIR-"${MainDir}"}" OutDir="${ALTER_OUT_DIR-"${MainDir}/out"}"
+WorkDir="${ALTER_WORK_DIR-"${MainDir}/work"}"
 ChrootUser="hayao"
 
 #-- Function --#
