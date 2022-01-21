@@ -13,8 +13,11 @@ RunBuildAllPkg(){
     eval "SetupChroot_$_Arch"
 
     # Run makepkg
+    # _Pkg変数: PKGBUILDへのフルパス
     while read -r _Pkg; do
+        # Update repo
         BuildPkg "$_Arch" "$_Pkg"
+        MovePkgToPool "$_Arch" "$_Pkg"
     done < <(GetPkgbuildList "$(basename "$_Repo")")
 
     # Update repo

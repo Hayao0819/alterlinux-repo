@@ -27,3 +27,26 @@ BuildPkg(){
     # Run makechrootpkg
     makechrootpkg "${MakeChrootPkg_Args[@]}" -- "${Makepkg_Args[@]}"
 }
+
+# MovePkgToPool <PKGBUILD Path>
+MovePkgToPool(){
+    local _Pool="${ReposDir}/pool/packages"
+    local _Arch="$1" _Pkgbuild="$2" _PkgFile
+
+    # Move to dir
+    cd "$(dirname "$Pkgbuild")" || {
+        MsgError "Failed to move the PKGBUILD's directory."
+        return 1
+    }
+
+    while read -r _PkgFile; do
+        for __File in "$_PkgFile" "$_PkgFile.sig"; do
+            [[ -e "$__File" ]] && {
+                cp "$__File" "$_Pool"
+                continue
+            }
+            MsgError "$__File does not exist"
+        done
+    done < <(setarch "$_Arch" sudo -u "$ChrootUser" makepkg --packagelist)
+    return 0
+}
