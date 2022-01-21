@@ -16,8 +16,8 @@ BuildArch=("x86_64")
 #-- Debug Message --#
 ShowVariable ALTER_WORK_DIR
 ShowVariable ALTER_OUT_DIR
-MainDir="$ALTER_MAIN_DIR" OutDir="$ALTER_OUT_DIR"
-WorkDir="$ALTER_WORK_DIR"
+MainDir="${ALTER_MAIN_DIR-"${HOME}/alterlinux-repo"}" OutDir="${ALTER_OUT_DIR-"${HOME}/alterlinux-repo/out"}"
+WorkDir="${ALTER_WORK_DIR-"${HOME}/alterlinux-repo/work"}"
 ChrootUser="hayao"
 
 #-- Function --#
