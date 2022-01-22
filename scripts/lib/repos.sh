@@ -68,7 +68,7 @@ CheckCorrectArch(){
 # GetRepoArchList <repo name>
 GetRepoArchList(){ {
     local _RepoName="$1"
-    local _Repo="$OutDir/$_RepoName"
+    local _Repo="$ReposDir/$_RepoName"
     LoadShellFIles "$_Repo/repo-config.sh"
     PrintArray "${RepoArch[@]}"
 } }
