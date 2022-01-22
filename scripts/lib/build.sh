@@ -42,7 +42,7 @@ BuildAllArch(){
     local _RepoName="$1"
     shift 1
     local _PkgList=("$@") _ArchList
-    readarray -t _ArchList < <(GetRepoArchList)
+    readarray -t _ArchList < <(GetRepoArchList "$_RepoName")
 
     for _Arch in "${_ArchList[@]}"; do
         BuildPkg "$_Arch" "$_RepoName" "${_PkgList[@]}"
