@@ -12,6 +12,10 @@ GetBaseName(){
 }
 
 ShowVariable(){
+    [[ ! -v "$1" ]] && {
+        MsgDebug "$1 is undefined"
+        return 0
+    }
     MsgDebug "${1}=$(eval "echo \"\${${1}}\"")"
 }
 
