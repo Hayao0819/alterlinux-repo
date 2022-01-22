@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # 参考: 
 
-set -Eeuxv
+set -Eeu
 
 #-- Initialize --#
 CurrentDir="$(cd "$(dirname "${0}")" || exit 1 ; pwd)"
@@ -120,4 +120,5 @@ while true; do
 done
 
 #-- Run --#
+set -xv
 Main
