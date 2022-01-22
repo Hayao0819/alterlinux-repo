@@ -22,6 +22,17 @@ WorkDir="${ALTER_WORK_DIR-"${MainDir}/work"}"
 ChrootUser="hayao"
 
 #-- Function --#
+HelpDoc(){
+    echo "usage: main.sh [option]"
+    echo
+    echo " General options:"
+    echo "    -r | --repo REPO"
+    echo "    -p | --pkg PkgBase1,PkgBase2 ..."
+    echo "    -w | --work WORK_DIR"
+    echo "    -o | --out OUT_DIR"
+    echo "    -h | --help              This help message"
+}
+
 PrepareBuild(){
     # Add alterlinux-keyring
     pacman-key --init
@@ -60,8 +71,53 @@ Main(){
     }
 
     local _Repo="${BuildRepo[*]}"
+    readarray -t PkgBuildList < <(
+        for _Pkg in "${BuildPkg[@]}"; do
+            _PkgBuild="${ReposDir}/${_Repo}/${_Pkg}/PKGBUILD"
+            [[ ! -e "${_PkgBuild}" ]] || echo "$_PkgBuild"
+        done
+    )
     BuildAllArch "$_Repo" "${BuildPkg[@]}"
 }
+
+#-- Parse command-line options --#
+# Parse options
+ParseCmdOpt SHORT="ho:p:r:w:" LONG="help,out:,pkg:,repo:,work:" -- "${@}" || exit 1
+eval set -- "${OPTRET[@]}"
+unset OPTRET
+
+while true; do
+    case "${1}" in
+        -o | --out)
+            OutDir="$2"
+            shift 2
+            ;;
+        -p | --pkg)
+            readarray -t BuildPkg < <(PrintOneLineCSV "$2")
+            shift 2
+            ;;
+        -r | --repo)
+            readarray -t BuildRepo < <(PrintOneLineCSV "$2")
+            shift 2
+            ;;
+        -w | --work)
+            WorkDir="$2"
+            shift 2
+            ;;
+        -h | --help)
+            HelpDoc
+            exit 0
+            ;;
+        --)
+            shift 1
+            break
+            ;;
+        *)
+            MsgError "Argument exception error '${1}'"
+            MsgError "Please report this error to the developer." 1
+            ;;
+    esac
+done
 
 #-- Run --#
 Main

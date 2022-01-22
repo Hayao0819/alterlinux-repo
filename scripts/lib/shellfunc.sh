@@ -18,3 +18,8 @@ ShowVariable(){
 UserCheck(){
     cut -d ":" -f 1 < "/etc/passwd" | grep -qx "$1"
 }
+
+
+PrintOneLineCSV(){
+    tr "," "\n" <<< "$1" | grep -Ev "^$"
+}
