@@ -14,8 +14,8 @@ SetupChroot_x86_64(){
 }
 
 
-#BuildPkg <ARCH> <PKGBUILD PATH>
-BuildPkg(){
+# RunMakePkg <ARCH> <PKGBUILD PATH>
+RunMakePkg(){
     local MakeChrootPkg_Args=(-c -r "$WorkDir/$1" -U "$ChrootUser")
     local Makepkg_Args=()
     local Pkgbuild="${2}"
