@@ -9,9 +9,8 @@
 *.log.*
 *.sig
 *.tar.gz
-
 pkg/
 src/
 /temp
-
 .DS_Store
+/work
