@@ -48,7 +48,7 @@ MovePkgToPool(){
     while read -r _PkgFile; do
         for __File in "$_PkgFile" "$_PkgFile.sig"; do
             [[ -e "$__File" ]] && {
-                MsgDebug　"Move $__File to $__Pool"
+                MsgDebug　"Move $__File to $_Pool"
                 cp "$__File" "$_Pool"
                 continue
             }
