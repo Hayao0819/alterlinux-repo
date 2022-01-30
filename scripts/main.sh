@@ -12,7 +12,7 @@ source "${LibDir}/loader.sh"
 
 #-- Config --#
 BuildRepo=()
-BuidPkg=()
+BuildPkg=()
 
 #-- Debug Message --#
 ShowVariable ALTER_WORK_DIR
