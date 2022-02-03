@@ -22,6 +22,8 @@ BuildPkg(){
         # Update repo
         RunMakePkg "$_Arch" "$_Pkg"
         MovePkgToPool "$_Arch" "$_RepoName" "$_Pkg"
+
+
     done < <(PrintArray "${_ToBuildPkg[@]}")
 
     # Update repo

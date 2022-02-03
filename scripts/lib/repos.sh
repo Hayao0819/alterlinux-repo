@@ -72,3 +72,36 @@ GetRepoArchList(){ {
     LoadShellFIles "$_Repo/repo-config.sh"
     PrintArray "${RepoArch[@]}"
 } }
+
+
+# CreateRepoLockFile <arch> <repo> <pkgbuild>
+CreateRepoLockFile(){
+    local _Arch="$1" _RepoName="$2" _PkgBuild="$3"
+    local _LockFileDir="$WorkDir/LockFile/"
+    local _RepoFile="$_LockFileDir/$_RepoName"
+
+    [[ -e "$_RepoFile" ]] || { echo > "$_RepoFile"; }
+    readarray _FileList < <(makepkg --ignorearch --packagelist | GetBaseName)
+
+    local _Pkg
+    for _Pkg in "${_FileList[@]}"; do
+        echo "$_Arch/$_Pkg" >> "$_RepoFile"
+    done
+}
+
+
+# CheckAlreadyBuilt <arch> <repo> <pkgbuild>
+CheckAlreadyBuilt(){
+    local _Arch="$1" _RepoName="$2" _PkgBuild="$3"
+    local _LockFileDir="$WorkDir/LockFile/"
+    local _RepoFile="$_LockFileDir/$_RepoName"
+
+    [[ -e "$_RepoFile" ]] || return 1
+    readarray _FileList < <(makepkg --ignorearch --packagelist | GetBaseName)
+
+    for _Pkg in "${_FileList[@]}"; do
+        grep -qx "$_Arch/$_Pkg" "$_RepoFile" || return 1
+    done
+    return 0
+}
+

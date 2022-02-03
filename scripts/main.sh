@@ -44,6 +44,9 @@ PrepareBuild(){
     # Setup user
     UserCheck "$ChrootUser" || useradd -m -g root -s /bin/bash "$ChrootUser"
     chmod 775 -R "$ReposDir"
+
+    # Create user
+    mkdir -p "$WorkDir/Chroot" "$WorkDir/LockFile"
 }
 
 Main(){

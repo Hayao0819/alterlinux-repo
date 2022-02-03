@@ -1,5 +1,5 @@
 SetupChroot_x86_64(){
-    local CHROOT="$WorkDir/x86_64/"
+    local CHROOT="$WorkDir/Chroot/x86_64/"
     mkdir -p "$CHROOT"
 
     [[ -e "$CHROOT/root" ]] && return 0
@@ -16,7 +16,7 @@ SetupChroot_x86_64(){
 
 # RunMakePkg <ARCH> <PKGBUILD PATH>
 RunMakePkg(){
-    local MakeChrootPkg_Args=(-c -r "$WorkDir/$1" -U "$ChrootUser")
+    local MakeChrootPkg_Args=(-c -r "$WorkDir/Chroot/$1" -U "$ChrootUser")
     local Makepkg_Args=()
     local Pkgbuild="${2}"
 
