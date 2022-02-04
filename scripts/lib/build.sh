@@ -19,6 +19,7 @@ BuildPkg(){
     # Run makepkg
     # _Pkg変数: PKGBUILDへのフルパス
     while read -r _Pkg; do
+        MsgDebug "Build $_Pkg"
         CheckAlreadyBuilt "$_Arch" "$_RepoName" "$_Pkg" || {
             MsgWarn "$(basename "$(dirname "$_Pkg")") has been built."
             continue
