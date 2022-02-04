@@ -104,8 +104,7 @@ CheckAlreadyBuilt(){
 
     [[ -e "$_RepoFile" ]] || return 0
     readarray _FileList < <(
-        cd "$(dirname "$_Pkgbuild")" || return 0
-        #sudo -E -u "$ChrootUser"\
+        cd "$(dirname "$_PkgBuild")" || return 0
         makepkg --ignorearch --packagelist | GetBaseName)
 
     for _Pkg in "${_FileList[@]}"; do
