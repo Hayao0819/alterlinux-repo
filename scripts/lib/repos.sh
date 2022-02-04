@@ -24,7 +24,10 @@ UpdateRepoDb(){
         _File="$(basename "$_Path")"
         _Arch="${_File##*-}"
         _Arch="${_Arch%%.pkg.tar.*}"
+
+        # Setup files
         mkdir -p "$_RepoDir/$_Arch"
+        rm -rf "${_RepoDir:?}/${_Arch:?}/${_File:?}" 
 
         case "$_Arch" in
             "any")
