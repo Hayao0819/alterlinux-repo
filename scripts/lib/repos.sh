@@ -107,6 +107,7 @@ CheckAlreadyBuilt(){
         cd "$(dirname "$_PkgBuild")" || return 0
         makepkg --ignorearch --packagelist | GetBaseName)
 
+    local _Pkg
     for _Pkg in "${_FileList[@]}"; do
         ! grep -qx "$_Arch/$_Pkg" "$_RepoFile" || return 1
     done
