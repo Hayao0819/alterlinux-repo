@@ -98,7 +98,8 @@ unset OPTRET
 while true; do
     case "${1}" in
         -a | --arch)
-            IFS=" " read -r -a OverRideRepoArch <<< "${2}"
+            IFS="," read -r -a OverRideRepoArch <<< "${2}"
+            shift 2
             ;;
         -o | --out)
             OutDir="$2"
