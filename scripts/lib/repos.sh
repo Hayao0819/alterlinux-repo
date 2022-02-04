@@ -20,14 +20,11 @@ UpdateRepoDb(){
     local _RepoDir="${OutDir}/$_Repo/os/"
     local _File _Arch _Path
 
-    for _Arch in "${RepoArch[@]}"; do
-        mkdir -p "$_RepoDir/$_Arch"
-    done
-
     while read -r _Path; do
         _File="$(basename "$_Path")"
         _Arch="${_File##*-}"
         _Arch="${_Arch%%.pkg.tar.*}"
+        mkdir -p "$_RepoDir/$_Arch"
 
         case "$_Arch" in
             "any")
@@ -85,7 +82,9 @@ CreateRepoLockFile(){
     local _RepoFile="$_LockFileDir/$_RepoName"
 
     [[ -e "$_RepoFile" ]] || { echo > "$_RepoFile"; }
-    readarray _FileList < <(makepkg --ignorearch --packagelist | GetBaseName)
+    readarray -t _FileList < <(
+        cd "$(dirname "$_PkgBuild")" || return 0
+        makepkg --ignorearch --packagelist | GetBaseName)
 
     local _Pkg
     for _Pkg in "${_FileList[@]}"; do
