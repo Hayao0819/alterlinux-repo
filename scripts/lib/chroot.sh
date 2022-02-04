@@ -13,6 +13,20 @@ SetupChroot_x86_64(){
     arch-nspawn "$CHROOT/root" pacman -Syyu
 }
 
+SetupChroot_i686(){
+    local CHROOT="$WorkDir/Chroot/i686/"
+    mkdir -p "$CHROOT"
+
+    [[ -e "$CHROOT/root" ]] && return 0
+
+    # Create chroot
+    mkarchroot \
+        -C "$MainDir/configs/pacman-i686.conf" \
+        "$CHROOT/root" "${ChrootPkg[@]}"
+
+    # Update package
+    arch-nspawn "$CHROOT/root" pacman -Syyu
+}
 
 # RunMakePkg <ARCH> <PKGBUILD PATH>
 RunMakePkg(){
