@@ -13,6 +13,23 @@ GetPkgbuildList(){
     find "$_Repo" -name "PKGBUILD" -type f -mindepth 1
 }
 
+# RunEachArch <repo name> <cmmands>
+# {} will be replaced to architecture name
+RunEachArch(){
+    local _Arch _Cmd _Repo="$1"
+    local _CmdArray=()
+    shift 1 || return 0
+
+    while read -r _Arch; do
+        _CmdArray=()
+        for _Cmd in "$@"; do
+            # shellcheck disable=SC2001
+            _CmdArray+=("$(sed "s|{}|$_Arch|g" <<< "${_Cmd}")")
+        done
+        "${_CmdArray[@]}"
+    done < <(GetRepoArchList "$_Repo")
+}
+
 # UpdateRepoDb <repo name>
 UpdateRepoDb(){
     local _Repo="$1"
@@ -28,16 +45,24 @@ UpdateRepoDb(){
         # Setup files
         rm -rf "${_RepoDir:?}/${_Arch:?}/${_File:?}" 
 
+        # Function to add pakage to db
+        local _Add_Pkg
+        _Add_Pkg(){
+            local _Arch="$1" _Symlink="$_RepoDir/$_Arch/${_File}"
+            mkdir -p "$_RepoDir/$_Arch"
+            if [[ -n "$GPGKey" ]]; then
+                gpg --output "${_Path}.sig" -u "$GPGKey" --detach-sig "${_Path}"
+            fi
+            ln -s "../../pool/packages/$_File" "$_Symlink"
+            repo-add "$_RepoDir/${_Arch}/$_Repo.db.tar.gz" "$_Symlink"
+        }
+
         case "$_Arch" in
             "any")
-                GetRepoArchList "$_Repo" | xargs -I{} mkdir -p "$_RepoDir/{}"
-                GetRepoArchList "$_Repo" | xargs -I{} ln -s "../../pool/packages/$_File" "$_RepoDir/{}/${_File}"
-                GetRepoArchList "$_Repo" | xargs -I{} repo-add "$_RepoDir/{}/$_Repo.db.tar.gz" "$_RepoDir/{}/$_File" 
+                RunEachArch _Add_Pkg "{}"
                 ;;
             *)
-                mkdir -p "$_RepoDir/$_Arch"
-                ln -s "../../pool/packages/$_File" "$_RepoDir/$_Arch/${_File}"
-                repo-add "$_RepoDir/${_Arch}/$_Repo.db.tar.gz" "$_RepoDir/$_Arch/$_File" 
+                _Add_Pkg "$_Arch"
                 ;;
         esac
 
