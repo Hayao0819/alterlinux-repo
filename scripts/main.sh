@@ -13,6 +13,7 @@ source "${LibDir}/loader.sh"
 #-- Config --#
 BuildRepo=()
 BuildPkg=()
+OverRideRepoArch=()
 
 #-- Debug Message --#
 ShowVariable ALTER_WORK_DIR
