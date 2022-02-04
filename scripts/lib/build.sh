@@ -19,11 +19,13 @@ BuildPkg(){
     # Run makepkg
     # _Pkg変数: PKGBUILDへのフルパス
     while read -r _Pkg; do
-        # Update repo
+        CheckAlreadyBuilt "$_Arch" "$_RepoName" "$_Pkg" || {
+            MsgWarn "$(basename "$(dirname "$_Pkg")") has been built."
+            continue
+        }
         RunMakePkg "$_Arch" "$_Pkg"
         MovePkgToPool "$_Arch" "$_RepoName" "$_Pkg"
-
-
+        CreateRepoLockFile "$_Arch" "$_RepoName" "$_Pkg"
     done < <(PrintArray "${_ToBuildPkg[@]}")
 
     # Update repo
