@@ -95,6 +95,8 @@ CreateRepoLockFile(){
 
 
 # CheckAlreadyBuilt <arch> <repo> <pkgbuild>
+# return 1 => already built
+# return 0 -> not built yet
 CheckAlreadyBuilt(){
     local _Arch="$1" _RepoName="$2" _PkgBuild="$3"
     local _LockFileDir="$WorkDir/LockFile/"
@@ -104,7 +106,7 @@ CheckAlreadyBuilt(){
     readarray _FileList < <(makepkg --ignorearch --packagelist | GetBaseName)
 
     for _Pkg in "${_FileList[@]}"; do
-        grep -qx "$_Arch/$_Pkg" "$_RepoFile" || return 1
+        ! grep -qx "$_Arch/$_Pkg" "$_RepoFile" || return 1
     done
     return 0
 }
