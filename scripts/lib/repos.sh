@@ -103,7 +103,7 @@ CheckAlreadyBuilt(){
     local _RepoFile="$_LockFileDir/$_RepoName"
 
     [[ -e "$_RepoFile" ]] || return 0
-    readarray _FileList < <(
+    readarray -t _FileList < <(
         cd "$(dirname "$_PkgBuild")" || return 0
         makepkg --ignorearch --packagelist | GetBaseName)
 
