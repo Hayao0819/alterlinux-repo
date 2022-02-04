@@ -35,11 +35,11 @@ HelpDoc(){
 
 PrepareBuild(){
     # Add alterlinux-keyring
-    pacman-key --init
-    curl -Lo - "http://repo.dyama.net/fascode.pub" | pacman-key -a -
-    pacman-key --lsign-key development@fascode.net
-    pacman --config "$MainDir/configs/pacman-x86_64.conf" -Sy --noconfirm alter-stable/alterlinux-keyring
-    pacman-key --populate alterlinux
+    sudo pacman-key --init
+    curl -Lo - "http://repo.dyama.net/fascode.pub" | sudo pacman-key -a -
+    sudo pacman-key --lsign-key development@fascode.net
+    sudo pacman --config "$MainDir/configs/pacman-x86_64.conf" -Sy --noconfirm alter-stable/alterlinux-keyring
+    sudo pacman-key --populate alterlinux
 
     # Setup user
     UserCheck "$ChrootUser" || useradd -m -g root -s /bin/bash "$ChrootUser"
@@ -49,9 +49,14 @@ PrepareBuild(){
     mkdir -p "$WorkDir/Chroot" "$WorkDir/LockFile"
 }
 
-Main(){
-    PrepareBuild
+CheckEnvironment(){
+    if (( UID == 0 )); then
+        MdgError "Do not run as root"
+        exit 1
+    fi
+}
 
+Main(){
     # リポジトリ指定なし
     (( "${#BuildRepo[@]}" < 1 )) && {
         BuildAllPkgInAllRepo
@@ -124,4 +129,7 @@ done
 
 #-- Run --#
 set -xv
+
+CheckEnvironment
+PrepareBuild
 Main
