@@ -14,6 +14,7 @@ source "${LibDir}/loader.sh"
 BuildRepo=()
 BuildPkg=()
 OverRideRepoArch=()
+RemoveLockFile=false
 
 #-- Debug Message --#
 ShowVariable ALTER_WORK_DIR
@@ -36,6 +37,7 @@ HelpDoc(){
     echo "    -w | --work WORK_DIR"
     echo "    -o | --out OUT_DIR"
     echo "    -h | --help              This help message"
+    echo "         --rmlock            Remove all lockfile"
 }
 
 PrepareBuild(){
@@ -52,6 +54,11 @@ PrepareBuild(){
 
     # Create user
     mkdir -p "$WorkDir/Chroot" "$WorkDir/LockFile"
+
+    # RemoveLockFile
+    if [[ "${RemoveLockFile}" = true ]]; then
+        rm -rf "$WorkDir/Lockfile"
+    fi
 }
 
 CheckEnvironment(){
@@ -95,7 +102,7 @@ Main(){
 
 #-- Parse command-line options --#
 # Parse options
-ParseCmdOpt SHORT="a:g:ho:p:r:w:" LONG="arch:gpg:help,out:,pkg:,repo:,work:" -- "${@}" || exit 1
+ParseCmdOpt SHORT="a:g:ho:p:r:w:" LONG="arch:gpg:help,out:,pkg:,repo:,work:,rmlock" -- "${@}" || exit 1
 eval set -- "${OPTRET[@]}"
 unset OPTRET
 
@@ -128,6 +135,10 @@ while true; do
         -h | --help)
             HelpDoc
             exit 0
+            ;;
+        --rmlock)
+            RemoveLockFile=true
+            shift 1
             ;;
         --)
             shift 1
