@@ -17,8 +17,10 @@ BuildPkg=()
 #-- Debug Message --#
 ShowVariable ALTER_WORK_DIR
 ShowVariable ALTER_OUT_DIR
+ShowVariable ALTER_SIGN_KEY
 MainDir="${ALTER_MAIN_DIR-"${MainDir}"}" OutDir="${ALTER_OUT_DIR-"${MainDir}/out"}"
 WorkDir="${ALTER_WORK_DIR-"${MainDir}/work"}"
+GPGKey="${ALTER_SIGN_KEY-""}"
 ChrootUser="hayao"
 
 #-- Function --#
@@ -27,6 +29,7 @@ HelpDoc(){
     echo
     echo " General options:"
     echo "    -a | --arch Arch1,Arch2 ..."
+    echo "    -g | --gpg KEY"
     echo "    -r | --repo REPO"
     echo "    -p | --pkg PkgBase1,PkgBase2 ..."
     echo "    -w | --work WORK_DIR"
@@ -91,7 +94,7 @@ Main(){
 
 #-- Parse command-line options --#
 # Parse options
-ParseCmdOpt SHORT="a:ho:p:r:w:" LONG="arch:help,out:,pkg:,repo:,work:" -- "${@}" || exit 1
+ParseCmdOpt SHORT="a:g:ho:p:r:w:" LONG="arch:gpg:help,out:,pkg:,repo:,work:" -- "${@}" || exit 1
 eval set -- "${OPTRET[@]}"
 unset OPTRET
 
@@ -99,6 +102,10 @@ while true; do
     case "${1}" in
         -a | --arch)
             IFS="," read -r -a OverRideRepoArch <<< "${2}"
+            shift 2
+            ;;
+        -g | --gpg)
+            GPGKey="$2"
             shift 2
             ;;
         -o | --out)
