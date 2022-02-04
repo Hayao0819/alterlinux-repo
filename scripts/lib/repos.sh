@@ -102,7 +102,7 @@ CheckAlreadyBuilt(){
     local _LockFileDir="$WorkDir/LockFile/"
     local _RepoFile="$_LockFileDir/$_RepoName"
 
-    [[ -e "$_RepoFile" ]] || return 1
+    [[ -e "$_RepoFile" ]] || return 0
     readarray _FileList < <(makepkg --ignorearch --packagelist | GetBaseName)
 
     for _Pkg in "${_FileList[@]}"; do
