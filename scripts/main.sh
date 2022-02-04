@@ -26,6 +26,7 @@ HelpDoc(){
     echo "usage: main.sh [option]"
     echo
     echo " General options:"
+    echo "    -a | --arch Arch1,Arch2 ..."
     echo "    -r | --repo REPO"
     echo "    -p | --pkg PkgBase1,PkgBase2 ..."
     echo "    -w | --work WORK_DIR"
@@ -90,12 +91,15 @@ Main(){
 
 #-- Parse command-line options --#
 # Parse options
-ParseCmdOpt SHORT="ho:p:r:w:" LONG="help,out:,pkg:,repo:,work:" -- "${@}" || exit 1
+ParseCmdOpt SHORT="a:ho:p:r:w:" LONG="arch:help,out:,pkg:,repo:,work:" -- "${@}" || exit 1
 eval set -- "${OPTRET[@]}"
 unset OPTRET
 
 while true; do
     case "${1}" in
+        -a | --arch)
+            IFS=" " read -r -a OverRideRepoArch <<< "${2}"
+            ;;
         -o | --out)
             OutDir="$2"
             shift 2

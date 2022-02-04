@@ -74,8 +74,12 @@ CheckCorrectArch(){
 GetRepoArchList(){ {
     local _RepoName="$1"
     local _Repo="$ReposDir/$_RepoName"
-    LoadShellFIles "$_Repo/repo-config.sh"
-    PrintArray "${RepoArch[@]}"
+    if (( "${#OverRideRepoArch[@]}" > 0)); then
+        PrintArray "${OverRideRepoArch[@]}"
+    else
+        LoadShellFIles "$_Repo/repo-config.sh"
+        PrintArray "${RepoArch[@]}"
+    fi
 } }
 
 
