@@ -31,8 +31,8 @@ UpdateRepoDb(){
 
         case "$_Arch" in
             "any")
-                PrintArray "${RepoArch[@]}" | xargs -I{} ln -s "../../pool/packages/$_File" "$_RepoDir/{}/${_File}"
-                PrintArray "${RepoArch[@]}" | xargs -I{} repo-add "$_RepoDir/$_Repo.db.tar.gz" "$_RepoDir/{}/$_File" 
+                GetRepoArchList "$_Repo" | xargs -I{} ln -s "../../pool/packages/$_File" "$_RepoDir/{}/${_File}"
+                GetRepoArchList "$_Repo" | xargs -I{} repo-add "$_RepoDir/$_Repo.db.tar.gz" "$_RepoDir/{}/$_File" 
                 ;;
             *)
                 ln -s "../../pool/packages/$_File" "$_RepoDir/$_Arch/${_File}"
