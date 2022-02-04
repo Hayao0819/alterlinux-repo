@@ -26,15 +26,16 @@ UpdateRepoDb(){
         _Arch="${_Arch%%.pkg.tar.*}"
 
         # Setup files
-        mkdir -p "$_RepoDir/$_Arch"
         rm -rf "${_RepoDir:?}/${_Arch:?}/${_File:?}" 
 
         case "$_Arch" in
             "any")
+                GetRepoArchList "$_Repo" | xargs -I{} mkdir -p "$_RepoDir/{}"
                 GetRepoArchList "$_Repo" | xargs -I{} ln -s "../../pool/packages/$_File" "$_RepoDir/{}/${_File}"
                 GetRepoArchList "$_Repo" | xargs -I{} repo-add "$_RepoDir/{}/$_Repo.db.tar.gz" "$_RepoDir/{}/$_File" 
                 ;;
             *)
+                mkdir -p "$_RepoDir/$_Arch"
                 ln -s "../../pool/packages/$_File" "$_RepoDir/$_Arch/${_File}"
                 repo-add "$_RepoDir/${_Arch}/$_Repo.db.tar.gz" "$_RepoDir/$_Arch/$_File" 
                 ;;
