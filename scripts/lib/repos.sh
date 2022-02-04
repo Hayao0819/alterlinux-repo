@@ -103,7 +103,10 @@ CheckAlreadyBuilt(){
     local _RepoFile="$_LockFileDir/$_RepoName"
 
     [[ -e "$_RepoFile" ]] || return 0
-    readarray _FileList < <(makepkg --ignorearch --packagelist | GetBaseName)
+    readarray _FileList < <(
+        cd "$(dirname "$_Pkgbuild")" || return 0
+        #sudo -E -u "$ChrootUser"\
+        makepkg --ignorearch --packagelist | GetBaseName)
 
     for _Pkg in "${_FileList[@]}"; do
         ! grep -qx "$_Arch/$_Pkg" "$_RepoFile" || return 1
