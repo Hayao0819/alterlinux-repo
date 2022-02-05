@@ -121,6 +121,9 @@ RsyncArgs+=("--recursive" "--verbose" "--archive" "--progress")
 if [[ -n "${Port-""}" ]]; then
     RsyncArgs+=("--port=$Port")
 fi
+if [[ -n "${SecretKey-""}" ]]; then
+    RsyncArgs+=("-e ssh -i \"$SecretKey\"")
+fi
 RsyncArgs=("${RsyncArgs[@]}" "${LocalRepoPath}/" "${Server}:${RemoteRepoPath}") 
 
 #-- Run rsync --#
