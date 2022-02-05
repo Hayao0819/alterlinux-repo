@@ -42,11 +42,13 @@ HelpDoc(){
 
 PrepareBuild(){
     # Add alterlinux-keyring
-    sudo pacman-key --init
-    curl -Lo - "http://repo.dyama.net/fascode.pub" | sudo pacman-key -a -
-    sudo pacman-key --lsign-key development@fascode.net
-    sudo pacman --config "$MainDir/configs/pacman-x86_64.conf" -Sy --noconfirm alter-stable/alterlinux-keyring
-    sudo pacman-key --populate alterlinux
+    if ! pacman -Qq alterlinux-keyring 1> /dev/null 2>&1; then
+        sudo pacman-key --init
+        curl -Lo - "http://repo.dyama.net/fascode.pub" | sudo pacman-key -a -
+        sudo pacman-key --lsign-key development@fascode.net
+        sudo pacman --config "$MainDir/configs/pacman-x86_64.conf" -Sy --noconfirm alter-stable/alterlinux-keyring
+        sudo pacman-key --populate alterlinux
+    fi
 
     # Setup user
     UserCheck "$ChrootUser" || useradd -m -g root -s /bin/bash "$ChrootUser"
