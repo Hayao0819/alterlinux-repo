@@ -5,6 +5,8 @@ set -Eeu
 
 #-- Initialize --#
 CurrentDir="$(cd "$(dirname "${0}")" || exit 1 ; pwd)"
+ScriptName="$0"
+RawArgument=("$@")
 LibDir="$CurrentDir/lib"
 MainDir="$CurrentDir/../"
 ReposDir="$CurrentDir/../repos"
@@ -56,7 +58,13 @@ PrepareBuild(){
     UserCheck "$ChrootUser" || useradd -m -g root -s /bin/bash "$ChrootUser"
     chmod 775 -R "$ReposDir"
 
-    # Create user
+    # Run this script as ChrootUser
+    if (( UID == 0 )); then
+        sudo -u "$ChrootUser" "$ScriptName" "${RawArgument[@]}"
+        exit "$?"
+    fi
+
+    # Create directory
     mkdir -p "$WorkDir/Chroot" "$WorkDir/LockFile"
 
     # RemoveLockFile
@@ -162,6 +170,6 @@ done
 #-- Run --#
 set -xv
 export GNUPGHOME="$GPGDir"
-CheckEnvironment
 PrepareBuild
+CheckEnvironment
 Main
