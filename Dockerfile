@@ -10,8 +10,8 @@ RUN systemd-machine-id-setup
 # Setup environment
 WORKDIR /Main
 COPY . /Main
-ENV ALTER_MAIN_DIR="/Main" ALTER_OUT_DIR="/Repo" ALTER_WORK_DIR="/Main/work"
-RUN useradd -m -g root -s /bin/bash -d "/Main" user
+ENV ALTER_MAIN_DIR="/home/user/main" ALTER_OUT_DIR="/home/user/repo" ALTER_WORK_DIR="/home/user/out"
+RUN useradd -m -g root -s /bin/bash -d "/home/user/" user
 RUN echo "user ALL=(ALL) NOPASSWD:ALL" > "/etc/sudoers.d/alter-repo"
 
 # Run
