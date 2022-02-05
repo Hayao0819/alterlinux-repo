@@ -66,9 +66,10 @@ shift 1
 
 #-- Run --#
 set -xv
+HomeDir="$(eval echo ~"$USER")"
 sudo usermod -u "$USER_ID" -o "$USER"
 sudo groupmod -g "$GROUP_ID" "$USER"
 
-sudo chmod 755 -R "$HOME"
-sudo chown -R "$USER:$USER" "$HOME"
+sudo chmod 755 -R "$HomeDir"
+sudo chown -R "$USER:$USER" "$HomeDir"
 sudo -u "$USER" "$@"
