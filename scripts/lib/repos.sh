@@ -41,7 +41,7 @@ UpdateRepoDb(){
         _File="$(basename "$_Path")"
         _Arch="${_File##*-}"
         _Arch="${_Arch%%.pkg.tar.*}"
-        MsgDeBug "Meta Update: $_Path"
+        MsgDebug "Meta Update: $_Path"
 
         # Setup files
         rm -rf "${_RepoDir:?}/${_Arch:?}/${_File:?}" 
