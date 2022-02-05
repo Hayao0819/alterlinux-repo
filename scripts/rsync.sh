@@ -134,7 +134,7 @@ RsyncArgs=("${RsyncArgs[@]}" "${LocalRepoPath}/" "${Server}:${RemoteRepoPath}")
 
 # フィルター
 for s in "${IgnoreRsyncArgs[@]}"; do
-    readarray RsyncArgs < <(PrintArray "${RsyncArgs[@]}" | grep -vx "$s")
+    readarray RsyncArgs < <(PrintArray "${RsyncArgs[@]}" | grep -vx -- "$s")
 done
 
 #-- Run rsync --#
