@@ -16,4 +16,4 @@ COPY . /home/user/main/
 
 # Run
 ENTRYPOINT []
-CMD ["/Main/scripts/main.sh", "--user", "user"]
+CMD ["/home/user/main/scripts/main.sh", "--user", "user"]
