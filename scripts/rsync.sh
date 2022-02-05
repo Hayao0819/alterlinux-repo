@@ -9,6 +9,7 @@ source "$LibDir/shellfunc.sh"
 source "$LibDir/parsecmdopt.sh"
 
 #-- Configs --#
+ShowDebugMsg=true
 SecretKey=""
 Server=""
 Port="22"
@@ -50,6 +51,10 @@ while true; do
         -b | --backup)
             Backup=true
             shift 1
+            ;;
+        -c | --config)
+            ConfigFile="$2"
+            shift 2
             ;;
         -h | --help)
             HelpDoc
