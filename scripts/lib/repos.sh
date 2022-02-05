@@ -67,7 +67,7 @@ UpdateRepoDb(){
                 ;;
         esac
 
-    done < <(find "$_Pool" -mindepth 1 -type f)
+    done < <(find "$_Pool" -mindepth 1 -type f | grep -v ".sig$")
 
 }
 
