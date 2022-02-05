@@ -117,7 +117,13 @@ fi
 
 
 #-- Setup rsync argument--#
-RsyncArgs+=("--recursive" "--links" "--verbose" "--archive" "--progress")
+RsyncArgs+=(
+    "--recursive" # 再帰的に処理
+    "--verbose" #冗長出力
+    "--progress" #プログレスバー表示
+    "--links" #シンボリックリンクをコピー
+    
+)
 if [[ -n "${Port-""}" ]]; then
     RsyncArgs+=("--port=$Port")
 fi
