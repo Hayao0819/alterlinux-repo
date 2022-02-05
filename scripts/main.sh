@@ -67,7 +67,7 @@ PrepareBuild(){
 
 CheckEnvironment(){
     if (( UID == 0 )); then
-        MdgError "Do not run as root"
+        MsgError "Do not run as root"
         exit 1
     fi
 }
