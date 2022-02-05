@@ -22,6 +22,7 @@ ShowVariable ALTER_OUT_DIR
 ShowVariable ALTER_SIGN_KEY
 MainDir="${ALTER_MAIN_DIR-"${MainDir}"}" OutDir="${ALTER_OUT_DIR-"${MainDir}/out"}"
 WorkDir="${ALTER_WORK_DIR-"${MainDir}/work"}"
+GPGDir="${ALTER_GPG_DIR-"${HOME}/.gnupg/"}"
 GPGKey="${ALTER_SIGN_KEY-""}"
 ChrootUser="hayao"
 
@@ -38,6 +39,7 @@ HelpDoc(){
     echo "    -o | --out OUT_DIR"
     echo "    -h | --help              This help message"
     echo "         --rmlock            Remove all lockfile"
+    echo "         --gpgdir DIR        Specify GnuPG directory"
 }
 
 PrepareBuild(){
@@ -104,7 +106,7 @@ Main(){
 
 #-- Parse command-line options --#
 # Parse options
-ParseCmdOpt SHORT="a:g:ho:p:r:w:" LONG="arch:gpg:help,out:,pkg:,repo:,work:,rmlock" -- "${@}" || exit 1
+ParseCmdOpt SHORT="a:g:ho:p:r:w:" LONG="arch:gpg:help,out:,pkg:,repo:,work:,rmlock,gpgdir:" -- "${@}" || exit 1
 eval set -- "${OPTRET[@]}"
 unset OPTRET
 
@@ -142,6 +144,10 @@ while true; do
             RemoveLockFile=true
             shift 1
             ;;
+        --gpgdir)
+            GPGDir="$2"
+            shift 2
+            ;;
         --)
             shift 1
             break
@@ -155,7 +161,7 @@ done
 
 #-- Run --#
 set -xv
-
+export GNUPGHOME="$GPGDir"
 CheckEnvironment
 PrepareBuild
 Main
