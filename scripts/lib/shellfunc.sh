@@ -39,5 +39,7 @@ MakeSymLink(){
 }
 
 MakeDir(){
-    sudo mkdir -p "$@"
+    MsgDebug "Create dir: $*"
+    #sudo mkdir -p "$@"
+    mkdir -p "$@"
 }
