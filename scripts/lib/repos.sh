@@ -41,6 +41,7 @@ UpdateRepoDb(){
         _File="$(basename "$_Path")"
         _Arch="${_File##*-}"
         _Arch="${_Arch%%.pkg.tar.*}"
+        MsgDeBug "Meta Update: $_Path"
 
         # Setup files
         rm -rf "${_RepoDir:?}/${_Arch:?}/${_File:?}" 
@@ -68,7 +69,7 @@ UpdateRepoDb(){
                 ;;
         esac
 
-    done < <(find "$_Pool" -mindepth 1 -type f | grep -v ".sig$")
+    done < <(find "$_Pool" -name "*.pkg.tar.*" -mindepth 1 -maxdepth 1 -type f | grep -v ".sig$")
 
 }
 
