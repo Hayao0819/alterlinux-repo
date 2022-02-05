@@ -27,3 +27,13 @@ UserCheck(){
 PrintOneLineCSV(){
     tr "," "\n" <<< "$1" | grep -Ev "^$"
 }
+
+# MakeSimLink <Real file path> <Link path>
+MakeSimLink(){
+    [[ -e "$2" ]] && {
+        rm -rf "$2"
+    }
+
+    mkdir -p "${dirname "$2"}"
+    ln -s "$1" "$2"
+}
