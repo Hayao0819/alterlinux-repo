@@ -34,6 +34,10 @@ MakeSymLink(){
         rm -rf "$2"
     }
 
-    mkdir -p "$(dirname "$2")"
+    MakeDir "$(dirname "$2")"
     ln -s "$1" "$2"
+}
+
+MakeDir(){
+    sudo mkdir -p "$@"
 }

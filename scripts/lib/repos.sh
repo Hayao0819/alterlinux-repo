@@ -50,7 +50,7 @@ UpdateRepoDb(){
         local _Add_Pkg
         _Add_Pkg(){
             local _Arch="$1" _Symlink="$_RepoDir/$_Arch/${_File}"
-            mkdir -p "$_RepoDir/$_Arch"
+            MakeDir"$_RepoDir/$_Arch"
             if [[ -n "$GPGKey" ]]; then
                 rm -rf "${_Path}.sig"
                 gpg --output "${_Path}.sig" -u "$GPGKey" --detach-sig "${_Path}"
@@ -125,7 +125,7 @@ CreateRepoLockFile(){
     local _LockFileDir="$WorkDir/LockFile/"
     local _RepoFile="$_LockFileDir/$_RepoName"
 
-    mkdir -p "$_LockFileDir"
+    MakeDir "$_LockFileDir"
     [[ -e "$_RepoFile" ]] || { echo > "$_RepoFile"; }
     readarray -t _FileList < <(
         cd "$(dirname "$_PkgBuild")" || return 0

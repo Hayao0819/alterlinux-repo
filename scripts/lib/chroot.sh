@@ -1,6 +1,6 @@
 SetupChroot_x86_64(){
     local CHROOT="$WorkDir/Chroot/x86_64/"
-    mkdir -p "$CHROOT"
+    MakeDir "$CHROOT"
 
     [[ -e "$CHROOT/root" ]] && return 0
 
@@ -15,7 +15,7 @@ SetupChroot_x86_64(){
 
 SetupChroot_i686(){
     local CHROOT="$WorkDir/Chroot/i686/"
-    mkdir -p "$CHROOT"
+    MakeDir "$CHROOT"
 
     [[ -e "$CHROOT/root" ]] && return 0
 
@@ -56,7 +56,7 @@ MovePkgToPool(){
     }
 
     # Make dir
-    mkdir -p "$_Pool"
+    MakeDir "$_Pool"
 
     # Move
     while read -r _PkgFile; do

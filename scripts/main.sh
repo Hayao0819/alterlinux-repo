@@ -66,7 +66,7 @@ PrepareBuild(){
     fi
 
     # Create directory
-    mkdir -p "$WorkDir/Chroot" "$WorkDir/LockFile"
+    MakeDir "$WorkDir/Chroot" "$WorkDir/LockFile"
 
     # RemoveLockFile
     if [[ "${RemoveLockFile}" = true ]]; then
