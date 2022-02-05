@@ -11,7 +11,9 @@ RUN systemd-machine-id-setup
 WORKDIR /Main
 COPY . /Main
 ENV ALTER_MAIN_DIR="/Main" ALTER_OUT_DIR="/Repo" ALTER_WORK_DIR="/Work"
+RUN useradd -m -g root -s /bin/bash user
+RUN echo "user ALL=(ALL) NOPASSWD:ALL" > "/etc/sudoers.d/alter-repo"
 
 # Run
 ENTRYPOINT []
-CMD ["/Main/scripts/main.sh"]
+CMD ["/Main/scripts/main.sh" "--user" "user"]
