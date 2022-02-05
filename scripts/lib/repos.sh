@@ -55,9 +55,9 @@ UpdateRepoDb(){
                 rm -rf "${_Path}.sig"
                 gpg --output "${_Path}.sig" -u "$GPGKey" --detach-sig "${_Path}"
             fi
-            MakeSimLink "../../pool/packages/$_File" "$_Symlink"
+            MakeSymLink "../../pool/packages/$_File" "$_Symlink"
             if [[ -f "$_Path.sig" ]]; then
-                MakeSimLink "../../pool/packages/$_File.sig" "$_Symlink.sig"
+                MakeSymLink "../../pool/packages/$_File.sig" "$_Symlink.sig"
             fi
             if [[ -n "$GPGKey" ]]; then
                 repo-add --sign --key "$GPGKey" "$_RepoDir/${_Arch}/$_Repo.db.tar.gz" "$_Symlink"
@@ -76,6 +76,9 @@ UpdateRepoDb(){
         esac
 
     done < <(find "$_Pool" -mindepth 1 -maxdepth 1 -name "*.pkg.tar.*" -type f | grep -v ".sig$")
+
+    # Create Arch Directory for OLD Alter Linux
+    MakeSymLink 
 
 }
 
