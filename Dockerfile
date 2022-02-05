@@ -13,6 +13,8 @@ RUN useradd -m -s /bin/bash -d "/home/user/" user
 RUN echo "user ALL=(ALL) NOPASSWD:ALL" > "/etc/sudoers.d/alter-repo"
 WORKDIR /home/user/main/
 COPY . /home/user/main/
+RUN chown -R user:user /home/user; chmod 755 /home/user
+
 
 # Run
 ENTRYPOINT []
