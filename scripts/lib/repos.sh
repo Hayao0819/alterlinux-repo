@@ -57,6 +57,9 @@ UpdateRepoDb(){
             fi
             rm -rf "$_Symlink"
             ln -s "../../pool/packages/$_File" "$_Symlink"
+            if [[ -f "$_Path.sig" ]]; then
+                ln -s "../../pool/packages/$_File.sig" "$_Symlink.sig"
+            fi
             repo-add "$_RepoDir/${_Arch}/$_Repo.db.tar.gz" "$_Symlink"
         }
 
