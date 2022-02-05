@@ -16,4 +16,4 @@ RUN echo "user ALL=(ALL) NOPASSWD:ALL" > "/etc/sudoers.d/alter-repo"
 
 # Run
 ENTRYPOINT []
-CMD ["/Main/scripts/main.sh" "--user" "user"]
+CMD ["/Main/scripts/main.sh", "--user", "user"]
