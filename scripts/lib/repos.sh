@@ -51,6 +51,7 @@ UpdateRepoDb(){
             local _Arch="$1" _Symlink="$_RepoDir/$_Arch/${_File}"
             mkdir -p "$_RepoDir/$_Arch"
             if [[ -n "$GPGKey" ]]; then
+                rm -rf "${_Path}.sig"
                 gpg --output "${_Path}.sig" -u "$GPGKey" --detach-sig "${_Path}"
             fi
             ln -s "../../pool/packages/$_File" "$_Symlink"
