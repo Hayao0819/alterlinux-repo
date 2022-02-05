@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -Eeuxv
+set -Eeu
 
 #-- Initilize --#
 CurrentDir="$(cd "$(dirname "${0}")" || exit 1 ; pwd)"
@@ -77,6 +77,8 @@ while true; do
             ;;
     esac
 done
+
+set -xv
 
 if [[ -n "${ConfigFile-""}" ]]; then
     if [[ -e "$ConfigFile" ]]; then
