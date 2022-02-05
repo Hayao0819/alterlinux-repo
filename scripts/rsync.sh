@@ -117,7 +117,7 @@ fi
 
 
 #-- Setup rsync argument--#
-RsyncArgs+=("--recursive" "--verbose" "--archive" "--progress")
+RsyncArgs+=("--recursive" "--links" "--verbose" "--archive" "--progress")
 if [[ -n "${Port-""}" ]]; then
     RsyncArgs+=("--port=$Port")
 fi
