@@ -40,6 +40,7 @@ HelpDoc(){
 #    SftpCmd+=("$@" "\n")
 #}
 RsyncArgs=()
+IgnoreRsyncArgs=()
 
 #-- Parse Opts --#
 ParseCmdOpt SHORT="bc:hi:p:" LONG="backup,config:,port:,key:,identity:,bkdir:,help" -- "${@}" || exit 1
@@ -122,7 +123,6 @@ RsyncArgs+=(
     "--verbose" #冗長出力
     "--progress" #プログレスバー表示
     "--links" #シンボリックリンクをコピー
-    
 )
 if [[ -n "${Port-""}" ]]; then
     RsyncArgs+=("--port=$Port")
@@ -131,6 +131,11 @@ if [[ -n "${SecretKey-""}" ]]; then
     RsyncArgs+=("-e ssh -i \"$SecretKey\"")
 fi
 RsyncArgs=("${RsyncArgs[@]}" "${LocalRepoPath}/" "${Server}:${RemoteRepoPath}") 
+
+# フィルター
+for s in "${IgnoreRsyncArgs[@]}"; do
+    readarray -t RsyncArgs < <(PrintArray "${RsyncArgs[@]}" | grep -vx -- "$s")
+done
 
 #-- Run rsync --#
 MsgDebug "rsync ${RsyncArgs[*]}"
