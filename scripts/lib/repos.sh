@@ -54,6 +54,7 @@ UpdateRepoDb(){
                 rm -rf "${_Path}.sig"
                 gpg --output "${_Path}.sig" -u "$GPGKey" --detach-sig "${_Path}"
             fi
+            rm -rf "$_Symlink"
             ln -s "../../pool/packages/$_File" "$_Symlink"
             repo-add "$_RepoDir/${_Arch}/$_Repo.db.tar.gz" "$_Symlink"
         }
