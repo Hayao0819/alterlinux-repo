@@ -69,4 +69,6 @@ set -xv
 usermod -u "$USER_ID" -o "$USER"
 groupmod -g "$GROUP_ID" "$USER"
 
-"$@"
+sudo chmod 755 -R "$HOME"
+sudo chown -R "$USER:$USER" "$HOME"
+sudo -u "$USER" "$@"
