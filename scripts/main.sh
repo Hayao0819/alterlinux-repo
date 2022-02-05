@@ -42,6 +42,7 @@ HelpDoc(){
     echo "    -h | --help              This help message"
     echo "         --rmlock            Remove all lockfile"
     echo "         --gpgdir DIR        Specify GnuPG directory"
+    echo "         --user USER         Specify username to chroot"
 }
 
 PrepareBuild(){
@@ -114,7 +115,7 @@ Main(){
 
 #-- Parse command-line options --#
 # Parse options
-ParseCmdOpt SHORT="a:g:ho:p:r:w:" LONG="arch:gpg:help,out:,pkg:,repo:,work:,rmlock,gpgdir:" -- "${@}" || exit 1
+ParseCmdOpt SHORT="a:g:ho:p:r:w:" LONG="arch:gpg:help,out:,pkg:,repo:,work:,rmlock,gpgdir:user:" -- "${@}" || exit 1
 eval set -- "${OPTRET[@]}"
 unset OPTRET
 
@@ -154,6 +155,10 @@ while true; do
             ;;
         --gpgdir)
             GPGDir="$2"
+            shift 2
+            ;;
+        --user)
+            ChrootUser="$2"
             shift 2
             ;;
         --)
