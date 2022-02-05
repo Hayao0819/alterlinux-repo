@@ -60,7 +60,7 @@ UpdateRepoDb(){
 
         case "$_Arch" in
             "any")
-                RunEachArch _Add_Pkg "{}"
+                RunEachArch "$_Repo" _Add_Pkg "{}"
                 ;;
             *)
                 _Add_Pkg "$_Arch"
