@@ -58,6 +58,7 @@ done
 
 
 #-- Run --#
+USER="$(whoami)"
 usermod -u "$USER_ID" -o -m "$USER"
 groupmod -g "$GROUP_ID" "$USER"
 
