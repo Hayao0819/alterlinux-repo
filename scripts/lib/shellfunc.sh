@@ -28,8 +28,8 @@ PrintOneLineCSV(){
     tr "," "\n" <<< "$1" | grep -Ev "^$"
 }
 
-# MakeSimLink <Real file path> <Link path>
-MakeSimLink(){
+# MakeSymLink <Real file path> <Link path>
+MakeSymLink(){
     [[ -e "$2" ]] && {
         rm -rf "$2"
     }
