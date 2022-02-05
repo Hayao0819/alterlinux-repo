@@ -56,11 +56,11 @@ PrepareBuild(){
 
     # Setup user
     UserCheck "$ChrootUser" || useradd -m -g root -s /bin/bash "$ChrootUser"
-    chmod 775 -R "$ReposDir"
+    sudo chmod 775 -R "$ReposDir"
 
     # Run this script as ChrootUser
     if (( UID == 0 )); then
-        sudo -u "$ChrootUser" "$ScriptName" "${RawArgument[@]}"
+        sudo -E -u "$ChrootUser" "$ScriptName" "${RawArgument[@]}"
         exit "$?"
     fi
 
