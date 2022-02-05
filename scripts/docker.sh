@@ -66,8 +66,8 @@ shift 1
 
 #-- Run --#
 set -xv
-usermod -u "$USER_ID" -o "$USER"
-groupmod -g "$GROUP_ID" "$USER"
+sudo usermod -u "$USER_ID" -o "$USER"
+sudo groupmod -g "$GROUP_ID" "$USER"
 
 sudo chmod 755 -R "$HOME"
 sudo chown -R "$USER:$USER" "$HOME"
