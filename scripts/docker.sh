@@ -15,7 +15,7 @@ source "${LibDir}/loader.sh"
 
 #-- Functions --#
 HelpDoc(){
-    echo "usage: docker.sh [Command] [Option]"
+    echo "usage: docker.sh [user] [Command] [Option]"
     echo
     echo " General options:"
     echo "    -g | --group GID"
@@ -25,6 +25,10 @@ HelpDoc(){
 
 GROUP_ID="${GROUP_ID-""}"
 USER_ID="${USER_ID-""}"
+
+#-- Show debug info --#
+ShowVariable USER_ID
+ShowVariable GROUP_ID
 
 #-- Parse Opts --#
 ParseCmdOpt SHORT="g:u:h" LONG="group:,user:,help" -- "${@}" || exit 1
@@ -55,11 +59,13 @@ while true; do
             ;;
     esac
 done
+USER="${1-""}"
+[[ -n "$USER" ]] || exit 1
+shift 1
 
 
 #-- Run --#
 set -xv
-USER="$(whoami)"
 usermod -u "$USER_ID" -o -m "$USER"
 groupmod -g "$GROUP_ID" "$USER"
 
