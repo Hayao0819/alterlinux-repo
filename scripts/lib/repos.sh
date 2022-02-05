@@ -69,7 +69,7 @@ UpdateRepoDb(){
                 ;;
         esac
 
-    done < <(find "$_Pool" -name "*.pkg.tar.*" -mindepth 1 -maxdepth 1 -type f | grep -v ".sig$")
+    done < <(find "$_Pool" -mindepth 1 -maxdepth 1 -name "*.pkg.tar.*" -type f | grep -v ".sig$")
 
 }
 
