@@ -6,7 +6,7 @@ CurrentDir="$(cd "$(dirname "${0}")" || exit 1 ; pwd)"
 LibDir="$CurrentDir/lib"
 source "$LibDir/msg.sh"
 source "$LibDir/shellfunc.sh"
-source "$LibDir/parsecmdoppt.sh"
+source "$LibDir/parsecmdopt.sh"
 
 #-- Configs --#
 SecretKey=""
