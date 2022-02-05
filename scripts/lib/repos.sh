@@ -117,6 +117,7 @@ CreateRepoLockFile(){
     local _LockFileDir="$WorkDir/LockFile/"
     local _RepoFile="$_LockFileDir/$_RepoName"
 
+    mkdir -p "$_LockFileDir"
     [[ -e "$_RepoFile" ]] || { echo > "$_RepoFile"; }
     readarray -t _FileList < <(
         cd "$(dirname "$_PkgBuild")" || return 0
