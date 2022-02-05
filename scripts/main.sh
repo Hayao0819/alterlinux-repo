@@ -59,7 +59,7 @@ PrepareBuild(){
 
     # RemoveLockFile
     if [[ "${RemoveLockFile}" = true ]]; then
-        rm -rf "$WorkDir/Lockfile"
+        rm -rf "$WorkDir/LockFile"
     fi
 }
 
