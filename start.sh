@@ -66,11 +66,11 @@ done
 #-- Configure --#
 # Do not edit path
 DockerMountDir "${OutDir}" "/Repo/"
-DockerMountDir "$WorkDir" "/Work"
+DockerMountDir "$WorkDir" "/Main/work"
 #DockerMountDir "$CurrentDir" "/Main"
 if [[ -n "${GPGKey-""}" ]]; then
-    DockerMountDir "${HOME}/.gnupg" "/Work/GPG"
-    DOCKER_RUN_OPT+=("--env" "ALTER_SIGN_KEY=$GPGKey" "--env" "ALTER_GPG_DIR=/Work/GPG")
+    DockerMountDir "${HOME}/.gnupg" "/Main/work/GPG"
+    DOCKER_RUN_OPT+=("--env" "ALTER_SIGN_KEY=$GPGKey" "--env" "ALTER_GPG_DIR=/Main/work/GPG")
 fi
 
 
