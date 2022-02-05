@@ -66,7 +66,7 @@ shift 1
 
 #-- Run --#
 set -xv
-usermod -u "$USER_ID" -o -m "$USER"
+usermod -u "$USER_ID" -o "$USER"
 groupmod -g "$GROUP_ID" "$USER"
 
 "$@"
