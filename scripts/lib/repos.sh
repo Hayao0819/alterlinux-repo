@@ -50,7 +50,7 @@ UpdateRepoDb(){
         local _Add_Pkg
         _Add_Pkg(){
             local _Arch="$1" _Symlink="$_RepoDir/$_Arch/${_File}"
-            MakeDir"$_RepoDir/$_Arch"
+            MakeDir "$_RepoDir/$_Arch"
             if [[ -n "$GPGKey" ]]; then
                 rm -rf "${_Path}.sig"
                 gpg --output "${_Path}.sig" -u "$GPGKey" --detach-sig "${_Path}"
