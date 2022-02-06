@@ -36,6 +36,7 @@ HelpDoc(){
 
 
 RunSftpCmd(){
+    MsgDebug "Run: $*"
     SftpCmd+=("$@" "\0")
 }
 PrintSftpCmd(){
@@ -96,7 +97,7 @@ while true; do
     esac
 done
 
-set -xv
+#set -xv
 
 if [[ -n "${ConfigFile-""}" ]]; then
     if [[ -e "$ConfigFile" ]]; then
@@ -120,13 +121,16 @@ fi
 #-- Set SFTP Commands --#
 RunSftpCmd cd "$(dirname "$RemoteRepoPath")"
 if [[ "$Backup" = true ]]; then
-    BackupDate="$(date "+%Y/%m/%d-%H:%M:%S")"
-    RunSftpCmd get -r "$RemoteRepoPath" "${LocalRepoPath}.${BackupDate}.remote-old"
-    RunSftpCmd put -r "${LocalRepoPath}.${BackupDate}.remote-old" "${RemoteRepoPath}.backup"
+    BackupDate="$(date "+%Y%m%d-%H:%M:%S")"
+    DirName="$(basename "${LocalRepoPath%/}").${BackupDate}.remote-old"
+    RunSftpCmd get -r "${RemoteRepoPath}" "${LocalBackupDir}/${DirName}"
+    RunSftpCmd mkdir "${RemoteRepoPath%/}.backup/${DirName}"
+    RunSftpCmd put -r "${LocalBackupDir}/$DirName" "${RemoteRepoPath%/}.backup/"
 fi
-while read -r Dir;do
-    RunSftpCmd rmdir "$Dir"
-done < <(find "${LocalRepoPath}" -mindepth 1 -maxdepth 1)
+#while read -r Dir;do
+#    RunSftpCmd rm "$RemoteRepoPath/$Dir/*"
+#    RunSftpCmd rmdir "$RemoteRepoPath/$Dir"
+#done < <(find "${LocalRepoPath}" -mindepth 1 -maxdepth 1 | sed "s|$LocalRepoPath||g" | tac)
 #RunSftpCmd rmdir "$(basename "$_RemoteRepoPath")"
 #RunSftpCmd mkdir "$(basename "$_RemoteRepoPath")"
 #RunSftpCmd put -r "$LocalRepoPath" "$(basename "$_RemoteRepoPath")"
@@ -139,9 +143,7 @@ fi
 SftpArgs+=("${Server}:${RemoteRepoPath}")
 
 #-- Run SFTP --#
-sftp "${SftpArgs[@]}" <(PrintSftpCmd)
-
-
+PrintSftpCmd | sftp "${SftpArgs[@]}"
 
 #-- Setup rsync argument--#
 RsyncArgs+=(
