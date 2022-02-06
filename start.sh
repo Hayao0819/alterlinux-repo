@@ -16,7 +16,7 @@ source "${LibDir}/loader.sh"
 
 #-- Configs --#
 OutDir="${HOME}/repo/"
-WorkDir="$CurrentDir/work"
+WorkDir="${HOME}/work"
 GPGKey=""
 DockerName="alterlinux-repo-build"
 DOCKER_RUN_OPT=()
