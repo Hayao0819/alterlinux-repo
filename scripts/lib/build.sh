@@ -24,6 +24,11 @@ BuildPkg(){
             MsgWarn "$(basename "$(dirname "$_Pkg")") has been built."
             continue
         }
+        ! GetSkipPkgList "$_Arch" "$_RepoName" | grep -qx "$(basename "$(dirname "${_Pkg}")")" || {
+            MsgWarn "$(basename "$(dirname "$_Pkg")") has set as SkipPkg_${_Arch}"
+            MsgWarn "Skip the build it for $_Arch"
+            continue
+        }
         RunMakePkg "$_Arch" "$_Pkg"
         MovePkgToPool "$_Arch" "$_RepoName" "$_Pkg"
         CreateRepoLockFile "$_Arch" "$_RepoName" "$_Pkg"

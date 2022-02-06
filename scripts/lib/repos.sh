@@ -50,6 +50,10 @@ UpdateRepoDb(){
         local _Add_Pkg
         _Add_Pkg(){
             local _Arch="$1" _Symlink="$_RepoDir/$_Arch/${_File}"
+            ! GetSkipPkgList "$_Arch" "$_Repo" | grep -qx "$(cut -d "-" -f 1 <<< "$_File")" || {
+                MsgWarn "Skip to add $(cut -d "-" -f 1 <<< "$_File") to $_Arch"
+                return 0
+            }
             MakeDir "$_RepoDir/$_Arch"
             if [[ -n "$GPGKey" ]]; then
                 rm -rf "${_Path}.sig"
@@ -117,6 +121,14 @@ GetRepoArchList(){ {
         PrintArray "${RepoArch[@]}"
     fi
 } }
+
+# GetSkipPkgList <arch> <repo>
+GetSkipPkgList(){{
+    local _Arch="$1" _RepoName="$2"
+    local _Repo="$ReposDir/$_RepoName"
+    LoadShellFIles "$_Repo/repo-config.sh"
+    eval "PrintArray \"\${SkipPkg_${_Arch}}\""
+}}
 
 
 # CreateRepoLockFile <arch> <repo> <pkgbuild>
