@@ -30,6 +30,12 @@ USER_ID="${USER_ID-""}"
 ShowVariable USER_ID
 ShowVariable GROUP_ID
 
+ShowVariable ALTER_MAIN_DIR
+ShowVariable ALTER_WORK_DIR
+ShowVariable ALTER_OUT_DIR
+ShowVariable ALTER_SIGN_KEY
+ShowVariable ALTER_GPG_DIR
+
 #-- Parse Opts --#
 ParseCmdOpt SHORT="g:u:h" LONG="group:,user:,help" -- "${@}" || exit 1
 eval set -- "${OPTRET[@]}"
@@ -70,6 +76,18 @@ HomeDir="$(eval echo ~"$USER")"
 sudo usermod -u "$USER_ID" -o "$USER"
 sudo groupmod -g "$GROUP_ID" "$USER"
 
+ShowVariable ALTER_MAIN_DIR
+ShowVariable ALTER_WORK_DIR
+ShowVariable ALTER_OUT_DIR
+ShowVariable ALTER_SIGN_KEY
+ShowVariable ALTER_GPG_DIR
+
 sudo chmod 755 -R "$HomeDir"
 sudo chown -R "$USER:$USER" "$HomeDir"
-sudo -u "$USER" "$@"
+sudo -u "$USER" \
+    ALTER_MAIN_DIR="${ALTER_MAIN_DIR}"　\
+    ALTER_WORK_DIR="${ALTER_WORK_DIR}"
+    ALTER_OUT_DIR="$ALTER_OUT_DIR" \
+    ALTER_SIGN_KEY="$ALTER_SIGN_KEY" \
+    ALTER_GPG_DIR="$ALTER_GPG_DIR" \
+    "$@"
