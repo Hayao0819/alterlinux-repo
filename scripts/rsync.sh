@@ -34,11 +34,23 @@ HelpDoc(){
     echo "    -h | --help              This help message"
 }
 
+
+RunSftpCmd(){
+    SftpCmd+=("$@" "\0")
+}
+PrintSftpCmd(){
+    local s
+    for s in "${SftpCmd[@]}";do 
+        if [[ "$s" = "\0" ]]; then
+            echo
+        else
+            echo -en "${s} "
+        fi
+    done | sed "s| $||g"
+}
+
 SftpCmd=()
 SftpArgs=()
-RunSftpCmd(){
-    SftpCmd+=("$@" "\n")
-}
 RsyncArgs=()
 IgnoreRsyncArgs=()
 
@@ -106,11 +118,11 @@ fi
 
 
 #-- Set SFTP Commands --#
-RunSftpCmd cd "$(dirname "$_RemoteRepoPath")"
+RunSftpCmd cd "$(dirname "$RemoteRepoPath")"
 if [[ "$Backup" = true ]]; then
     BackupDate="$(date "+%Y/%m/%d-%H:%M:%S")"
     RunSftpCmd get -r "$RemoteRepoPath" "${LocalRepoPath}.${BackupDate}.remote-old"
-    RunSftpCmd put -r "${LocalRepoPath}.${BackupDate}.remote-old" "${_RemoteRepoPath}.backup"
+    RunSftpCmd put -r "${LocalRepoPath}.${BackupDate}.remote-old" "${RemoteRepoPath}.backup"
 fi
 while read -r Dir;do
     RunSftpCmd rmdir "$Dir"
@@ -119,6 +131,15 @@ done < <(find "${LocalRepoPath}" -mindepth 1 -maxdepth 1)
 #RunSftpCmd mkdir "$(basename "$_RemoteRepoPath")"
 #RunSftpCmd put -r "$LocalRepoPath" "$(basename "$_RemoteRepoPath")"
 RunSftpCmd bye
+
+#-- Setup SFTP argument --#
+if [[ -n "$Port" ]]; then
+    SftpArgs+=("-oPort=$Port")
+fi
+SftpArgs+=("${Server}:${RemoteRepoPath}")
+
+#-- Run SFTP --#
+sftp "${SftpArgs[@]}" <(PrintSftpCmd)
 
 
 
