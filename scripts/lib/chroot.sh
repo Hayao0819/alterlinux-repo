@@ -45,11 +45,14 @@ SetupChroot_i686(){
     arch-nspawn "$CHROOT/root" pacman -Syyu
 }
 
-# RunMakePkg <ARCH> <PKGBUILD PATH>
+# RunMakePkg <ARCH> <PKGBUILD PATH> <MAKEPKG Args ...>
 RunMakePkg(){
     local MakeChrootPkg_Args=(-c -r "$WorkDir/Chroot/$1" -U "$ChrootUser")
     local Makepkg_Args=()
     local Pkgbuild="${2}"
+
+    shift 2 || return 1
+    Makepkg_Args+=("$@")
 
     # Move to dir
     cd "$(dirname "$Pkgbuild")" || {
