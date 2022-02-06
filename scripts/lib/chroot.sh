@@ -21,8 +21,11 @@ SetupChroot_i686(){
     if ! pacman -Qq archlinux32-keyring && [[ "$(uname -m)" = "x86_64" ]]; then
         {
             cd "$WorkDir/Keyring" || return 1
-            git clone "https://aur.archlinux.org/archlinux32-keyring"
+            if [[ ! -d "archlinux32-keyring" ]]; then
+                git clone "https://aur.archlinux.org/archlinux32-keyring" "archlinux32-keyring"
+            fi
             cd "archlinux32-keyring" || return 1
+            git pull
             SetupChroot_x86_64
             RunMakePkg "x86_64" "./PKGBUILD"
             local _Pkg
