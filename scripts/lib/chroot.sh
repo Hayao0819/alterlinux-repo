@@ -15,7 +15,24 @@ SetupChroot_x86_64(){
 
 SetupChroot_i686(){
     local CHROOT="$WorkDir/Chroot/i686/"
-    MakeDir "$CHROOT"
+    MakeDir "$CHROOT" "$WorkDir/Keyring"
+
+    # Install archlinux32-keyring
+    if ! pacman -Qq archlinux32-keyring && [[ "$(uname -m)" = "x86_64" ]]; then
+        {
+            cd "$WorkDir/Keyring" || return 1
+            git clone "https://aur.archlinux.org/archlinux32-keyring"
+            cd "archlinux32-keyring" || return 1
+            SetupChroot_x86_64
+            RunMakePkg "x86_64" "./PKGBUILD"
+            local _Pkg
+            while read -r _Pkg; do
+                MsgWarn "Install $_Pkg"
+                sudo pacman -U --noconfirm "$_Pkg"
+            done < <(GetPkgListFromPKGBUILD "x86_64" "./PKGBUILD")
+        }
+    fi
+        
 
     [[ -e "$CHROOT/root" ]] && return 0
 
@@ -68,6 +85,6 @@ MovePkgToPool(){
             }
             MsgError "$__File does not exist"
         done
-    done < <(setarch "$_Arch" sudo -u "$ChrootUser" makepkg --packagelist)
+    done < <(GetPkgListFromPKGBUILD "$_Arch" "./PKGBUILD")
     return 0
 }

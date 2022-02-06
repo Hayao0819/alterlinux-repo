@@ -129,7 +129,7 @@ CreateRepoLockFile(){
     [[ -e "$_RepoFile" ]] || { echo > "$_RepoFile"; }
     readarray -t _FileList < <(
         cd "$(dirname "$_PkgBuild")" || return 0
-        makepkg --ignorearch --packagelist | GetBaseName)
+        GetPkgListFromPKGBUILD "$_Arch" "./PKGBUILD" | GetBaseName)
 
     local _Pkg
     for _Pkg in "${_FileList[@]}"; do
@@ -149,7 +149,7 @@ CheckAlreadyBuilt(){
     [[ -e "$_RepoFile" ]] || return 0
     readarray -t _FileList < <(
         cd "$(dirname "$_PkgBuild")" || return 0
-        makepkg --ignorearch --packagelist | GetBaseName)
+        GetPkgListFromPKGBUILD "$_Arch" "${_PkgBuild}" | GetBaseName)
 
     local _Pkg
     for _Pkg in "${_FileList[@]}"; do
