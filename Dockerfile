@@ -8,7 +8,7 @@ RUN pacman -Sy --noconfirm devtools base-devel
 RUN systemd-machine-id-setup
 
 # Setup environment
-ENV ALTER_MAIN_DIR="/home/user/main" ALTER_OUT_DIR="/home/user/repo" ALTER_WORK_DIR="/home/user/out"
+ENV ALTER_MAIN_DIR="/home/user/main" ALTER_OUT_DIR="/home/user/repo" ALTER_WORK_DIR="/home/user/work"
 RUN useradd -m -s /bin/bash -d "/home/user/" user
 RUN echo "user ALL=(ALL) NOPASSWD:ALL" > "/etc/sudoers.d/alter-repo"
 WORKDIR /home/user/main/
