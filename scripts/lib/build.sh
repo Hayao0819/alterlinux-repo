@@ -24,7 +24,7 @@ BuildPkg(){
             MsgWarn "$(basename "$(dirname "$_Pkg")") has been built."
             continue
         }
-        RunMakePkg "$_Arch" "$_Pkg" --skippgpcheck --nocheck
+        RunMakePkg "$_Arch" "$_Pkg"
         MovePkgToPool "$_Arch" "$_RepoName" "$_Pkg"
         CreateRepoLockFile "$_Arch" "$_RepoName" "$_Pkg"
     done < <(PrintArray "${_ToBuildPkg[@]}")
