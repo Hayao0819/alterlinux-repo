@@ -84,10 +84,4 @@ ShowVariable ALTER_GPG_DIR
 
 sudo chmod 755 -R "$HomeDir"
 sudo chown -R "$USER:$USER" "$HomeDir"
-sudo -u "$USER" \
-    ALTER_MAIN_DIR="${ALTER_MAIN_DIR}"　\
-    ALTER_WORK_DIR="${ALTER_WORK_DIR}"
-    ALTER_OUT_DIR="$ALTER_OUT_DIR" \
-    ALTER_SIGN_KEY="$ALTER_SIGN_KEY" \
-    ALTER_GPG_DIR="$ALTER_GPG_DIR" \
-    "$@"
+sudo -u "$USER" --preserve-env=ALTER_MAIN_DIR,ALTER_WORK_DIR,ALTER_OUT_DIR,ALTER_SIGN_KEY,ALTER_GPG_DIR "$@"
