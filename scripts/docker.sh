@@ -82,6 +82,15 @@ ShowVariable ALTER_OUT_DIR
 ShowVariable ALTER_SIGN_KEY
 ShowVariable ALTER_GPG_DIR
 
-sudo chmod 755 -R "$HomeDir"
-sudo chown -R "$USER:$USER" "$HomeDir"
+FixPermission(){
+    sudo chmod 755 -R "$1"
+    sudo chown -R "$USER:$USER" "$1"
+}
+
+FixPermission "$ALTER_MAIN_DIR"
+FixPermission "$ALTER_OUT_DIR"
+if [[ ! -e "$ALTER_WORK_DIR/Chroot" ]]; then
+    FixPermission "$ALTER_WORK_DIR"
+fi
+
 sudo -u "$USER" --preserve-env=ALTER_MAIN_DIR,ALTER_WORK_DIR,ALTER_OUT_DIR,ALTER_SIGN_KEY,ALTER_GPG_DIR "$@"
