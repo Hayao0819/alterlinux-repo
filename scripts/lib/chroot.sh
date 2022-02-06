@@ -19,21 +19,8 @@ SetupChroot_i686(){
 
     # Install archlinux32-keyring
     if ! pacman -Qq archlinux32-keyring && [[ "$(uname -m)" = "x86_64" ]]; then
-        {
-            cd "$WorkDir/Keyring" || return 1
-            if [[ ! -d "archlinux32-keyring" ]]; then
-                git clone "https://aur.archlinux.org/archlinux32-keyring-git" "archlinux32-keyring"
-            fi
-            cd "archlinux32-keyring" || return 1
-            git pull
-            SetupChroot_x86_64
-            RunMakePkg "x86_64" "./PKGBUILD" --skippgpcheck --nocheck
-            local _Pkg
-            while read -r _Pkg; do
-                MsgWarn "Install $_Pkg"
-                sudo pacman -U --noconfirm "$_Pkg"
-            done < <(GetPkgListFromPKGBUILD "x86_64" "./PKGBUILD")
-        }
+        sudo pacman --config "$MainDir/configs/pacman-x86_64.conf" -Sy --noconfirm archlinux32-keyring
+        sudo pacman-key --populate archlinux32
     fi
         
 
@@ -51,7 +38,7 @@ SetupChroot_i686(){
 # RunMakePkg <ARCH> <PKGBUILD PATH> <MAKEPKG Args ...>
 RunMakePkg(){
     local MakeChrootPkg_Args=(-c -r "$WorkDir/Chroot/$1" -U "$ChrootUser")
-    local Makepkg_Args=()
+    local Makepkg_Args=(--skippgpcheck --nocheck)
     local Pkgbuild="${2}"
 
     shift 2 || return 1
