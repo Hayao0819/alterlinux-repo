@@ -27,7 +27,7 @@ SetupChroot_i686(){
             cd "archlinux32-keyring" || return 1
             git pull
             SetupChroot_x86_64
-            RunMakePkg "x86_64" "./PKGBUILD"
+            RunMakePkg "x86_64" "./PKGBUILD" --skippgpcheck --nocheck
             local _Pkg
             while read -r _Pkg; do
                 MsgWarn "Install $_Pkg"
