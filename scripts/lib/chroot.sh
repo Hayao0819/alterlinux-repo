@@ -22,7 +22,7 @@ SetupChroot_i686(){
         {
             cd "$WorkDir/Keyring" || return 1
             if [[ ! -d "archlinux32-keyring" ]]; then
-                git clone "https://aur.archlinux.org/archlinux32-keyring" "archlinux32-keyring"
+                git clone "https://aur.archlinux.org/archlinux32-keyring-git" "archlinux32-keyring"
             fi
             cd "archlinux32-keyring" || return 1
             git pull
