@@ -82,7 +82,7 @@ UpdateRepoDb(){
     done < <(find "$_Pool" -mindepth 1 -maxdepth 1 -name "*.pkg.tar.*" -type f | grep -v ".sig$")
 
     # Create Arch Directory for OLD Alter Linux
-    RunEachArch "$_Repo" MakeSymLink "./os/{}" "{}"
+    RunEachArch "$_Repo" MakeSymLink "./os/{}" "${_RepoDir}/../{}"
 }
 
 # CheckCorrectArch <arch>
