@@ -132,7 +132,7 @@ fi
 #    RunSftpCmd rmdir "$RemoteRepoPath/$Dir"
 #done < <(find "${LocalRepoPath}" -mindepth 1 -maxdepth 1 | sed "s|$LocalRepoPath||g" | tac)
 #RunSftpCmd rmdir "$(basename "$_RemoteRepoPath")"
-RunSftpCmd mkdir "$(basename "$_RemoteRepoPath")"
+RunSftpCmd mkdir "$(basename "$RemoteRepoPath")"
 #RunSftpCmd put -r "$LocalRepoPath" "$(basename "$_RemoteRepoPath")"
 RunSftpCmd bye
 
