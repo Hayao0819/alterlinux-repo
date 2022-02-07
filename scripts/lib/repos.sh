@@ -63,11 +63,11 @@ UpdateRepoDb(){
             if [[ -f "$_Path.sig" ]]; then
                 MakeSymLink "../../pool/packages/$_File.sig" "$_Symlink.sig"
             fi
-            if [[ -n "$GPGKey" ]]; then
-                repo-add --sign --key "$GPGKey" "$_RepoDir/${_Arch}/$_Repo.db.tar.gz" "$_Symlink"
-            else
+            #if [[ -n "$GPGKey" ]]; then
+            #    repo-add --sign --key "$GPGKey" "$_RepoDir/${_Arch}/$_Repo.db.tar.gz" "$_Symlink"
+            #else
                 repo-add "$_RepoDir/${_Arch}/$_Repo.db.tar.gz" "$_Symlink"
-            fi
+            #fi
         }
 
         case "$_Arch" in
