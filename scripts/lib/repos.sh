@@ -127,7 +127,7 @@ GetSkipPkgList(){ {
     local _Arch="$1" _RepoName="$2"
     local _Repo="$ReposDir/$_RepoName"
     LoadShellFIles "$_Repo/repo-config.sh"
-    eval "PrintArray \"\${SkipPkg_${_Arch}}\""
+    eval "PrintArray \"\${SkipPkg_${_Arch}[@]}\""
 } }
 
 
