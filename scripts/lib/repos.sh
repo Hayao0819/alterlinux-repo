@@ -145,7 +145,7 @@ CreateRepoLockFile(){
 
     local _Pkg
     for _Pkg in "${_FileList[@]}"; do
-        echo "$_Arch/$_Pkg" >> "$_RepoFile"
+        echo "$_Pkg" >> "$_RepoFile"
     done
 }
 
@@ -165,7 +165,7 @@ CheckAlreadyBuilt(){
 
     local _Pkg
     for _Pkg in "${_FileList[@]}"; do
-        ! grep -qx "$_Arch/$_Pkg" "$_RepoFile" || return 1
+        ! grep -qx "$_Pkg" "$_RepoFile" || return 1
     done
     return 0
 }
