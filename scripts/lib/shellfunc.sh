@@ -57,3 +57,23 @@ CutLastString(){
 GetLine(){
     head -n "$1" | tail -n 1
 }
+
+CheckCommand(){
+    type "$1" 2> /dev/null 1>&2 || {
+        MsgError "Missing command: ${1}"
+        return 1
+    }
+}
+
+# PrintArray <array> | ForArray <command>
+ForArray(){
+    local _Item _Cmd _C
+    while read -r _Item; do
+        for _C in "$@"; do
+            #shellcheck disable=SC2001
+            _Cmd+=("$(sed "s|{}|${_Item}|g" <<< "$_C")")
+        done
+        "${_Cmd[@]}" || return 1
+        _Cmd=()
+    done
+}

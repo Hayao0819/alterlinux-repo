@@ -75,10 +75,12 @@ PrepareBuild(){
 }
 
 CheckEnvironment(){
-    if (( UID == 0 )); then
-        MsgError "Do not run as root"
+    # Package
+    local _DependCmds=("pacman" "mkarchroot" "makepkg" "pacman-key")
+    PrintArray "${_DependCmds[@]}" | ForArray CheckCommand "{}" || {
+        MsgError "Please install it and try again"
         exit 1
-    fi
+    }
 }
 
 Main(){
@@ -175,6 +177,6 @@ done
 #-- Run --#
 set -xv
 export GNUPGHOME="$GPGDir"
-PrepareBuild
 CheckEnvironment
+PrepareBuild
 Main
