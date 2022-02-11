@@ -50,7 +50,7 @@ ParseCmdOpt(){
       shift 1
       _NoArg+=("${@}")
       shift "$#"
-      _ParseFinisheda=true
+      _ParseFinished=true
       break
     elif [[ "${1}" = "--"* ]]; then # Long option
       # Long option with argument
@@ -58,7 +58,7 @@ ParseCmdOpt(){
         # Check argument
         if [[ "${2}" = "-"* ]]; then
           MsgError "${1} の引数が指定されていません"
-          return 2
+          return 1
         else
           _OutArg+=("${1}" "${2}")
           shift 2
@@ -75,18 +75,18 @@ ParseCmdOpt(){
       while read -r _Chr; do # 引数を1文字ずつループ
         if printf "%s\n" "${_ShortWithArg[@]}" | grep -qx "${_Chr}"; then
           # 連続したショートオプションの場合、自分が最後かどうか
-          if [[ "${1}" = *"${_Chr}" ]] && [[ ! "${2}" = *"-" ]]; then
+          if [[ "${1}" = *"${_Chr}" ]] && [[ ! "${2}" = "-"* ]]; then
             _OutArg+=("-${_Chr}" "${2}")
             _Shift=2
           else
-            MsgError "-${_Che} の引数が指定されていません"
+            MsgError "-${_Chr} の引数が指定されていません"
             return 2
           fi
         elif printf "%s\n" "${_Short[@]}" | grep -qx "${_Chr}"; then
           _OutArg+=("-${_Chr}")
           _Shift=1
         else
-          MsgError "${1} は不正なオプションです。-hで使い方を確認してください。"
+          MsgError "-${_Chr} は不正なオプションです。-hで使い方を確認してください。"
           return 1
         fi
       done < <(grep -o . <<< "${1#-}")
