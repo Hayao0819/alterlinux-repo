@@ -15,6 +15,11 @@ LoadShellFiles(){
 
 CheckBashVersion(){
     MsgDebug "Your bash is ${BASH_VERSION}"
+    if [[ -z "${EPOCHSECONDS-""}" ]]; then
+      MsgError "Your bash is too old."
+      MsgError "This script require bash 5.x or later."
+      exit 1
+    fi
 }
 
 WorkInProgress(){
