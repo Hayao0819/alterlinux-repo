@@ -38,9 +38,10 @@ Libraries=(
   "${LibDir}/shellfunc.sh"
   "${LibDir}/parsecmdopt.sh"
 
-  "$LibDir/repos.sh"
-  "$LibDir/arch.sh"
-  "$LibDir/build.sh"
+  "${LibDir}/gpg.sh"
+  "${LibDir}/repos.sh"
+  "${LibDir}/arch.sh"
+  "${LibDir}/build.sh"
   "${LibDir}/chroot.sh"
   "${LibDir}/pkgbuild.sh"
 )
