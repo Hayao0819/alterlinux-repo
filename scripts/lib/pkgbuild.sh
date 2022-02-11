@@ -7,8 +7,7 @@ GetPkgListFromPKGBUILD(){
 
 # ParsePkgFileName <Pacman package file name>
 ParsePkgFileName(){
-    #local _Pkg="$1"
-    local _Pkg="fascode-gtk-bookmarks-1.9-1-any.pkg.tar.zst"
+    local _Pkg="$1"
     local _PkgName _PkgVer _PkgRel _Arch _FileExt  
     local _PkgWithOutExt
     _FileExt="$(GetLastSplitString "-" "$_Pkg" | cut -d "." -f 2-)" #pkg.tar.zst
