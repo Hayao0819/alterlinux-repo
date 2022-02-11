@@ -43,3 +43,17 @@ MakeDir(){
     #sudo mkdir -p "$@"
     mkdir -p "$@"
 }
+
+# GetLastSplitString <delim> <string>
+GetLastSplitString(){
+    rev <<< "$2" | cut -d "$1" -f 1 | rev
+}
+
+# CutLastString <Full String> <Last String>
+CutLastString(){
+    echo "${1%%"${2}"}"
+}
+
+GetLine(){
+    head -n "$1" | tail -n 1
+}
