@@ -63,11 +63,11 @@ UpdateRepoDb(){
             if [[ -f "$_Path.sig" ]]; then
                 MakeSymLink "../../pool/packages/$_File.sig" "$_Symlink.sig"
             fi
-            if [[ -n "$GPGKey" ]]; then
-                repo-add --sign --key "$GPGKey" "$_RepoDir/${_Arch}/$_Repo.db.tar.gz" "$_Symlink"
-            else
+            #if [[ -n "$GPGKey" ]]; then
+            #    repo-add --sign --key "$GPGKey" "$_RepoDir/${_Arch}/$_Repo.db.tar.gz" "$_Symlink"
+            #else
                 repo-add "$_RepoDir/${_Arch}/$_Repo.db.tar.gz" "$_Symlink"
-            fi
+            #fi
         }
 
         case "$_Arch" in
@@ -127,7 +127,7 @@ GetSkipPkgList(){ {
     local _Arch="$1" _RepoName="$2"
     local _Repo="$ReposDir/$_RepoName"
     LoadShellFIles "$_Repo/repo-config.sh"
-    eval "PrintArray \"\${SkipPkg_${_Arch}}\""
+    eval "PrintArray \"\${SkipPkg_${_Arch}[@]}\""
 } }
 
 
@@ -145,7 +145,7 @@ CreateRepoLockFile(){
 
     local _Pkg
     for _Pkg in "${_FileList[@]}"; do
-        echo "$_Arch/$_Pkg" >> "$_RepoFile"
+        echo "$_Pkg" >> "$_RepoFile"
     done
 }
 
@@ -165,7 +165,7 @@ CheckAlreadyBuilt(){
 
     local _Pkg
     for _Pkg in "${_FileList[@]}"; do
-        ! grep -qx "$_Arch/$_Pkg" "$_RepoFile" || return 1
+        ! grep -qx "$_Pkg" "$_RepoFile" || return 1
     done
     return 0
 }

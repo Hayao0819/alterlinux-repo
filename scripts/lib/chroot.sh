@@ -7,6 +7,7 @@ SetupChroot_x86_64(){
     # Create chroot
     mkarchroot \
         -C "$MainDir/configs/pacman-x86_64.conf" \
+        -M "$MainDir/configs/makepkg-${_Arch}.conf" \
         "$CHROOT/root" "${ChrootPkg[@]}"
 
     # Update package
@@ -29,6 +30,7 @@ SetupChroot_i686(){
     # Create chroot
     mkarchroot \
         -C "$MainDir/configs/pacman-i686.conf" \
+        -M "$MainDir/configs/makepkg-${_Arch}.conf" \
         "$CHROOT/root" "${ChrootPkg[@]}"
 
     # Update package
