@@ -10,6 +10,13 @@ ParsePkgFileName(){
     local _Pkg="$1"
     local _PkgName _PkgVer _PkgRel _Arch _FileExt  
     local _PkgWithOutExt
+
+    # File name
+    if grep "/" <<< "$_Pkg"; then
+        _Pkg="$(basename "$_Pkg")"
+    fi
+
+    # Parse
     _FileExt="$(GetLastSplitString "-" "$_Pkg" | cut -d "." -f 2-)" #pkg.tar.zst
     _PkgWithOutExt="${_Pkg%%".${_FileExt}"}" 
     _Arch=$(GetLastSplitString "-" "${_PkgWithOutExt}")
