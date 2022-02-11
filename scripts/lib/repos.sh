@@ -117,7 +117,7 @@ GetRepoArchList(){ {
     if (( "${#OverRideRepoArch[@]}" > 0)); then
         PrintArray "${OverRideRepoArch[@]}"
     else
-        LoadShellFIles "$_Repo/repo-config.sh"
+        LoadShellFiles "$_Repo/repo-config.sh"
         PrintArray "${RepoArch[@]}"
     fi
 } }
@@ -126,7 +126,7 @@ GetRepoArchList(){ {
 GetSkipPkgList(){ {
     local _Arch="$1" _RepoName="$2"
     local _Repo="$ReposDir/$_RepoName"
-    LoadShellFIles "$_Repo/repo-config.sh"
+    LoadShellFiles "$_Repo/repo-config.sh"
     eval "PrintArray \"\${SkipPkg_${_Arch}[@]}\""
 } }
 

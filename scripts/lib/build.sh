@@ -10,8 +10,8 @@ BuildPkg(){
     CheckCorrectArch "$_Arch"
 
     # Load configs
-    LoadShellFIles "$MainDir/repos/$_RepoName/repo-config.sh"
-    LoadShellFIles "$MainDir/configs/config-$_Arch.sh"
+    LoadShellFiles "$MainDir/repos/$_RepoName/repo-config.sh"
+    LoadShellFiles "$MainDir/configs/config-$_Arch.sh"
 
     # Setup chroot
     eval "SetupChroot_$_Arch"

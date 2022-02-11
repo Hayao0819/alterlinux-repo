@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# LoadShellFIles <file1> <file2> ...
-LoadShellFIles(){
+# LoadShellFiles <file1> <file2> ...
+LoadShellFiles(){
     local _file
     for _file in "${@}"; do
         if [[ -e "${_file}" ]]; then 
@@ -39,7 +39,7 @@ Libraries=(
   "${LibDir}/chroot.sh"
   "${LibDir}/pkgbuild.sh"
 )
-LoadShellFIles "${Libraries[@]}"
+LoadShellFiles "${Libraries[@]}"
 
 # Show bash version
 CheckBashVersion
