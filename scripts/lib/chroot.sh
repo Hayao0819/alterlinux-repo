@@ -59,13 +59,13 @@ UpdateChrootPkgs(){
     local _Arch="$1"
     local CHROOT="$WorkDir/Chroot/$_Arch/"
 
-    arch-nspawn "$CHROOT/root" pacman -Syyu
+    setarch "$_Arch" arch-nspawn -s "$CHROOT/root" pacman -Syyu
 }
 
 # RunMakePkg <ARCH> <PKGBUILD PATH> <MAKEPKG Args ...>
 RunMakePkg(){
     local MakeChrootPkg_Args=(-c -r "$WorkDir/Chroot/$1" -U "$ChrootUser")
-    local Makepkg_Args=(--skippgpcheck --nocheck)
+    local Makepkg_Args=(--skippgpcheck --nocheck --noconfirm --ignorearch)
     local Pkgbuild="${2}"
 
     shift 2 || return 1

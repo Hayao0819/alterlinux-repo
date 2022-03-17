@@ -42,6 +42,7 @@ HelpDoc(){
     echo "    -o | --out OUT_DIR"
     echo "    -h | --help              This help message"
     #echo "         --rmlock            Remove all lockfile"
+    echo "         --bash-debug        Show bash debug message"
     echo "         --gpgdir DIR        Specify GnuPG directory"
     echo "         --user USER         Specify username to chroot"
 }
@@ -118,7 +119,7 @@ Main(){
 
 #-- Parse command-line options --#
 # Parse options
-ParseCmdOpt SHORT="a:g:ho:p:r:w:" LONG="arch:gpg:help,out:,pkg:,repo:,work:,rmlock,gpgdir:,user:" -- "${@}" || exit 1
+ParseCmdOpt SHORT="a:g:ho:p:r:w:" LONG="arch:gpg:help,out:,pkg:,repo:,work:,rmlock,gpgdir:,user:,bash-debug" -- "${@}" || exit 1
 eval set -- "${OPTRET[@]}"
 unset OPTRET
 
@@ -154,6 +155,10 @@ while true; do
             ;;
         --rmlock)
             #RemoveLockFile=true
+            shift 1
+            ;;
+        --bash-debug)
+            set -xv
             shift 1
             ;;
         --gpgdir)
