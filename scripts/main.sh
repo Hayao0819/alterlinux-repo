@@ -16,13 +16,14 @@ source "${LibDir}/loader.sh"
 BuildRepo=()
 BuildPkg=()
 OverRideRepoArch=()
-RemoveLockFile=false
+#RemoveLockFile=false
 
 #-- Debug Message --#
 ShowVariable ALTER_WORK_DIR
 ShowVariable ALTER_OUT_DIR
 ShowVariable ALTER_SIGN_KEY
-MainDir="${ALTER_MAIN_DIR-"${MainDir}"}" OutDir="${ALTER_OUT_DIR-"${MainDir}/out"}"
+MainDir="${ALTER_MAIN_DIR-"${MainDir}"}"
+OutDir="${ALTER_OUT_DIR-"${MainDir}/out"}"
 WorkDir="${ALTER_WORK_DIR-"${MainDir}/work"}"
 GPGDir="${ALTER_GPG_DIR-"${HOME}/.gnupg/"}"
 GPGKey="${ALTER_SIGN_KEY-""}"
@@ -40,7 +41,7 @@ HelpDoc(){
     echo "    -w | --work WORK_DIR"
     echo "    -o | --out OUT_DIR"
     echo "    -h | --help              This help message"
-    echo "         --rmlock            Remove all lockfile"
+    #echo "         --rmlock            Remove all lockfile"
     echo "         --gpgdir DIR        Specify GnuPG directory"
     echo "         --user USER         Specify username to chroot"
 }
@@ -66,12 +67,12 @@ PrepareBuild(){
     fi
 
     # Create directory
-    MakeDir "$WorkDir/Chroot" "$WorkDir/LockFile"
+    MakeDir "$WorkDir/Chroot" #"$WorkDir/LockFile"
 
     # RemoveLockFile
-    if [[ "${RemoveLockFile}" = true ]]; then
-        rm -rf "$WorkDir/LockFile"
-    fi
+    #if [[ "${RemoveLockFile}" = true ]]; then
+    #    rm -rf "$WorkDir/LockFile"
+    #fi
 }
 
 CheckEnvironment(){
@@ -152,7 +153,7 @@ while true; do
             exit 0
             ;;
         --rmlock)
-            RemoveLockFile=true
+            #RemoveLockFile=true
             shift 1
             ;;
         --gpgdir)
