@@ -179,7 +179,7 @@ CheckAlreadyBuilt(){
 
     MsgDebug "Getting package file list from PKGBUILD"
     local _FileList=()
-    readarray _FileList < <(GetPkgListFromPKGBUILD "$_Arch" "$_PkgBuild" | GetBaseName)
+    readarray -t _FileList < <(GetPkgListFromPKGBUILD "$_Arch" "$_PkgBuild" | GetBaseName)
 
     for _File in "${_FileList[@]}"; do
         if [[ -e "$_Pool/$_File" ]]; then
