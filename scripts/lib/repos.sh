@@ -132,40 +132,59 @@ GetSkipPkgList(){ {
 
 
 # CreateRepoLockFile <arch> <repo> <pkgbuild>
-CreateRepoLockFile(){
-    local _Arch="$1" _RepoName="$2" _PkgBuild="$3"
-    local _LockFileDir="$WorkDir/LockFile/"
-    local _RepoFile="$_LockFileDir/$_RepoName"
+#CreateRepoLockFile(){
+#    local _Arch="$1" _RepoName="$2" _PkgBuild="$3"
+#    local _LockFileDir="$WorkDir/LockFile/"
+#    local _RepoFile="$_LockFileDir/$_RepoName"
 
-    MakeDir "$_LockFileDir"
-    [[ -e "$_RepoFile" ]] || { echo > "$_RepoFile"; }
-    readarray -t _FileList < <(
-        cd "$(dirname "$_PkgBuild")" || return 0
-        GetPkgListFromPKGBUILD "$_Arch" "./PKGBUILD" | GetBaseName)
+#    MakeDir "$_LockFileDir"
+#    [[ -e "$_RepoFile" ]] || { echo > "$_RepoFile"; }
+#    readarray -t _FileList < <(
+#        cd "$(dirname "$_PkgBuild")" || return 0
+#        GetPkgListFromPKGBUILD "$_Arch" "./PKGBUILD" | GetBaseName)
 
-    local _Pkg
-    for _Pkg in "${_FileList[@]}"; do
-        echo "$_Pkg" >> "$_RepoFile"
-    done
-}
+#    local _Pkg
+#    for _Pkg in "${_FileList[@]}"; do
+#        echo "$_Pkg" >> "$_RepoFile"
+#    done
+#}
 
 
 # CheckAlreadyBuilt <arch> <repo> <pkgbuild>
 # return 1 => already built
 # return 0 -> not built yet
+#CheckAlreadyBuilt(){
+#    local _Arch="$1" _RepoName="$2" _PkgBuild="$3"
+#    local _LockFileDir="$WorkDir/LockFile/"
+#    local _RepoFile="$_LockFileDir/$_RepoName"
+#
+#    [[ -e "$_RepoFile" ]] || return 0
+#    readarray -t _FileList < <(
+#        cd "$(dirname "$_PkgBuild")" || return 0
+#        GetPkgListFromPKGBUILD "$_Arch" "${_PkgBuild}" | GetBaseName)
+#
+#    local _Pkg
+#    for _Pkg in "${_FileList[@]}"; do
+#        ! grep -qx "$_Pkg" "$_RepoFile" || return 1
+#    done
+#    return 0
+#}
+
 CheckAlreadyBuilt(){
     local _Arch="$1" _RepoName="$2" _PkgBuild="$3"
-    local _LockFileDir="$WorkDir/LockFile/"
-    local _RepoFile="$_LockFileDir/$_RepoName"
+    local _Pool="${OutDir}/$_Repo/pool/packages"
 
-    [[ -e "$_RepoFile" ]] || return 0
-    readarray -t _FileList < <(
-        cd "$(dirname "$_PkgBuild")" || return 0
-        GetPkgListFromPKGBUILD "$_Arch" "${_PkgBuild}" | GetBaseName)
+    MsgDebug "Getting package file list from PKGBUILD"
+    local _FileList=()
+    readarray _FileList < <(GetPkgListFromPKGBUILD "$_Arch" "$_PkgBuild" | GetBaseName)
 
-    local _Pkg
-    for _Pkg in "${_FileList[@]}"; do
-        ! grep -qx "$_Pkg" "$_RepoFile" || return 1
+    for _File in "${_FileList[@]}"; do
+        if [[ -e "$_Pool/$_File" ]]; then
+            MsgDebug "Found $_File"
+        else
+            MsgDebug "Not found $_File"
+            return 1
+        fi
     done
     return 0
 }
