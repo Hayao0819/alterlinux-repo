@@ -10,7 +10,7 @@ GetRepoFullPath(){
 GetPkgbuildList(){
     local _Repo="$ReposDir/$1"
 
-    find "$_Repo" -name "PKGBUILD" -type f -mindepth 1
+    find "$_Repo" -mindepth 1 -name "PKGBUILD" -type f
 }
 
 # RunEachArch <repo name> <cmmands>
