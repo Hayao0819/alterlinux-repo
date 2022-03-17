@@ -25,11 +25,11 @@ SetupChroot_pen4(){
 # _SetupChroot_Arch32 <i686/pen4> 
 _SetupChroot_Arch32(){
     local _Arch="$1"
-    case "$_Arch" in
-        "pen4")
-            _Arch="pentium4"
-            ;;
-    esac
+    #case "$_Arch" in
+    #    "pen4")
+    #        _Arch="pentium4"
+    #        ;;
+    #esac
 
     local CHROOT="$WorkDir/Chroot/${_Arch}/"
     MakeDir "$CHROOT" "$WorkDir/Keyring"
