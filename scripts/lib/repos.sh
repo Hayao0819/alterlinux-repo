@@ -170,6 +170,9 @@ GetSkipPkgList(){ {
 #    return 0
 #}
 
+# CheckAlreadyBuilt <arch> <repo> <pkgbuild>
+# return 1 => already built
+# return 0 -> not built yet
 CheckAlreadyBuilt(){
     local _Arch="$1" _RepoName="$2" _PkgBuild="$3"
     local _Pool="${OutDir}/$_Repo/pool/packages"
@@ -183,9 +186,9 @@ CheckAlreadyBuilt(){
             MsgDebug "Found $_File"
         else
             MsgDebug "Not found $_File"
-            return 1
+            return 0
         fi
     done
-    return 0
+    return 1
 }
 
