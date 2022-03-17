@@ -25,8 +25,13 @@ SetupChroot_pen4(){
 # _SetupChroot_Arch32 <i686/pen4> 
 _SetupChroot_Arch32(){
     local _Arch="$1"
+    case "$_Arch" in
+        "pen4")
+            _Arch="pentium4"
+            ;;
+    esac
 
-    local CHROOT="$WorkDir/Chroot/i686/"
+    local CHROOT="$WorkDir/Chroot/${_Arch}/"
     MakeDir "$CHROOT" "$WorkDir/Keyring"
 
     # Install archlinux32-keyring
@@ -40,7 +45,7 @@ _SetupChroot_Arch32(){
 
     # Create chroot
     mkarchroot \
-        -C "$MainDir/configs/pacman-i686.conf" \
+        -C "$MainDir/configs/pacman-${_Arch}.conf" \
         -M "$MainDir/configs/makepkg-${_Arch}.conf" \
         "$CHROOT/root" "${ChrootPkg[@]}"
 
