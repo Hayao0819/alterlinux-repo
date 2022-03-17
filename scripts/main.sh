@@ -176,7 +176,7 @@ while true; do
 done
 
 #-- Run --#
-set -xv
+#set -xv
 export GNUPGHOME="$GPGDir"
 CheckEnvironment
 PrepareBuild
