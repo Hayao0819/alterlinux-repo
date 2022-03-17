@@ -175,13 +175,15 @@ GetSkipPkgList(){ {
 # return 0 -> not built yet
 CheckAlreadyBuilt(){
     local _Arch="$1" _RepoName="$2" _PkgBuild="$3"
-    local _Pool="${OutDir}/$_Repo/pool/packages"
+    local _Pool="${OutDir}/$_RepoName/pool/packages"
 
     MsgDebug "Getting package file list from PKGBUILD"
     local _FileList=()
     readarray -t _FileList < <(GetPkgListFromPKGBUILD "$_Arch" "$_PkgBuild" | GetBaseName)
-
+    
     for _File in "${_FileList[@]}"; do
+        #MsgDebug "Pool=$_Pool"
+        #MsgDebug "File=$_File"
         if [[ -e "$_Pool/$_File" ]]; then
             MsgDebug "Found $_Pool/$_File"
         else
