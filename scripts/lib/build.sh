@@ -81,3 +81,7 @@ setarch(){
     esac
     "$_Bin" "$_Arch" "$@"
 }
+
+makechrootpkg(){
+    "$LibDir/makechrootpkg" "$@"
+}
