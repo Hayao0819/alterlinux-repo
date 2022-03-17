@@ -2,7 +2,7 @@ SetupChroot_x86_64(){
     local CHROOT="$WorkDir/Chroot/x86_64/"
     MakeDir "$CHROOT"
 
-    [[ -e "$CHROOT/root" ]] && return 0
+    [[ -e "$CHROOT/root/etc/pacman.conf" ]] && return 0
 
     # Create chroot
     mkarchroot \
@@ -15,7 +15,23 @@ SetupChroot_x86_64(){
 }
 
 SetupChroot_i686(){
-    local CHROOT="$WorkDir/Chroot/i686/"
+    _SetupChroot_Arch32 i686
+}
+
+SetupChroot_pen4(){
+    _SetupChroot_Arch32 pen4
+}
+
+# _SetupChroot_Arch32 <i686/pen4> 
+_SetupChroot_Arch32(){
+    local _Arch="$1"
+    #case "$_Arch" in
+    #    "pen4")
+    #        _Arch="pentium4"
+    #        ;;
+    #esac
+
+    local CHROOT="$WorkDir/Chroot/${_Arch}/"
     MakeDir "$CHROOT" "$WorkDir/Keyring"
 
     # Install archlinux32-keyring
@@ -25,22 +41,31 @@ SetupChroot_i686(){
     fi
         
 
-    [[ -e "$CHROOT/root" ]] && return 0
+    [[ -e "$CHROOT/root/etc/pacman.conf" ]] && return 0
 
     # Create chroot
     mkarchroot \
-        -C "$MainDir/configs/pacman-i686.conf" \
+        -C "$MainDir/configs/pacman-${_Arch}.conf" \
         -M "$MainDir/configs/makepkg-${_Arch}.conf" \
         "$CHROOT/root" "${ChrootPkg[@]}"
 
     # Update package
-    arch-nspawn "$CHROOT/root" pacman -Syyu
+    #arch-nspawn "$CHROOT/root" pacman -Syyu
+}
+
+# Update chroot environment
+# UpdateChrootEnv <ARCH>
+UpdateChrootPkgs(){
+    local _Arch="$1"
+    local CHROOT="$WorkDir/Chroot/$_Arch/"
+
+    setarch "$_Arch" arch-nspawn -s "$CHROOT/root" pacman -Syyu
 }
 
 # RunMakePkg <ARCH> <PKGBUILD PATH> <MAKEPKG Args ...>
 RunMakePkg(){
     local MakeChrootPkg_Args=(-c -r "$WorkDir/Chroot/$1" -U "$ChrootUser")
-    local Makepkg_Args=(--skippgpcheck --nocheck)
+    local Makepkg_Args=(--skippgpcheck --nocheck --noconfirm --ignorearch)
     local Pkgbuild="${2}"
 
     shift 2 || return 1

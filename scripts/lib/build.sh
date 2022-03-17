@@ -15,6 +15,7 @@ BuildPkg(){
 
     # Setup chroot
     eval "SetupChroot_$_Arch"
+    UpdateChrootPkgs "$_Arch"
 
     # Run makepkg
     # _Pkg変数: PKGBUILDへのフルパス
@@ -31,7 +32,7 @@ BuildPkg(){
         }
         RunMakePkg "$_Arch" "$_Pkg"
         MovePkgToPool "$_Arch" "$_RepoName" "$_Pkg"
-        CreateRepoLockFile "$_Arch" "$_RepoName" "$_Pkg"
+        #CreateRepoLockFile "$_Arch" "$_RepoName" "$_Pkg"
     done < <(PrintArray "${_ToBuildPkg[@]}")
 
     # Update repo
@@ -66,4 +67,21 @@ BuildAllPkgInAllRepo(){
         MsgDebug "Found repository: $_repo"
         BuildAllPkg "${_repo}"
     done < <(GetRepoList)
+}
+
+# setarch <arch> [args]
+setarch(){
+    local _Bin _Arch="$1"
+    _Bin="$(which setarch)"
+    shift 1
+    case "$_Arch" in
+        "pen4")
+            _Arch="athlon"
+            ;;
+    esac
+    "$_Bin" "$_Arch" "$@"
+}
+
+makechrootpkg(){
+    "$CurrentDir/makechrootpkg" -s "$@"
 }

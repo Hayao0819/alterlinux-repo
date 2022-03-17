@@ -5,6 +5,7 @@ pkgbase = filesystem
 	url = https://alter.fascode.net
 	arch = x86_64
 	arch = i686
+	arch = pentium4
 	license = GPL
 	depends = iana-etc
 	provides = alterlinux-filesystem

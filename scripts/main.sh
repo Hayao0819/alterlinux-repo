@@ -16,13 +16,14 @@ source "${LibDir}/loader.sh"
 BuildRepo=()
 BuildPkg=()
 OverRideRepoArch=()
-RemoveLockFile=false
+#RemoveLockFile=false
 
 #-- Debug Message --#
 ShowVariable ALTER_WORK_DIR
 ShowVariable ALTER_OUT_DIR
 ShowVariable ALTER_SIGN_KEY
-MainDir="${ALTER_MAIN_DIR-"${MainDir}"}" OutDir="${ALTER_OUT_DIR-"${MainDir}/out"}"
+MainDir="${ALTER_MAIN_DIR-"${MainDir}"}"
+OutDir="${ALTER_OUT_DIR-"${MainDir}/out"}"
 WorkDir="${ALTER_WORK_DIR-"${MainDir}/work"}"
 GPGDir="${ALTER_GPG_DIR-"${HOME}/.gnupg/"}"
 GPGKey="${ALTER_SIGN_KEY-""}"
@@ -40,7 +41,8 @@ HelpDoc(){
     echo "    -w | --work WORK_DIR"
     echo "    -o | --out OUT_DIR"
     echo "    -h | --help              This help message"
-    echo "         --rmlock            Remove all lockfile"
+    #echo "         --rmlock            Remove all lockfile"
+    echo "         --bash-debug        Show bash debug message"
     echo "         --gpgdir DIR        Specify GnuPG directory"
     echo "         --user USER         Specify username to chroot"
 }
@@ -66,12 +68,12 @@ PrepareBuild(){
     fi
 
     # Create directory
-    MakeDir "$WorkDir/Chroot" "$WorkDir/LockFile"
+    MakeDir "$WorkDir/Chroot" #"$WorkDir/LockFile"
 
     # RemoveLockFile
-    if [[ "${RemoveLockFile}" = true ]]; then
-        rm -rf "$WorkDir/LockFile"
-    fi
+    #if [[ "${RemoveLockFile}" = true ]]; then
+    #    rm -rf "$WorkDir/LockFile"
+    #fi
 }
 
 CheckEnvironment(){
@@ -117,7 +119,7 @@ Main(){
 
 #-- Parse command-line options --#
 # Parse options
-ParseCmdOpt SHORT="a:g:ho:p:r:w:" LONG="arch:gpg:help,out:,pkg:,repo:,work:,rmlock,gpgdir:,user:" -- "${@}" || exit 1
+ParseCmdOpt SHORT="a:g:ho:p:r:w:" LONG="arch:gpg:help,out:,pkg:,repo:,work:,rmlock,gpgdir:,user:,bash-debug" -- "${@}" || exit 1
 eval set -- "${OPTRET[@]}"
 unset OPTRET
 
@@ -152,7 +154,11 @@ while true; do
             exit 0
             ;;
         --rmlock)
-            RemoveLockFile=true
+            #RemoveLockFile=true
+            shift 1
+            ;;
+        --bash-debug)
+            set -xv
             shift 1
             ;;
         --gpgdir)
@@ -175,7 +181,7 @@ while true; do
 done
 
 #-- Run --#
-set -xv
+#set -xv
 export GNUPGHOME="$GPGDir"
 CheckEnvironment
 PrepareBuild
