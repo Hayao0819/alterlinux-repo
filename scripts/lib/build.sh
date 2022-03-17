@@ -68,3 +68,16 @@ BuildAllPkgInAllRepo(){
         BuildAllPkg "${_repo}"
     done < <(GetRepoList)
 }
+
+# setarch <arch> [args]
+setarch(){
+    local _Bin _Arch="$1"
+    _Bin="$(which setarch)"
+    shift 1
+    case "$_Arch" in
+        "pen4")
+            _Arch="athlon"
+            ;;
+    esac
+    "$_Bin" "$_Arch" "$@"
+}
