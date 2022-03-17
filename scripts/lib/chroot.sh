@@ -15,6 +15,17 @@ SetupChroot_x86_64(){
 }
 
 SetupChroot_i686(){
+    _SetupChroot_Arch32 i686
+}
+
+SetupChroot_pen4(){
+    _SetupChroot_Arch32 pen4
+}
+
+# _SetupChroot_Arch32 <i686/pen4> 
+_SetupChroot_Arch32(){
+    local _Arch="$1"
+
     local CHROOT="$WorkDir/Chroot/i686/"
     MakeDir "$CHROOT" "$WorkDir/Keyring"
 
