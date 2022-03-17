@@ -2,7 +2,7 @@ SetupChroot_x86_64(){
     local CHROOT="$WorkDir/Chroot/x86_64/"
     MakeDir "$CHROOT"
 
-    [[ -e "$CHROOT/root" ]] && return 0
+    [[ -e "$CHROOT/root/etc/pacman.conf" ]] && return 0
 
     # Create chroot
     mkarchroot \
@@ -41,7 +41,7 @@ _SetupChroot_Arch32(){
     fi
         
 
-    [[ -e "$CHROOT/root" ]] && return 0
+    [[ -e "$CHROOT/root/etc/pacman.conf" ]] && return 0
 
     # Create chroot
     mkarchroot \
