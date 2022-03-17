@@ -183,9 +183,9 @@ CheckAlreadyBuilt(){
 
     for _File in "${_FileList[@]}"; do
         if [[ -e "$_Pool/$_File" ]]; then
-            MsgDebug "Found $_File"
+            MsgDebug "Found $_Pool/$_File"
         else
-            MsgDebug "Not found $_File"
+            MsgDebug "Not found $_Pool/$_File"
             return 0
         fi
     done
