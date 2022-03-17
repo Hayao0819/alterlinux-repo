@@ -34,6 +34,15 @@ SetupChroot_i686(){
         "$CHROOT/root" "${ChrootPkg[@]}"
 
     # Update package
+    #arch-nspawn "$CHROOT/root" pacman -Syyu
+}
+
+# Update chroot environment
+# UpdateChrootEnv <ARCH>
+UpdateChrootPkgs(){
+    local _Arch="$1"
+    local CHROOT="$WorkDir/Chroot/$_Arch/"
+
     arch-nspawn "$CHROOT/root" pacman -Syyu
 }
 

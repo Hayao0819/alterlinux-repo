@@ -15,6 +15,7 @@ BuildPkg(){
 
     # Setup chroot
     eval "SetupChroot_$_Arch"
+    UpdateChrootPkgs "$_Arch"
 
     # Run makepkg
     # _Pkg変数: PKGBUILDへのフルパス
