@@ -83,5 +83,5 @@ setarch(){
 }
 
 makechrootpkg(){
-    "$LibDir/makechrootpkg" "$@"
+    "$CurrentDir/makechrootpkg" "$@"
 }
