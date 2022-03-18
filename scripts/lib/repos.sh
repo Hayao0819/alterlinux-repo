@@ -51,12 +51,12 @@ UpdateRepoDb(){
         local _Add_Pkg
         _Add_Pkg(){
             local _Arch="$1" _Symlink
-            local _PArch
-            _PArch="$(GetPacmanArch "$_Arch")" # pacmanの正式なアーキテクチャ名
-            _Symlink="$_RepoDir/$_PArch/${_File}"
+            #local _PArch
+            #_PArch="$(GetPacmanArch "$_Arch")" # pacmanの正式なアーキテクチャ名
+            _Symlink="$_RepoDir/$_Arch/${_File}"
 
             # パッケージがスキップリストにある場合は0を返して終了
-            ! GetSkipPkgList "$_Arch" "$_Repo" | GetPkgName "$_File" || {
+            ! GetSkipPkgList "$_Arch" "$_Repo" | grep -qx "$(GetPkgName "$_File")" || {
                 MsgWarn "Skip to add $(GetPkgName "$_File") to $_Arch"
                 return 0
             }
@@ -83,13 +83,13 @@ UpdateRepoDb(){
             #if [[ -n "$GPGKey" ]]; then
             #    repo-add --sign --key "$GPGKey" "$_RepoDir/${_Arch}/$_Repo.db.tar.gz" "$_Symlink"
             #else
-                repo-add "$_RepoDir/${_PArch}/$_Repo.db.tar.gz" "$_Symlink"
+                repo-add "$_RepoDir/${_Arch}/$_Repo.db.tar.gz" "$_Symlink"
             #fi
         }
 
         case "$_Arch" in
             "any")
-                RunEachArch "$_Repo" _Add_Pkg "{}"
+                RunEachArch "$_Repo" eval _Add_Pkg '"$(GetPacmanArch "{}")"'
                 ;;
             *)
                 _Add_Pkg "$_Arch"
@@ -100,7 +100,7 @@ UpdateRepoDb(){
 
     # Create Arch Directory for OLD Alter Linux
     # osディレクトリを使用しない構造
-    RunEachArch "$_Repo" MakeSymLink "./os/{}" "${_RepoDir}/../{}"
+    RunEachArch "$_Repo" eval MakeSymLink './os/$(GetPacmanArch {})' '${_RepoDir}/../$(GetPacmanArch {})'
 }
 
 # CheckCorrectArch <arch>
