@@ -9,5 +9,5 @@ CheckPkg(){
 # GetPacmanArch <ARCH>
 GetPacmanArch(){
     local _Arch="${1}"
-    pacman-conf --config="$MainDir/configs/pacman-$_Ach.conf" Architecture
+    pacman-conf --config="$MainDir/configs/pacman-$_Arch.conf" Architecture
 }
