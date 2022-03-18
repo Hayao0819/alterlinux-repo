@@ -641,7 +641,7 @@ makepkg_args+=("${@:$OPTIND}")
 for arg in "${@:$OPTIND}"; do
 	case ${arg%%=*} in
 		--skip*|--holdver) verifysource_args+=("$arg") ;;
-		--repackage|--noextract) keepbuilddir=1 ;;
+		--skip*|--holdver|--ignorearch) verifysource_args+=("$arg") ;;
 		--*) ;;
 		-*R*|-*e*) keepbuilddir=1 ;;
 	esac
