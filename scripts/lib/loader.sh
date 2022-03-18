@@ -44,6 +44,7 @@ Libraries=(
   "${LibDir}/build.sh"
   "${LibDir}/chroot.sh"
   "${LibDir}/pkgbuild.sh"
+  "${LibDir}/pacman.sh"
 )
 LoadShellFiles "${Libraries[@]}"
 
