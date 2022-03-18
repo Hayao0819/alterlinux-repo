@@ -34,16 +34,24 @@ MakeSymLink(){
         rm -rf "$2"
     }
 
-    local _LinkDir
+    local _LinkDir _DoNotMakeLink="$NoSymLink"
     _LinkDir="$(dirname "$2")"
 
     MakeDir "$_LinkDir"
-    cd "$_LinkDir" || true
-    if [[ "${NoSymLink}" = true ]]; then
-        cp -r "$1" "$2"
-    else
-        ln -s "$1" "$2"
-    fi
+    (
+        cd "$_LinkDir" || true
+        if [[ ! -e "$1" ]]; then
+            MsgError "$1 does not exist."
+            MsgError "Script will create broken symlink."
+            _DoNotMakeLink=false
+        fi
+
+        if [[ "${_DoNotMakeLink}" = true ]]; then        
+            cp -r "$1" "$2"
+        else
+            ln -s "$1" "$2"
+        fi
+    )
 }
 
 MakeDir(){
