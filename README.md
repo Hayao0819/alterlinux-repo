@@ -1,5 +1,11 @@
 # Alter Linux Repository
 
+`alterlinux-repo`はPKGBUILDと、それをビルドするシェルスクリプトを含んだリポジトリです。
+
+全てのPKGBUILDはクリーンなChroot環境内でビルドされます。
+
+現在、サポートされているアーキテクチャは `x86_64` `i686` `pentium4` です。
+
 <p>
     <a href="/LICENSE.md">
         <img src="https://img.shields.io/badge/license-MIT--SUSHI-orange?style=flat-square">
@@ -18,11 +24,6 @@
     </a>
 </p>
 
-このGit RepositoryはPKGBUILDとビルドスクリプトで構成されています。
-
-`alter-stable`リポジトリはAlter Linuxの動作やAlterISOの実行に必要な最小限のパッケージが含まれています。
-
-このリポジトリのBashスクリプトは Arch Linux x86_64上で動作します。
 
 ## Document
 
