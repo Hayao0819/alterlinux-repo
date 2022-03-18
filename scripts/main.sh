@@ -16,7 +16,8 @@ source "${LibDir}/loader.sh"
 BuildRepo=()
 BuildPkg=()
 OverRideRepoArch=()
-#RemoveLockFile=false
+NoSimLink=false
+
 
 #-- Debug Message --#
 ShowVariable ALTER_WORK_DIR
@@ -45,6 +46,7 @@ HelpDoc(){
     echo "         --bash-debug        Show bash debug message"
     echo "         --gpgdir DIR        Specify GnuPG directory"
     echo "         --user USER         Specify username to chroot"
+    echo "         --nolink            Do not create link and copy files"
 }
 
 PrepareBuild(){
@@ -119,7 +121,7 @@ Main(){
 
 #-- Parse command-line options --#
 # Parse options
-ParseCmdOpt SHORT="a:g:ho:p:r:w:" LONG="arch:gpg:help,out:,pkg:,repo:,work:,rmlock,gpgdir:,user:,bash-debug" -- "${@}" || exit 1
+ParseCmdOpt SHORT="a:g:ho:p:r:w:" LONG="arch:gpg:help,out:,pkg:,repo:,work:,rmlock,gpgdir:,user:,bash-debug,nolink" -- "${@}" || exit 1
 eval set -- "${OPTRET[@]}"
 unset OPTRET
 
@@ -168,6 +170,10 @@ while true; do
         --user)
             ChrootUser="$2"
             shift 2
+            ;;
+        --nolink)
+            NoSimLink=true
+            shift 1
             ;;
         --)
             shift 1

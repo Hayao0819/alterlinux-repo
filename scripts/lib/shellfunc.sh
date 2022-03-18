@@ -35,7 +35,11 @@ MakeSymLink(){
     }
 
     MakeDir "$(dirname "$2")"
-    ln -s "$1" "$2"
+    if [[ "${NoSimLink}" = true ]]; then
+        cp -r "$1" "$2"
+    else
+        ln -s "$1" "$2"
+    fi
 }
 
 MakeDir(){
