@@ -32,15 +32,16 @@ RunEachArch(){
 
 # UpdateRepoDb <repo name>
 UpdateRepoDb(){
-    local _Repo="$1"
+    local _Repo="$1" #リポジトリ名
     local _Pool="${OutDir}/$_Repo/pool/packages"
     local _RepoDir="${OutDir}/$_Repo/os/"
     local _File _Arch _Path
 
     while read -r _Path; do
+    # $_Path: pool内のpkg.tar.zstのフルパス
+
         _File="$(basename "$_Path")"
-        _Arch="${_File##*-}"
-        _Arch="${_Arch%%.pkg.tar.*}"
+        _Arch=$(GetPkgArch "$_File")
         MsgDebug "Meta Update: $_Path"
 
         # Setup files
@@ -49,24 +50,40 @@ UpdateRepoDb(){
         # Function to add pakage to db
         local _Add_Pkg
         _Add_Pkg(){
-            local _Arch="$1" _Symlink="$_RepoDir/$_Arch/${_File}"
-            ! GetSkipPkgList "$_Arch" "$_Repo" | grep -qx "$(cut -d "-" -f 1 <<< "$_File")" || {
-                MsgWarn "Skip to add $(cut -d "-" -f 1 <<< "$_File") to $_Arch"
+            local _Arch="$1" _Symlink
+            local _PArch
+            _PArch="$(GetPacmanArch "$_Arch")" # pacmanの正式なアーキテクチャ名
+            _Symlink="$_RepoDir/$_PArch/${_File}"
+
+            # パッケージがスキップリストにある場合は0を返して終了
+            ! GetSkipPkgList "$_Arch" "$_Repo" | GetPkgName "$_File" || {
+                MsgWarn "Skip to add $(GetPkgName "$_File") to $_Arch"
                 return 0
             }
-            MakeDir "$_RepoDir/$_Arch"
+
+            # out/alter-stable/os/x86_64を作成
+            MakeDir "$(dirname "${_Symlink}")"
+
+            # パッケージにgpgで署名
             if [[ -n "$GPGKey" ]]; then
                 rm -rf "${_Path}.sig"
                 gpg --output "${_Path}.sig" -u "$GPGKey" --detach-sig "${_Path}"
             fi
+
+            # プールからos/x86_64へシンボリックリンクを作成
             MakeSymLink "../../pool/packages/$_File" "$_Symlink"
-            if [[ -f "$_Path.sig" ]]; then
+
+            # 署名が存在する場合は、それのシンボリックリンクも作成
+            if [[ -e "$_Path.sig" ]]; then
                 MakeSymLink "../../pool/packages/$_File.sig" "$_Symlink.sig"
             fi
+
+            # データベースにパッケージファルを追加
+            # repo-add --signで署名を行うとエラーになるので使用しない！！
             #if [[ -n "$GPGKey" ]]; then
             #    repo-add --sign --key "$GPGKey" "$_RepoDir/${_Arch}/$_Repo.db.tar.gz" "$_Symlink"
             #else
-                repo-add "$_RepoDir/${_Arch}/$_Repo.db.tar.gz" "$_Symlink"
+                repo-add "$_RepoDir/${_PArch}/$_Repo.db.tar.gz" "$_Symlink"
             #fi
         }
 
@@ -82,6 +99,7 @@ UpdateRepoDb(){
     done < <(find "$_Pool" -mindepth 1 -maxdepth 1 -name "*.pkg.tar.*" -type f | grep -v ".sig$")
 
     # Create Arch Directory for OLD Alter Linux
+    # osディレクトリを使用しない構造
     RunEachArch "$_Repo" MakeSymLink "./os/{}" "${_RepoDir}/../{}"
 }
 
