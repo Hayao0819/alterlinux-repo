@@ -59,6 +59,7 @@ UpdateChrootPkgs(){
     local _Arch="$1"
     local CHROOT="$WorkDir/Chroot/$_Arch/"
 
+    MsgDebug "Update packages in chroot environment"
     setarch "$_Arch" arch-nspawn -s "$CHROOT/root" pacman -Syyu
 }
 
@@ -71,6 +72,8 @@ RunMakePkg(){
     shift 2 || return 1
     Makepkg_Args+=("$@")
 
+    MsgDebug "Run makepkg for $Pkgbuild"
+
     # Move to dir
     cd "$(dirname "$Pkgbuild")" || {
         MsgError "Failed to move the PKGBUILD's directory."
@@ -78,7 +81,7 @@ RunMakePkg(){
     }
 
     # Run makechrootpkg
-    makechrootpkg "${MakeChrootPkg_Args[@]}" -- "${Makepkg_Args[@]}"
+    RunCmd makechrootpkg "${MakeChrootPkg_Args[@]}" -- "${Makepkg_Args[@]}"
 }
 
 # MovePkgToPool <ARCH> <REPO NAME> <PKGBUILD Path>

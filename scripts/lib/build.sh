@@ -6,6 +6,8 @@ BuildPkg(){
     shift 2
     _ToBuildPkg=("$@")
 
+    MsgDebug "Start BuildPkg for ${_RepoName}/${_Arch}"
+
     # Check arch
     CheckCorrectArch "$_Arch"
 
@@ -14,6 +16,7 @@ BuildPkg(){
     LoadShellFiles "$MainDir/configs/config-$_Arch.sh"
 
     # Setup chroot
+    MsgDebug "Setup Chroot environment for $_Arch"
     eval "SetupChroot_$_Arch"
     UpdateChrootPkgs "$_Arch"
 

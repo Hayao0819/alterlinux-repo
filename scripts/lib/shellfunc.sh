@@ -102,3 +102,8 @@ ReplaceLink(){
     rm -rf "$_Link"
     cp -r "$_RealPath" "$_Link"
 }
+
+RunCmd(){
+    MsgDebug "Run: ${*}"
+    "$@"
+}
