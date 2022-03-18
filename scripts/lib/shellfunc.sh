@@ -34,8 +34,12 @@ MakeSymLink(){
         rm -rf "$2"
     }
 
-    MakeDir "$(dirname "$2")"
-    if [[ "${NoSimLink}" = true ]]; then
+    local _LinkDir
+    _LinkDir="$(dirname "$2")"
+
+    MakeDir "$_LinkDir"
+    cd "$_LinkDir" || true
+    if [[ "${NoSymLink}" = true ]]; then
         cp -r "$1" "$2"
     else
         ln -s "$1" "$2"
@@ -80,4 +84,21 @@ ForArray(){
         "${_Cmd[@]}" || return 1
         _Cmd=()
     done
+}
+
+# ReplaceLink <link>
+# シンボリックリンクを実ファイルで置き換えます
+ReplaceLink(){
+    local _Link="$1"
+    _RealPath="$(readlinkf "$_Link")"
+
+    if ! [[ -e "$_RealPath" ]]; then
+        MsgError "Tyied to replace $_Link with $_RealPath but failed."
+        MsgError "$_RealPath does not exist."
+        return 0
+    fi
+
+    MsgDebug "Replace $_Link with $_RealPath"
+    rm -rf "$_Link"
+    cp -r "$_RealPath" "$_Link"
 }

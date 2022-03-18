@@ -53,7 +53,9 @@ UpdateRepoDb(){
             local _Arch="$1" _Symlink
             #local _PArch
             #_PArch="$(GetPacmanArch "$_Arch")" # pacmanの正式なアーキテクチャ名
+            
             _Symlink="$_RepoDir/$_Arch/${_File}"
+            MsgDebug "Symlink will be created to $_Symlink"
 
             # パッケージがスキップリストにある場合は0を返して終了
             ! GetSkipPkgList "$_Arch" "$_Repo" | grep -qx "$(GetPkgName "$_File")" || {
@@ -70,13 +72,18 @@ UpdateRepoDb(){
                 gpg --output "${_Path}.sig" -u "$GPGKey" --detach-sig "${_Path}"
             fi
 
-            # プールからos/x86_64へシンボリックリンクを作成
-            MakeSymLink "../../pool/packages/$_File" "$_Symlink"
+            # シンボリックリンクの代わりにファイルをコピーする
+            #if [[ "$NoSymLink" = true ]]; then
+            #    : #Todo: あとでかく
+            #else
+                # プールからos/x86_64へシンボリックリンクを作成
+                MakeSymLink "../../pool/packages/$_File" "$_Symlink"
 
-            # 署名が存在する場合は、それのシンボリックリンクも作成
-            if [[ -e "$_Path.sig" ]]; then
-                MakeSymLink "../../pool/packages/$_File.sig" "$_Symlink.sig"
-            fi
+                # 署名が存在する場合は、それのシンボリックリンクも作成
+                if [[ -e "$_Path.sig" ]]; then
+                    MakeSymLink "../../pool/packages/$_File.sig" "$_Symlink.sig"
+                fi
+            #fi
 
             # データベースにパッケージファルを追加
             # repo-add --signで署名を行うとエラーになるので使用しない！！
@@ -87,6 +94,7 @@ UpdateRepoDb(){
             #fi
         }
 
+        MsgDebug "Add $_File to database"
         case "$_Arch" in
             "any")
                 RunEachArch "$_Repo" eval _Add_Pkg '"$(GetPacmanArch "{}")"'
@@ -101,6 +109,11 @@ UpdateRepoDb(){
     # Create Arch Directory for OLD Alter Linux
     # osディレクトリを使用しない構造
     RunEachArch "$_Repo" eval MakeSymLink './os/$(GetPacmanArch {})' '${_RepoDir}/../$(GetPacmanArch {})'
+
+    # シンボリックリンクを実ファイルで置き換え
+    if [[ "${NoSymLink}" = true ]]; then
+        find "${OutDir}/$_Repo" -type l | ForArray ReplaceLink "{}"
+    fi
 }
 
 # CheckCorrectArch <arch>

@@ -16,7 +16,7 @@ source "${LibDir}/loader.sh"
 BuildRepo=()
 BuildPkg=()
 OverRideRepoArch=()
-NoSimLink=false
+NoSymLink=false
 
 
 #-- Debug Message --#
@@ -172,7 +172,7 @@ while true; do
             shift 2
             ;;
         --nolink)
-            NoSimLink=true
+            NoSymLink=true
             shift 1
             ;;
         --)
