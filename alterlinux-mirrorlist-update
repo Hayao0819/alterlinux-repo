@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# shellcheck source=/dev/null
+source /dev/stdin < <(curl -sL "https://github.com/Hayao0819/FasBashLib/releases/download/v0.1.1/fasbashlib.sh")
+
+# Set environment variable
+PACMAN_CONF="/etc/pacman.conf"
