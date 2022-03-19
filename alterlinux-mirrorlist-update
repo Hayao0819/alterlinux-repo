@@ -1,7 +1,32 @@
 #!/usr/bin/env bash
 
+# Internet check
+if ! ping -q -c 1 -W 1 google.com >/dev/null; then
+    Msg.Err "There is no internet connection."
+    exit 1
+fi
+
 # shellcheck source=/dev/null
-source /dev/stdin < <(curl -sL "https://github.com/Hayao0819/FasBashLib/releases/download/v0.1.1/fasbashlib.sh")
+#source /dev/stdin < <(curl -sL "https://github.com/Hayao0819/FasBashLib/releases/download/v0.1.1/fasbashlib.sh")
+source /dev/stdin < <(curl -sL "https://raw.githubusercontent.com/Hayao0819/FasBashLib/build-0.1.x/fasbashlib.sh")
 
 # Set environment variable
-PACMAN_CONF="/etc/pacman.conf"
+export PACMAN_CONF="/etc/pacman.conf"
+
+# Get current repo server
+#ArrayAppend CurrentLocalServer < <(Pm.GetRepoServer <<< "alter-stable" | sort)
+
+# Get latest repo server
+# shellcheck disable=SC2016
+ArrayAppend LatestServer < <(
+    curl -sL "https://raw.githubusercontent.com/FascodeNet/alterlinux-repo/master/repos/alter-stable/alterlinux-mirrorlist/mirrorlist-alter" | \
+        grep -v "^#" | grep -v "^$" | \
+        ForEach eval "Ini.ParseLine <<< '{}'; echo \${VALUE}" | sort
+)
+
+# 設定ファイルのincludesを取得
+ArrayAppend IncludeFiles < <( Ini.GetParam "alter-stable" "Include" < "${PACMAN_CONF-"/etc/pacman.conf"}" 2> /dev/null || true )
+ArrayIncludes IncludeFiles "/etc/pacman.d/mirrorlist-alter" || {
+    Msg.Err "pacman.conf has been edited. Not reading /etc/pacman.d/mirrorlist."
+    exit 1
+}
