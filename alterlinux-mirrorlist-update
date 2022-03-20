@@ -1,32 +1,158 @@
 #!/usr/bin/env bash
+#
+# Yamada Hayao
+# Twitter: @Hayao0819
+# Email  : hayao@fascode.net
+#
+# (c) 2019-2021 Fascode Network.
+#
+# shellcheck disable=SC2034
 
-# Internet check
-if ! ping -q -c 1 -W 1 google.com >/dev/null; then
-    Msg.Err "There is no internet connection."
-    exit 1
-fi
+#-- Initilize script --#
+set -Eeu -o pipefail 
 
+
+# Load FasBashLib v0.1.1 that is a collection of shell functions written by Hayao0819
 # shellcheck source=/dev/null
 #source /dev/stdin < <(curl -sL "https://github.com/Hayao0819/FasBashLib/releases/download/v0.1.1/fasbashlib.sh")
-source /dev/stdin < <(curl -sL "https://raw.githubusercontent.com/Hayao0819/FasBashLib/build-0.1.x/fasbashlib.sh")
+#source /dev/stdin < <(curl -sL "https://raw.githubusercontent.com/Hayao0819/FasBashLib/build-0.1.x/fasbashlib.sh")
+source "/home/hayao/Git/FasBashLib/fasbashlib.sh"
 
-# Set environment variable
-export PACMAN_CONF="/etc/pacman.conf"
+#-- Config --#
+MirrorList="/etc/pacman.d/mirrorlist-alter"
+Command="None"
+export PACMAN_CONF="/etc/pacman.conf" # Pm functions in FasBaslib use PACMAN_CONF
 
-# Get current repo server
-#ArrayAppend CurrentLocalServer < <(Pm.GetRepoServer <<< "alter-stable" | sort)
+#-- Define global arrays--#
+CurrentLocalServer=()
+LatestServer=()
+IncludeFiles=()
 
-# Get latest repo server
-# shellcheck disable=SC2016
-ArrayAppend LatestServer < <(
-    curl -sL "https://raw.githubusercontent.com/FascodeNet/alterlinux-repo/master/repos/alter-stable/alterlinux-mirrorlist/mirrorlist-alter" | \
-        grep -v "^#" | grep -v "^$" | \
-        ForEach eval "Ini.ParseLine <<< '{}'; echo \${VALUE}" | sort
-)
 
-# 設定ファイルのincludesを取得
-ArrayAppend IncludeFiles < <( Ini.GetParam "alter-stable" "Include" < "${PACMAN_CONF-"/etc/pacman.conf"}" 2> /dev/null || true )
-ArrayIncludes IncludeFiles "/etc/pacman.d/mirrorlist-alter" || {
-    Msg.Err "pacman.conf has been edited. Not reading /etc/pacman.d/mirrorlist."
+
+#-- Functions --#
+HelpDocument(){
+    echo "AlterLinux MirrorList Update"
+    echo "Usage: $0 [options] [command]"
+    echo
+    echo "Update mirrorlist of Alter Linux from GitHub."
+    echo "This script DO NOT update Arch Linux mirrorlist."
+    echo "If you want that, use reflector."
+    echo
+    echo "Commands:"
+    echo "    print          Print the latest mirrorlist"
+    echo "    update         Update mirrorlist"
+    echo "    list           Show backup list"
+    echo "    restore        Restore mirrorlist from backup"
+    echo
+    echo "Options:"
+    echo "    -h | --help    Print this help and exit"
+}
+
+
+CheckEnvironment(){
+    # Internet check
+    if ! ping -q -c 1 -W 1 google.com >/dev/null; then
+        Msg.Err "There is no internet connection."
+        exit 1
+    fi
+}
+
+GetInfo(){
+    # Get current repo server
+    ArrayAppend CurrentLocalServer < <(Pm.GetRepoServer <<< "alter-stable" | sort)
+
+    # Get latest repo server
+    # shellcheck disable=SC2016
+    ArrayAppend LatestServer < <(
+        curl -sL "https://raw.githubusercontent.com/FascodeNet/alterlinux-repo/master/repos/alter-stable/alterlinux-mirrorlist/mirrorlist-alter" | \
+            grep -v "^#" | grep -v "^$" | \
+            ForEach eval "Ini.ParseLine <<< '{}'; echo \${VALUE}" | sort
+    )
+
+    # 設定ファイルのincludesを取得
+    ArrayAppend IncludeFiles < <( Ini.GetParam "alter-stable" "Include" < "${PACMAN_CONF-"/etc/pacman.conf"}" 2> /dev/null || true )
+    ArrayIncludes IncludeFiles "${MirrorList}" || {
+        Msg.Err "pacman.conf has been edited. Not reading /etc/pacman.d/mirrorlist."
+        exit 1
+    }
+}
+
+# 取得したミラーが正常か確認
+CheckInfo(){
+    if Ntest "$(ArrayIndex LatestServer)" == 0; then
+        Msg.Err "Failed to get the latest mirror server list."
+        Msg.Err "Please check correct the Internet connection and report it to Fascode Network"
+        exit 1
+    fi
+}
+
+# 最新のミラーを出力
+PrintLatestMirror(){
+    PrintEvalArray LatestServer
+}
+
+#-- Entry point --#
+UpdateCommand(){
+    :
+}
+
+PrintCommand(){
+    CheckEnvironment
+    GetInfo
+    CheckInfo
+    PrintLatestMirror
+}
+
+Main(){
+    #CheckFuncDefined "${Command}Command" || {
+    #    Msg.Err "Unknown command \"$Command\""
+    #    exit 1
+    #}
+
+    #"${Command}Command" "$@"
+
+    case "$Command" in
+        "print")
+            PrintCommand "$@"
+            ;;
+        "update")
+            UpdateCommand "$@"
+            ;;
+    esac
+    exit 0
+}
+
+#-- Parse args--#
+ParseArg LONG="bash-debug,help" SHORT="h" -- "$@" || exit 1
+eval set -- "${OPTRET[*]}"
+unset OPTRET
+
+while Ntest "$#" ">" 0; do
+    case "$1" in
+        "-h" | "--help")
+            HelpDocument
+            exit 0
+            ;;
+        "--bash-debug")
+            set -xv
+            shift 1
+            ;;
+        "--")
+            shift 1
+            break
+            ;;
+        *)
+            Msg.Err "Unexpected error."
+            exit 1
+            ;;
+    esac
+done
+Command="${1-"None"}"
+shift 1 || {
+    Msg.Err "Please specify command"
     exit 1
 }
+
+#-- Start --#
+Main "$@"
