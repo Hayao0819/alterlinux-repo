@@ -84,32 +84,35 @@ CheckPacmanConf(){
 }
 
 CheckEnvironment(){
-    CheckInternet
     CheckRoot
+    CheckInternet
     CheckPacmanConf
 }
 
-GetInfo(){
-    # Get current repo server
-    ArrayAppend CurrentLocalServer < <(Pm.GetRepoServer <<< "alter-stable" | sort)
+GetCurrentLocalServer(){
+    Pm.GetRepoServer <<< "alter-stable"
+}
+
+GetLatestServer(){
+    local _Server=()
 
     # Get latest repo server
     # shellcheck disable=SC2016
-    ArrayAppend LatestServer < <(
+    ArrayAppend _Server < <(
         curl -sL "https://raw.githubusercontent.com/FascodeNet/alterlinux-repo/master/repos/alter-stable/alterlinux-mirrorlist/mirrorlist-alter" | \
             grep -v "^#" | grep -v "^$" | \
-            ForEach eval "Ini.ParseLine <<< '{}'; echo \${VALUE}" | sort
+            ForEach eval "Ini.ParseLine <<< '{}'; echo \${VALUE}" #| sort
     )
-}
 
-# 取得したミラーが正常か確認
-CheckInfo(){
-    if Ntest "$(ArrayIndex LatestServer)" == 0; then
+    if Ntest "$(ArrayIndex _Server)" == 0; then
         Msg.Err "Failed to get the latest mirror server list."
         Msg.Err "Please check correct the Internet connection and report it to Fascode Network"
         exit 1
     fi
+
+    PrintEvalArray _Server
 }
+
 
 # サーバ一覧からミラーリストを生成
 CreateConf(){
@@ -157,15 +160,10 @@ RestoreFromBackup(){
     rm -rf "$MirrorList"
 
     # Create new server list
-    PrintEvalArray LatestServer | CreateConf > "$MirrorList"
+    GetLatestServer | CreateConf > "$MirrorList"
 
     # Check created
     #if [[  ]]
-}
-
-# 最新のミラーを出力
-PrintLatestMirror(){
-    PrintEvalArray LatestServer
 }
 
 #-- Commands --#
@@ -209,10 +207,9 @@ RestoreCommand(){
 }
 
 PrintCommand(){
-    CheckEnvironment
-    GetInfo
-    CheckInfo
-    PrintLatestMirror
+    CheckInternet
+    CheckPacmanConf
+    GetLatestServer
 }
 
 Main(){
