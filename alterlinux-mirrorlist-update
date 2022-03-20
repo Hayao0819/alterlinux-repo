@@ -20,7 +20,9 @@ source "/home/hayao/Git/FasBashLib/fasbashlib.sh"
 
 #-- Config --#
 MirrorList="/etc/pacman.d/mirrorlist-alter"
+BackupDir="/etc/pacman.d/mirrorlist-alter.bak/"
 Command="None"
+
 export PACMAN_CONF="/etc/pacman.conf" # Pm functions in FasBaslib use PACMAN_CONF
 
 #-- Define global arrays--#
@@ -42,20 +44,49 @@ HelpDocument(){
     echo "Commands:"
     echo "    print          Print the latest mirrorlist"
     echo "    update         Update mirrorlist"
+    echo "    backup         Create backup"
     echo "    list           Show backup list"
+    echo "    rawlist        Show backup file path"
     echo "    restore        Restore mirrorlist from backup"
     echo
     echo "Options:"
     echo "    -h | --help    Print this help and exit"
 }
 
+CheckRoot(){
+    Ntest UID == 0 || {
+        Msg.Err "Please run $0 with root permission."
+        exit 1
+    }
+}
 
-CheckEnvironment(){
+CheckInternet(){
     # Internet check
     if ! ping -q -c 1 -W 1 google.com >/dev/null; then
         Msg.Err "There is no internet connection."
         exit 1
     fi
+}
+
+CheckPacmanConf(){
+    # Check exist
+    [[ -e "$PACMAN_CONF" ]] || {
+        Msg.Err "$PACMAN_CONF does not exist."
+        exit 1
+    }
+
+    # Check Include
+    ArrayAppend IncludeFiles < <( Ini.GetParam "alter-stable" "Include" < "${PACMAN_CONF-"/etc/pacman.conf"}" 2> /dev/null || true )
+    ArrayIncludes IncludeFiles "${MirrorList}" || {
+        Msg.Err "pacman.conf has been edited. Not reading /etc/pacman.d/mirrorlist."
+        exit 1
+    }
+}
+
+CheckEnvironment(){
+    CheckInternet
+    CheckRoot
+    CheckPacmanConf
 }
 
 GetInfo(){
@@ -69,13 +100,6 @@ GetInfo(){
             grep -v "^#" | grep -v "^$" | \
             ForEach eval "Ini.ParseLine <<< '{}'; echo \${VALUE}" | sort
     )
-
-    # 設定ファイルのincludesを取得
-    ArrayAppend IncludeFiles < <( Ini.GetParam "alter-stable" "Include" < "${PACMAN_CONF-"/etc/pacman.conf"}" 2> /dev/null || true )
-    ArrayIncludes IncludeFiles "${MirrorList}" || {
-        Msg.Err "pacman.conf has been edited. Not reading /etc/pacman.d/mirrorlist."
-        exit 1
-    }
 }
 
 # 取得したミラーが正常か確認
@@ -87,13 +111,100 @@ CheckInfo(){
     fi
 }
 
+# サーバ一覧からミラーリストを生成
+CreateConf(){
+    ForEach echo "Server = {}"
+}
+
+# バックアップの一覧
+BackupList(){
+    find "$BackupDir" -mindepth 1 -maxdepth 1 -type f | GetBaseName
+}
+
+# バックアップを作成
+# バックアップはServer=なども含めたファイルをそのまま（サーバ一覧だけのバックアップではない）
+CreateBackup(){
+    # get time
+    local _UnixTime _Failed=false
+    _UnixTime="$(date "+%s")" || _Failed=true
+    
+    # Create backup
+    mkdir -p "$BackupDir" || _Failed=true
+    cp "$MirrorList" "${BackupDir}/$_UnixTime" || _Failed=true
+
+    if Bool _Failed; then
+        Msg.Err "Failed to backup $MirrorList"
+        return 1
+    else
+        Msg.Info "Created backup ${BackupDir}/$_UnixTime"
+    fi
+    return 0
+}
+
+# RestoreFromBackup <UNIXTIME>
+RestoreFromBackup(){
+    local _Time="$1"
+
+    test -e "$BackupDir/$_Time" || {
+        Msg.Err "There is no backup created at $(date "+%Y/%m/%d-%H:%M:%S" --date "@$_Time")"
+        return 1
+    }
+
+    # backup current config
+    CreateBackup
+
+    # Remove backuped file
+    rm -rf "$MirrorList"
+
+    # Create new server list
+    PrintEvalArray LatestServer | CreateConf > "$MirrorList"
+
+    # Check created
+    #if [[  ]]
+}
+
 # 最新のミラーを出力
 PrintLatestMirror(){
     PrintEvalArray LatestServer
 }
 
-#-- Entry point --#
+#-- Commands --#
+ListCommand(){
+    declare -A _Date
+    local _PrintList=()
+
+    # バックアップに対応した日付一覧を取得
+    # PrintArray "${!_Date[@]}"でバックアップのファイル名一覧を取得
+    # echo ${_Date["UNIXTIME"]}で文字列化された日付一覧を取得
+    # shellcheck disable=SC2016
+    ForEach eval '_Date["{}"]="$(date "+%Y/%m/%d-%H:%M:%S" --date "@{}")"' < <(BackupList)
+
+    # shellcheck disable=SC2016
+    ArrayAppend _PrintList < <(PrintArray "${!_Date[@]}" | ForEach eval echo -e '${_Date[{}]}: ${BackupDir%/}/{}')
+    
+    local _Day
+    while read -r _Day; do
+        echo "$_Day"
+        PrintEvalArray _PrintList | grep "^$_Day" | sed "s|^${_Day}-|    |g"
+    done < <(PrintArray "${_Date[@]}" | cut -d "-" -f 1 | sort | uniq)  
+    
+    #ForEach eval 'echo {}; PrintEvalArray _PrintList | grep "^{}" | sed "s|^{}-|    |g"' < <(PrintArray "${_Date[@]}" | cut -d "-" -f 1 | sort | uniq)  
+}
+
+RawListCommand(){
+    BackupList | ForEach echo "${BackupDir%/}/{}"
+}
+
+BackupCommand(){
+    CheckRoot
+    CreateBackup
+}
+
 UpdateCommand(){
+    :
+}
+
+RestoreCommand(){
     :
 }
 
@@ -118,6 +229,19 @@ Main(){
             ;;
         "update")
             UpdateCommand "$@"
+            ;;
+        "backup")
+            BackupCommand "$@"
+            ;;
+        "list")
+            ListCommand "$@"
+            ;;
+        "rawlist")
+            RawListCommand "$@"
+            ;;
+        *)
+            Msg.Err "Unknown command \"$Command\""
+            exit 1
             ;;
     esac
     exit 0
