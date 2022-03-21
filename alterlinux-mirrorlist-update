@@ -22,6 +22,7 @@ source "/home/hayao/Git/FasBashLib/fasbashlib.sh"
 MirrorList="/etc/pacman.d/mirrorlist-alter"
 BackupDir="/etc/pacman.d/mirrorlist-alter.bak/"
 Command="None"
+DryRun=false
 
 export PACMAN_CONF="/etc/pacman.conf" # Pm functions in FasBaslib use PACMAN_CONF
 
@@ -42,16 +43,17 @@ HelpDocument(){
     echo "If you want that, use reflector."
     echo
     echo "Commands:"
-    echo "    print          Print the latest mirrorlist"
-    echo "    update         Update mirrorlist"
-    echo "    backup         Create backup"
-    echo "    list           Show backup list"
-    echo "    rawlist        Show backup file path"
-    echo "    restore        Restore mirrorlist from backup"
-    echo "    cat [UnixTime] Open backup file"
+    echo "    print           Print the latest mirrorlist"
+    echo "    update          Update mirrorlist"
+    echo "    backup          Create backup"
+    echo "    list            Show backup list"
+    echo "    rawlist         Show backup file path"
+    echo "    restore         Restore mirrorlist from backup"
+    echo "    cat [UnixTime]  Open backup file"
     echo
     echo "Options:"
-    echo "    -h | --help    Print this help and exit"
+    echo "    -h | --help     Print this help and exit"
+    echo "        --dry       Do not write anything to any file and show it in stdout"
 }
 
 CheckRoot(){
@@ -131,11 +133,23 @@ WriteConf(){
         mkdir -p "$(dirname "$_ConfigFile")"
     }
 
-    readarray _Stdin
-    PrintEvalArray _Stdin > "$_ConfigFile" || {
-        Msg.Err "Faild to write config to $_ConfigFile"
+    local _Stdin=()
+    ArrayAppend _Stdin
+    [[ -n "${_Stdin[*]}" ]] || {
+        Msg.Err "WriteConf function tried to write null"
         return 1
     }
+
+    if Bool DryRun; then
+        Msg.Debug "Dry Run (Write to $_ConfigFile)"
+        PrintEvalArray _Stdin
+    else
+        PrintEvalArray _Stdin > "$_ConfigFile" || {
+            Msg.Err "Faild to write config to $_ConfigFile"
+            return 1
+        }
+    fi
+    return 0
 }
 
 # バックアップの一覧
@@ -178,7 +192,6 @@ RestoreFromBackup(){
 
     # Remove backuped file
     #rm -rf "$MirrorList"
-    echo -n > "$MirrorList"
 
     WriteConf "$MirrorList" < "$_BackupFile"
 }
@@ -293,7 +306,7 @@ Main(){
 }
 
 #-- Parse args--#
-ParseArg LONG="bash-debug,help" SHORT="h" -- "$@" || exit 1
+ParseArg LONG="bash-debug,help,dry" SHORT="h" -- "$@" || exit 1
 eval set -- "${OPTRET[*]}"
 unset OPTRET
 
@@ -305,6 +318,10 @@ while Ntest "$#" ">" 0; do
             ;;
         "--bash-debug")
             set -xv
+            shift 1
+            ;;
+        "--dry")
+            DryRun=true
             shift 1
             ;;
         "--")
