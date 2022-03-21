@@ -186,7 +186,7 @@ RestoreFromBackup(){
 # 最新のサーバリストを取得してローカルに書き込みます
 UpdateServerList(){
     Msg.Info "Creating and writing the latest mirrorlist..."
-    GetLatestServer | CreateConf | WriteConf
+    GetLatestServer | CreateConf | WriteConf "$MirrorList"
 }
 
 #-- Commands --#
