@@ -48,6 +48,7 @@ HelpDocument(){
     echo "    list           Show backup list"
     echo "    rawlist        Show backup file path"
     echo "    restore        Restore mirrorlist from backup"
+    echo "    cat [UnixTime] Open backup file"
     echo
     echo "Options:"
     echo "    -h | --help    Print this help and exit"
@@ -115,8 +116,26 @@ GetLatestServer(){
 
 
 # サーバ一覧からミラーリストを生成
+# サーバ一覧は標準入力から取得
 CreateConf(){
     ForEach echo "Server = {}"
+}
+
+
+# 設定ファイルを指定したファイルに書き込み
+# 設定は標準入力から受け取り、書き込み先を$1に指定
+WriteConf(){
+    local _ConfigFile="$1"
+    test -e "$_ConfigFile" || {
+        Msg.Warn "$_ConfigFile does not exist."
+        mkdir -p "$(dirname "$_ConfigFile")"
+    }
+
+    readarray _Stdin
+    PrintEvalArray _Stdin > "$_ConfigFile" || {
+        Msg.Err "Faild to write config to $_ConfigFile"
+        return 1
+    }
 }
 
 # バックアップの一覧
@@ -147,6 +166,7 @@ CreateBackup(){
 # RestoreFromBackup <UNIXTIME>
 RestoreFromBackup(){
     local _Time="$1"
+    local _BackupFile="$BackupDir/$_Time"
 
     test -e "$BackupDir/$_Time" || {
         Msg.Err "There is no backup created at $(date "+%Y/%m/%d-%H:%M:%S" --date "@$_Time")"
@@ -157,13 +177,16 @@ RestoreFromBackup(){
     CreateBackup
 
     # Remove backuped file
-    rm -rf "$MirrorList"
+    #rm -rf "$MirrorList"
+    echo -n > "$MirrorList"
 
-    # Create new server list
-    GetLatestServer | CreateConf > "$MirrorList"
+    WriteConf "$MirrorList" < "$_BackupFile"
+}
 
-    # Check created
-    #if [[  ]]
+# 最新のサーバリストを取得してローカルに書き込みます
+UpdateServerList(){
+    Msg.Info "Creating and writing the latest mirrorlist..."
+    GetLatestServer | CreateConf | WriteConf
 }
 
 #-- Commands --#
@@ -199,7 +222,8 @@ BackupCommand(){
 }
 
 UpdateCommand(){
-    :
+    CheckEnvironment
+    UpdateServerList
 }
 
 RestoreCommand(){
@@ -210,6 +234,24 @@ PrintCommand(){
     CheckInternet
     CheckPacmanConf
     GetLatestServer
+}
+
+CatCommand(){
+    local _Time="${1-""}"
+
+    # Check argument
+    [[ -n "$_Time" ]] || {
+        Msg.Err "Please specfy Unix Time you want to open"
+        exit 1
+    }
+
+    local _FullPath="$BackupDir/$_Time"
+    [[ -e "$_FullPath" ]] || {
+        MSg.Err "$_FullPath does not found"
+        Msg.Err "Please see a list of backup with \"$0 list\""
+    }
+
+    cat "$_FullPath"
 }
 
 Main(){
@@ -235,6 +277,12 @@ Main(){
             ;;
         "rawlist")
             RawListCommand "$@"
+            ;;
+        #"restore")
+        #    RestoreCommand "$@"
+        #    ;;
+        "cat")
+            CatCommand "$@"
             ;;
         *)
             Msg.Err "Unknown command \"$Command\""
