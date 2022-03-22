@@ -35,12 +35,13 @@ IncludeFiles=()
 
 #-- Functions --#
 HelpDocument(){
-    echo "AlterLinux MirrorList Update"
+    echo "AlterLinux MirrorList Update -- mirrorlist manager"
     echo "Usage: $0 [options] [command]"
     echo
-    echo "Update mirrorlist of Alter Linux from GitHub."
-    echo "This script DO NOT update Arch Linux mirrorlist."
-    echo "If you want that, use reflector."
+    echo "Note:"
+    echo " Update mirrorlist of Alter Linux from GitHub."
+    echo " This script DO NOT update Arch Linux mirrorlist."
+    echo " If you want that, use reflector."
     echo
     echo "Commands:"
     echo "    print           Print the latest mirrorlist"
@@ -48,8 +49,9 @@ HelpDocument(){
     echo "    backup          Create backup"
     echo "    list            Show backup list"
     echo "    rawlist         Show backup file path"
-    echo "    restore         Restore mirrorlist from backup"
-    echo "    cat [UnixTime]  Open backup file"
+    echo "    restore [Time]  Restore mirrorlist from backup"
+    echo "                    (Time is optional)"
+    echo "    cat [Time]      Open backup file"
     echo
     echo "Options:"
     echo "    -h | --help     Print this help and exit"
@@ -157,6 +159,21 @@ BackupList(){
     find "$BackupDir" -mindepth 1 -maxdepth 1 -type f | GetBaseName
 }
 
+# 最新のバックアップを取得
+GetLatestBackup(){
+    BackupList | sort | tail -n 1
+}
+
+# GetTimeStr <UNIXTIME>
+GetTimeStr(){
+    date "+%Y/%m/%d-%H:%M:%S" --date "@${1}"
+}
+
+# GetUnixTime <TineStr>
+GetUnixTime(){
+    date "+%s" --date "$(tr "-" " " <<< "${1}")"
+}
+
 # バックアップを作成
 # バックアップはServer=なども含めたファイルをそのまま（サーバ一覧だけのバックアップではない）
 CreateBackup(){
@@ -183,7 +200,7 @@ RestoreFromBackup(){
     local _BackupFile="$BackupDir/$_Time"
 
     test -e "$BackupDir/$_Time" || {
-        Msg.Err "There is no backup created at $(date "+%Y/%m/%d-%H:%M:%S" --date "@$_Time")"
+        Msg.Err "There is no backup created at $(GetTimeStr "$_Time")"
         return 1
     }
 
@@ -211,7 +228,7 @@ ListCommand(){
     # PrintArray "${!_Date[@]}"でバックアップのファイル名一覧を取得
     # echo ${_Date["UNIXTIME"]}で文字列化された日付一覧を取得
     # shellcheck disable=SC2016
-    ForEach eval '_Date["{}"]="$(date "+%Y/%m/%d-%H:%M:%S" --date "@{}")"' < <(BackupList)
+    ForEach eval '_Date["{}"]="$(GetTimeStr "{}")"' < <(BackupList)
 
     # shellcheck disable=SC2016
     ArrayAppend _PrintList < <(PrintArray "${!_Date[@]}" | ForEach eval echo -e '${_Date[{}]}: ${BackupDir%/}/{}')
@@ -239,8 +256,34 @@ UpdateCommand(){
     UpdateServerList
 }
 
+RestoreCommand_NoArg(){
+    local _Selected="" _Default="" _Time=""
+    local _Ask="Which backup do you want to restore?"
+    local _BackupDateList=()
+
+    # 情報を取得
+    readarray -t _BackupDateList < <(BackupList | ForEach GetTimeStr "{}")
+    _Default="$(GetTimeStr "$(GetLatestBackup)")"
+
+    # Ask
+    _Selected="$(Choice -p "$_Ask" -d "${_Default}" "${_BackupDateList[@]}" )"
+    _Time="$(GetUnixTime "$_Selected")"
+
+    # 実行
+    RestoreFromBackup "$_Time"
+
+}
+
 RestoreCommand(){
-    :
+    local _Time="${1-""}"
+    CheckRoot
+    CheckPacmanConf
+
+    if [[ -z "$_Time" ]]; then
+        RestoreCommand_NoArg
+    else
+        RestoreFromBackup "$_Time"
+    fi
 }
 
 PrintCommand(){
@@ -291,9 +334,9 @@ Main(){
         "rawlist")
             RawListCommand "$@"
             ;;
-        #"restore")
-        #    RestoreCommand "$@"
-        #    ;;
+        "restore")
+            RestoreCommand "$@"
+            ;;
         "cat")
             CatCommand "$@"
             ;;
