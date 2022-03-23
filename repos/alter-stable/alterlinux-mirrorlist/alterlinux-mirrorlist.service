@@ -1,0 +1,13 @@
+[Unit]
+Description=Update the Alter Linux mirror list
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/alterlinux-mirrorlist-update update
+ExecStop=/usr/bin/nm-vpngate --stop
+Restart=no
+RemainAfterExit=yes
+
+[Install]
+WantedBy=network-online.target
