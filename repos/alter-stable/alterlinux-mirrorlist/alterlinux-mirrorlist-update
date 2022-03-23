@@ -132,14 +132,6 @@ GetLatestServer(){
     fi
 }
 
-
-# サーバ一覧からミラーリストを生成
-# サーバ一覧は標準入力から取得
-CreateConf(){
-    ForEach echo "Server = {}"
-}
-
-
 # 設定ファイルを指定したファイルに書き込み
 # 設定は標準入力から受け取り、書き込み先を$1に指定
 WriteConf(){
@@ -185,14 +177,10 @@ GetLatestBackup(){
 }
 
 # GetTimeStr <UNIXTIME>
-GetTimeStr(){
-    date "+%Y/%m/%d-%H:%M:%S" --date "@${1}"
-}
+GetTimeStr(){ date "+%Y/%m/%d-%H:%M:%S" --date "@${1}"; }
 
 # GetUnixTime <TineStr>
-GetUnixTime(){
-    date "+%s" --date "$(tr "-" " " <<< "${1}")"
-}
+GetUnixTime(){ date "+%s" --date "$(tr "-" " " <<< "${1}")"; }
 
 # バックアップを作成
 # バックアップはServer=なども含めたファイルをそのまま（サーバ一覧だけのバックアップではない）
@@ -217,9 +205,8 @@ CreateBackup(){
     if Bool _Failed; then
         Msg.Err "Failed to backup $MirrorList"
         return 1
-    else
-        Msg.Info "Created backup ${BackupDir}/$_UnixTime"
     fi
+    Msg.Info "Created backup ${BackupDir}/$_UnixTime"
     return 0
 }
 
@@ -273,7 +260,8 @@ ListCommand(){
 }
 
 RawListCommand(){
-    BackupList | ForEach echo "${BackupDir%/}/{}"
+    #BackupList | ForEach echo "${BackupDir%/}/{}"
+    sed "s|^|${BackupDir%/}/|g" < <(BackupList)
 }
 
 BackupCommand(){
