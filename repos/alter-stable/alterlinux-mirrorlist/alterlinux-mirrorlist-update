@@ -100,14 +100,21 @@ GetCurrentLocalServer(){
     Pm.GetRepoServer <<< "alter-stable"
 }
 
+
+# GetLatestServer <server/raw>
+# shellcheck disable=SC2120
 GetLatestServer(){
-    local _Server=()
+    local _Mode="${1-"server"}" _Server=() _RawText=()
+
+    # Get raw server
+    ArrayAppend _RawText < <(
+        curl -sL "https://raw.githubusercontent.com/FascodeNet/alterlinux-repo/master/repos/alter-stable/alterlinux-mirrorlist/mirrorlist-alter"
+    )
 
     # Get latest repo server
     # shellcheck disable=SC2016
     ArrayAppend _Server < <(
-        curl -sL "https://raw.githubusercontent.com/FascodeNet/alterlinux-repo/master/repos/alter-stable/alterlinux-mirrorlist/mirrorlist-alter" | \
-            grep -v "^#" | grep -v "^$" | \
+        PrintEvalArray _RawText | grep -v "^#" | grep -v "^$" | \
             ForEach eval "Ini.ParseLine <<< '{}'; echo \${VALUE}" #| sort
     )
 
@@ -117,7 +124,11 @@ GetLatestServer(){
         exit 1
     fi
 
-    PrintEvalArray _Server
+    if [[ "$_Mode" = "raw" ]]; then
+        PrintEvalArray _RawText
+    elif [[ "$_Mode" = "server" ]]; then
+        PrintEvalArray _Server
+    fi
 }
 
 
@@ -218,7 +229,7 @@ RestoreFromBackup(){
 # 最新のサーバリストを取得してローカルに書き込みます
 UpdateServerList(){
     Msg.Info "Creating and writing the latest mirrorlist..."
-    GetLatestServer | CreateConf | WriteConf "$MirrorList"
+    GetLatestServer "raw" | WriteConf "$MirrorList"
 }
 
 #-- Commands --#
@@ -291,7 +302,7 @@ RestoreCommand(){
 PrintCommand(){
     CheckInternet
     CheckPacmanConf
-    GetLatestServer
+    GetLatestServer "server"
 }
 
 CatCommand(){

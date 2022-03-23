@@ -7,6 +7,7 @@ pkgdesc='AlterLinux repository mirrorlists'
 arch=('any')
 url='https:/fascode.net'
 fasbashlib="v0.1.3"
+backup=("etc/pacman.d/mirrorlist-alter")
 source=("mirrorlist-alter" 
         "alterlinux-mirrorlist-update"
         "alterlinux-mirrorlist.service"
