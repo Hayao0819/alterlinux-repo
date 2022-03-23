@@ -14,9 +14,11 @@ set -Eeu -o pipefail
 
 # Load FasBashLib v0.1.1 that is a collection of shell functions written by Hayao0819
 # shellcheck source=/dev/null
-#source /dev/stdin < <(curl -sL "https://github.com/Hayao0819/FasBashLib/releases/download/v0.1.1/fasbashlib.sh")
-#source /dev/stdin < <(curl -sL "https://raw.githubusercontent.com/Hayao0819/FasBashLib/build-0.1.x/fasbashlib.sh")
-source "/home/hayao/Git/FasBashLib/fasbashlib.sh"
+source "/usr/lib/alterlinux-mirrorlist/fasbashlib.sh" 2> /dev/null 1>&2 || true
+if [[ -z "${FSBLIB_VERSION-""}" ]]; then
+    source /dev/stdin < <(curl -sL "https://github.com/Hayao0819/FasBashLib/releases/download/v0.1.3/fasbashlib.sh")
+fi
+
 
 #-- Config --#
 MirrorList="/etc/pacman.d/mirrorlist-alter"
