@@ -18,6 +18,6 @@ sha256sums=('4bb31a0c4569ffa82642a118beb2a513163937fb33b46970d545de98e731ab69'
 package() {
     install -Dm644 "${srcdir}/mirrorlist-alter" "${pkgdir}/etc/pacman.d/mirrorlist-alter"
     install -Dm755 "${srcdir}/alterlinux-mirrorlist-update" "${pkgdir}/usr/bin/alterlinux-mirrorlist-update"
-    install -Dm644 "${srcdir}/alterlinux-mirrorlist.service" "${srcdir}/usr/lib/systemd/system/alterlinux-mirrorlist.service"
+    install -Dm644 "${srcdir}/alterlinux-mirrorlist.service" "${pkgdir}/usr/lib/systemd/system/alterlinux-mirrorlist.service"
     install -Dm755 "${srcdir}/fasbashlib.sh" "${pkgdir}/usr/lib/alterlinux-mirrorlist/fasbashlib.sh"
 }
