@@ -1,10 +1,14 @@
 FROM archlinux:latest
 
 # Setuo mirror
-RUN echo 'Server = https://mirrors.kernel.org/archlinux/$repo/os/$arch' > /etc/pacman.d/mirrorlist
-RUN pacman -Sy --noconfirm reflector
+RUN echo 'Server = http://mirrors.cat.net/archlinux/$repo/os/$arch' > /etc/pacman.d/mirrorlist
+RUN pacman -Sy --noconfirm
+RUN pacman-key --init
+RUN pacman -S archlinux-keyring --noconfirm
+RUN pacman -Su --noconfirm
+RUN pacman -S --noconfirm reflector
 RUN reflector --protocol https -c Japan --sort rate --save /etc/pacman.d/mirrorlist
-RUN pacman -Sy --noconfirm devtools base-devel
+RUN pacman -Sy --noconfirm devtools base-devel --needed
 RUN systemd-machine-id-setup
 
 # Setup environment
