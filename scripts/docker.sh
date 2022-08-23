@@ -73,8 +73,10 @@ shift 1
 #-- Run --#
 set -xv
 HomeDir="$(eval echo ~"$USER")"
-sudo usermod -u "$USER_ID" -o "$USER"
-sudo groupmod -g "$GROUP_ID" "$USER"
+{
+    sudo usermod -u "$USER_ID" -o "$USER"
+    sudo groupmod -g "$GROUP_ID" "$USER"
+} || true
 
 ShowVariable ALTER_MAIN_DIR
 ShowVariable ALTER_WORK_DIR
