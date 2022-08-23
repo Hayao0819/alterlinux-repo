@@ -60,7 +60,7 @@ UpdateChrootPkgs(){
     local CHROOT="$WorkDir/Chroot/$_Arch/"
 
     MsgDebug "Update packages in chroot environment"
-    setarch "$_Arch" arch-nspawn -s "$CHROOT/root" pacman -Syyu
+    setarch "$_Arch" arch-nspawn -s "$CHROOT/root" pacman -Syyu --noconfirm
 }
 
 # RunMakePkg <ARCH> <PKGBUILD PATH> <MAKEPKG Args ...>
