@@ -13,12 +13,18 @@ MainDir="$CurrentDir/"
 ReposDir="$CurrentDir/repos"
 source "${LibDir}/loader.sh"
 
+#-- Consts (Do not edit) --#
+DockerName="alterlinux-repo-build"
+DockerTagName="$(date +%s)"
+
 
 #-- Configs --#
 OutDir="${HOME}/repo/"
 WorkDir="${HOME}/work"
 GPGKey=""
-DockerName="alterlinux-repo-build"
+KeepOldImage=false
+
+#-- Internal Configs --#
 DOCKER_RUN_OPT=()
 DOCKER_BUILD_OPT=()
 Main_OPT=()
@@ -29,6 +35,7 @@ HelpDoc(){
     echo "usage: start.sh [option]"
     echo
     echo " General options:"
+    echo "    -g | --gpg               Specify GPG key"
     echo "    -h | --help              This help message"
 }
 DockerMountDir(){
@@ -75,8 +82,27 @@ fi
 DOCKER_RUN_OPT+=("--env" "GROUP_ID=$(id -g)" "--env" "USER_ID=$(id -u)")
 
 # 
-DOCKER_BUILD_OPT+=(-t "$DockerName:latest" "${CurrentDir}")
-DOCKER_RUN_OPT+=(--rm --privileged=true -it "$DockerName:latest")
+DOCKER_BUILD_OPT+=(-t "$DockerName:$DockerTagName" "${CurrentDir}")
+DOCKER_RUN_OPT+=(--rm --privileged=true -it "$DockerName:${DockerTagName}")
+
+#-- Remove old image --#
+if ! Bool "KeepOldImage"; then
+    readarray -t DockerImageList < <(docker images --format "{{.Repository}}:{{.Tag}}:{{.ID}}")
+    # shellcheck disable=SC2126
+    ImageCount="$(PrintArray "${DockerImageList[@]}" | grep "^${DockerName}:" | wc -l)"
+
+    MsgWarn "Remove old docker image"
+    for Image in "${DockerImageList[@]}"; do
+        if (( ImageCount <= 1 )); then
+            break
+        fi
+        if [[ "$(cut -d ":" -f 1 <<< "$Image")" = "$DockerName" ]]; then
+            MsgWarn "Remove $Image"
+            docker rmi "$(cut -d ":" -f 1,2 <<< "$Image")"
+            ImageCount=$((ImageCount - 1))
+        fi
+    done
+fi
 
 #-- Run --#
 docker build "${DOCKER_BUILD_OPT[@]}" 
