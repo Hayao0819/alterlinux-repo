@@ -48,6 +48,10 @@ Libraries=(
 )
 LoadShellFiles "${Libraries[@]}"
 
+# Load FasBashLib
+# shellcheck source=/dev/null
+source /dev/stdin < <(curl -sL "https://github.com/Hayao0819/FasBashLib/releases/download/v0.2.4/fasbashlib.sh")
+
 # Show bash version
 CheckBashVersion
 
