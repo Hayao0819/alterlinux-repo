@@ -61,6 +61,7 @@ PrepareBuild(){
 
     # Check archlinux-keyring
     if [[ "$(Pm.GetLatestPkgVer <<< "archlinux-keyring")" != $(Pm.GetInstalledPkgVer <<< "archlinux-keyring") ]]; then
+        MsgWarn "Installed: $(Pm.GetInstalledPkgVer <<< "archlinux-keyring") Latest: $(Pm.GetLatestPkgVer <<< "archlinux-keyring")"
         sudo pacman --config "$MainDir/configs/pacman-x86_64.conf" -Sy --noconfirm archlinux-keyring
         sudo pacman-key --populate archlinux
     fi
