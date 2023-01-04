@@ -1,0 +1,408 @@
+#!/usr/bin/env bash
+#
+# Yamada Hayao
+# Twitter: @Hayao0819
+# Email  : hayao@fascode.net
+#
+# (c) 2019-2021 Fascode Network.
+#
+# shellcheck disable=SC2034
+
+#-- Initilize script --#
+set -Eeu -o pipefail 
+
+
+# Load FasBashLib v0.1.1 that is a collection of shell functions written by Hayao0819
+# shellcheck source=/dev/null
+source "/usr/lib/alterlinux-mirrorlist/fasbashlib.sh" 2> /dev/null 1>&2 || true
+if [[ -z "${FSBLIB_VERSION-""}" ]]; then
+    source /dev/stdin < <(curl -sL "https://github.com/Hayao0819/FasBashLib/releases/download/v0.1.3/fasbashlib.sh")
+fi
+
+
+#-- Config --#
+MirrorList="/etc/pacman.d/mirrorlist-alter"
+BackupDir="/etc/pacman.d/mirrorlist-alter.bak/"
+Command="None"
+DryRun=false
+
+export PACMAN_CONF="/etc/pacman.conf" # Pm functions in FasBaslib use PACMAN_CONF
+
+#-- Define global arrays--#
+CurrentLocalServer=()
+LatestServer=()
+IncludeFiles=()
+
+#-- 整形 --#
+BackupDir="${BackupDir%/}"
+
+#-- Functions --#
+HelpDocument(){
+    echo "AlterLinux MirrorList Update -- mirrorlist manager"
+    echo "Usage: $0 [options] [command]"
+    echo
+    echo "Note:"
+    echo " Update mirrorlist of Alter Linux from GitHub."
+    echo " This script DO NOT update Arch Linux mirrorlist."
+    echo " If you want that, use reflector."
+    echo
+    echo "Commands:"
+    echo "    print           Print the latest mirrorlist"
+    echo "    update          Update mirrorlist"
+    echo "    backup          Create backup"
+    echo "    list            Show backup list"
+    echo "    rawlist         Show backup file path"
+    echo "    restore [Time]  Restore mirrorlist from backup"
+    echo "                    (Time is optional)"
+    echo "    cat [Time]      Open backup file"
+    echo
+    echo "Options:"
+    echo "    -h | --help     Print this help and exit"
+    echo "        --dry       Do not write anything to any file and show it in stdout"
+}
+
+CheckRoot(){
+    Ntest UID == 0 || {
+        Msg.Err "Please run $0 with root permission."
+        exit 1
+    }
+}
+
+CheckInternet(){
+    # Internet check
+    if ! ping -q -c 1 -W 1 google.com >/dev/null; then
+        Msg.Err "There is no internet connection."
+        exit 1
+    fi
+}
+
+CheckPacmanConf(){
+    # Check exist
+    [[ -e "$PACMAN_CONF" ]] || {
+        Msg.Err "$PACMAN_CONF does not exist."
+        exit 1
+    }
+
+    # Check Include
+    ArrayAppend IncludeFiles < <( Ini.GetParam "alter-stable" "Include" < "${PACMAN_CONF-"/etc/pacman.conf"}" 2> /dev/null || true )
+    ArrayIncludes IncludeFiles "${MirrorList}" || {
+        Msg.Err "pacman.conf has been edited. Not reading /etc/pacman.d/mirrorlist."
+        exit 1
+    }
+}
+
+CheckEnvironment(){
+    CheckRoot
+    CheckInternet
+    CheckPacmanConf
+}
+
+GetCurrentLocalServer(){
+    Pm.GetRepoServer <<< "alter-stable"
+}
+
+
+# GetLatestServer <server/raw>
+# shellcheck disable=SC2120
+GetLatestServer(){
+    local _Mode="${1-"server"}" _Server=() _RawText=()
+
+    # Get raw server
+    ArrayAppend _RawText < <(
+        curl -sL "https://raw.githubusercontent.com/FascodeNet/alterlinux-repo/master/repos/alter-stable/alterlinux-mirrorlist/mirrorlist-alter"
+    )
+
+    # Get latest repo server
+    # shellcheck disable=SC2016
+    ArrayAppend _Server < <(
+        PrintEvalArray _RawText | grep -v "^#" | grep -v "^$" | \
+            ForEach eval "Ini.ParseLine <<< '{}'; echo \${VALUE}" #| sort
+    )
+
+    if Ntest "$(ArrayIndex _Server)" == 0; then
+        Msg.Err "Failed to get the latest mirror server list."
+        Msg.Err "Please check correct the Internet connection and report it to Fascode Network"
+        exit 1
+    fi
+
+    if [[ "$_Mode" = "raw" ]]; then
+        PrintEvalArray _RawText
+    elif [[ "$_Mode" = "server" ]]; then
+        PrintEvalArray _Server
+    fi
+}
+
+# 設定ファイルを指定したファイルに書き込み
+# 設定は標準入力から受け取り、書き込み先を$1に指定
+WriteConf(){
+    local _ConfigFile="$1"
+    test -e "$_ConfigFile" || {
+        Msg.Warn "$_ConfigFile does not exist."
+        mkdir -p "$(dirname "$_ConfigFile")"
+    }
+
+    local _Stdin=()
+    ArrayAppend _Stdin
+    [[ -n "${_Stdin[*]}" ]] || {
+        Msg.Err "WriteConf function tried to write null"
+        return 1
+    }
+
+    if Bool DryRun; then
+        Msg.Debug "Dry Run (Write to $_ConfigFile)"
+        PrintEvalArray _Stdin
+    else
+        PrintEvalArray _Stdin > "$_ConfigFile" || {
+            Msg.Err "Faild to write config to $_ConfigFile"
+            return 1
+        }
+    fi
+    return 0
+}
+
+# バックアップの一覧
+BackupList(){
+    [[ -e "$BackupDir" ]] || return 0
+    find "$BackupDir" -mindepth 1 -maxdepth 1 -type f | GetBaseName
+}
+
+# 最新のバックアップを取得
+GetLatestBackup(){
+    local _Latest
+    _Latest="$(BackupList | sort | tail -n 1)"
+    if [[ -z "$_Latest" ]]; then
+        return 1
+    fi
+    echo "$_Latest"
+}
+
+# GetTimeStr <UNIXTIME>
+GetTimeStr(){ date "+%Y/%m/%d-%H:%M:%S" --date "@${1}"; }
+
+# GetUnixTime <TineStr>
+GetUnixTime(){ date "+%s" --date "$(tr "-" " " <<< "${1}")"; }
+
+# バックアップを作成
+# バックアップはServer=なども含めたファイルをそのまま（サーバ一覧だけのバックアップではない）
+CreateBackup(){
+    # get time
+    local _UnixTime _Failed=false _LatestBackup
+    _UnixTime="$(date "+%s")" || _Failed=true
+
+    if _LatestBackup="$(GetLatestBackup)"; then
+        # Check diff
+        if cmp "$MirrorList" "${BackupDir}/${_LatestBackup}"; then
+            Msg.Info "The latest backup and the current mirror list match."
+            Msg.Info "Skip the backup."
+            return 0
+        fi
+    fi
+
+    # Create backup
+    mkdir -p "$BackupDir" || _Failed=true
+    cp "$MirrorList" "${BackupDir}/$_UnixTime" || _Failed=true
+
+    if Bool _Failed; then
+        Msg.Err "Failed to backup $MirrorList"
+        return 1
+    fi
+    Msg.Info "Created backup ${BackupDir}/$_UnixTime"
+    return 0
+}
+
+# RestoreFromBackup <UNIXTIME>
+RestoreFromBackup(){
+    local _Time="$1"
+    local _BackupFile="$BackupDir/$_Time"
+
+    test -e "$BackupDir/$_Time" || {
+        Msg.Err "There is no backup created at $(GetTimeStr "$_Time")"
+        return 1
+    }
+
+    # backup current config
+    CreateBackup
+
+    # Remove backuped file
+    #rm -rf "$MirrorList"
+
+    WriteConf "$MirrorList" < "$_BackupFile"
+}
+
+# 最新のサーバリストを取得してローカルに書き込みます
+UpdateServerList(){
+    CreateBackup
+    Msg.Info "Creating and writing the latest mirrorlist..."
+    GetLatestServer "raw" | WriteConf "$MirrorList"
+}
+
+#-- Commands --#
+ListCommand(){
+    declare -A _Date
+    local _PrintList=()
+
+    # バックアップに対応した日付一覧を取得
+    # PrintArray "${!_Date[@]}"でバックアップのファイル名一覧を取得
+    # echo ${_Date["UNIXTIME"]}で文字列化された日付一覧を取得
+    # shellcheck disable=SC2016
+    ForEach eval '_Date["{}"]="$(GetTimeStr "{}")"' < <(BackupList)
+
+    # shellcheck disable=SC2016
+    ArrayAppend _PrintList < <(PrintArray "${!_Date[@]}" | ForEach eval echo -e '${_Date[{}]}: ${BackupDir%/}/{}')
+    
+    local _Day
+    while read -r _Day; do
+        echo "$_Day"
+        PrintEvalArray _PrintList | grep "^$_Day" | sed "s|^${_Day}-|    |g"
+    done < <(PrintArray "${_Date[@]}" | cut -d "-" -f 1 | sort | uniq)  
+    
+    #ForEach eval 'echo {}; PrintEvalArray _PrintList | grep "^{}" | sed "s|^{}-|    |g"' < <(PrintArray "${_Date[@]}" | cut -d "-" -f 1 | sort | uniq)  
+}
+
+RawListCommand(){
+    #BackupList | ForEach echo "${BackupDir%/}/{}"
+    sed "s|^|${BackupDir%/}/|g" < <(BackupList)
+}
+
+BackupCommand(){
+    CheckRoot
+    CreateBackup
+}
+
+UpdateCommand(){
+    CheckEnvironment
+    UpdateServerList
+}
+
+RestoreCommand_NoArg(){
+    local _Selected="" _Default="" _Time=""
+    local _Ask="Which backup do you want to restore?"
+    local _BackupDateList=()
+
+    # 情報を取得
+    readarray -t _BackupDateList < <(BackupList | ForEach GetTimeStr "{}")
+    _Default="$(GetTimeStr "$(GetLatestBackup)")"
+
+    # Ask
+    _Selected="$(Choice -p "$_Ask" -d "${_Default}" "${_BackupDateList[@]}" )"
+    _Time="$(GetUnixTime "$_Selected")"
+
+    # 実行
+    RestoreFromBackup "$_Time"
+
+}
+
+RestoreCommand(){
+    local _Time="${1-""}"
+    CheckRoot
+    CheckPacmanConf
+
+    if [[ -z "$_Time" ]]; then
+        RestoreCommand_NoArg
+    else
+        RestoreFromBackup "$_Time"
+    fi
+}
+
+PrintCommand(){
+    CheckInternet
+    CheckPacmanConf
+    GetLatestServer "server"
+}
+
+CatCommand(){
+    local _Time="${1-""}"
+
+    # Check argument
+    [[ -n "$_Time" ]] || {
+        Msg.Err "Please specfy Unix Time you want to open"
+        exit 1
+    }
+
+    local _FullPath="$BackupDir/$_Time"
+    [[ -e "$_FullPath" ]] || {
+        MSg.Err "$_FullPath does not found"
+        Msg.Err "Please see a list of backup with \"$0 list\""
+    }
+
+    cat "$_FullPath"
+}
+
+Main(){
+    #CheckFuncDefined "${Command}Command" || {
+    #    Msg.Err "Unknown command \"$Command\""
+    #    exit 1
+    #}
+
+    #"${Command}Command" "$@"
+
+    case "$Command" in
+        "print")
+            PrintCommand "$@"
+            ;;
+        "update")
+            UpdateCommand "$@"
+            ;;
+        "backup")
+            BackupCommand "$@"
+            ;;
+        "list")
+            ListCommand "$@"
+            ;;
+        "rawlist")
+            RawListCommand "$@"
+            ;;
+        "restore")
+            RestoreCommand "$@"
+            ;;
+        "cat")
+            CatCommand "$@"
+            ;;
+        "help")
+            HelpDocument
+            ;;
+        *)
+            Msg.Err "Unknown command \"$Command\""
+            exit 1
+            ;;
+    esac
+    exit 0
+}
+
+#-- Parse args--#
+ParseArg LONG="bash-debug,help,dry" SHORT="h" -- "$@" || exit 1
+eval set -- "${OPTRET[*]}"
+unset OPTRET
+
+while Ntest "$#" ">" 0; do
+    case "$1" in
+        "-h" | "--help")
+            HelpDocument
+            exit 0
+            ;;
+        "--bash-debug")
+            set -xv
+            shift 1
+            ;;
+        "--dry")
+            DryRun=true
+            shift 1
+            ;;
+        "--")
+            shift 1
+            break
+            ;;
+        *)
+            Msg.Err "Unexpected error."
+            exit 1
+            ;;
+    esac
+done
+Command="${1-"None"}"
+shift 1 || {
+    Msg.Err "Please specify command"
+    exit 1
+}
+
+#-- Start --#
+Main "$@"

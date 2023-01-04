@@ -45,8 +45,15 @@ Libraries=(
   "${LibDir}/chroot.sh"
   "${LibDir}/pkgbuild.sh"
   "${LibDir}/pacman.sh"
+
+  "$MainDir/configs/config.sh"
 )
 LoadShellFiles "${Libraries[@]}"
+
+# Load FasBashLib
+# shellcheck source=/dev/null
+#source /dev/stdin < <(curl -sL "https://github.com/Hayao0819/FasBashLib/releases/download/v0.2.4/fasbashlib.sh")
+source /dev/stdin < <(curl -sL "#https://raw.githubusercontent.com/Hayao0819/FasBashLib/build-0.2.x/fasbashlib.sh")
 
 # Show bash version
 CheckBashVersion

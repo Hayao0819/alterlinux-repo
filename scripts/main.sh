@@ -59,6 +59,13 @@ PrepareBuild(){
         sudo pacman-key --populate alterlinux
     fi
 
+    # Check archlinux-keyring
+    if [[ "$(Pm.GetLatestPkgVer <<< "archlinux-keyring")" != $(Pm.GetInstalledPkgVer <<< "archlinux-keyring") ]]; then
+        MsgWarn "Installed: $(Pm.GetInstalledPkgVer <<< "archlinux-keyring") Latest: $(Pm.GetLatestPkgVer <<< "archlinux-keyring")"
+        sudo pacman --config "$MainDir/configs/pacman-x86_64.conf" -Sy --noconfirm archlinux-keyring
+        sudo pacman-key --populate archlinux
+    fi
+
     # Setup user
     UserCheck "$ChrootUser" || useradd -m -g root -s /bin/bash "$ChrootUser"
     sudo chmod 775 -R "$ReposDir"
@@ -76,6 +83,9 @@ PrepareBuild(){
     #if [[ "${RemoveLockFile}" = true ]]; then
     #    rm -rf "$WorkDir/LockFile"
     #fi
+
+    # Setup keyring
+
 }
 
 CheckEnvironment(){

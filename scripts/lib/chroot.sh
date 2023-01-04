@@ -2,7 +2,14 @@ SetupChroot_x86_64(){
     local CHROOT="$WorkDir/Chroot/x86_64/"
     MakeDir "$CHROOT"
 
-    [[ -e "$CHROOT/root/etc/pacman.conf" ]] && return 0
+    if [[ -e "$CHROOT/root/etc/pacman.conf" ]]; then
+        # Setup keyring
+        #if [[ "$(Pm.GetLatestPkgVer <<< "archlinux-keyring")" != $(Pm.GetInstalledPkgVer <<< "archlinux-keyring") ]]; then
+        #    setarch "x86_64" arch-nspawn -s "$CHROOT/root" pacman -Sy --noconfirm archlinux-keyring
+        #    setarch "x86_64" arch-nspawn -s "$CHROOT/root" pacman-key --populate archlinux
+        #fi
+        return 0
+    fi
 
     # Create chroot
     mkarchroot \
@@ -60,7 +67,7 @@ UpdateChrootPkgs(){
     local CHROOT="$WorkDir/Chroot/$_Arch/"
 
     MsgDebug "Update packages in chroot environment"
-    setarch "$_Arch" arch-nspawn -s "$CHROOT/root" pacman -Syyu
+    setarch "$_Arch" arch-nspawn -s "$CHROOT/root" pacman -Syyu --noconfirm
 }
 
 # RunMakePkg <ARCH> <PKGBUILD PATH> <MAKEPKG Args ...>

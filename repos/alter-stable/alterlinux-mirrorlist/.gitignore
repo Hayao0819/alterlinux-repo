@@ -1,0 +1,7 @@
+*
+!.SRCINFO
+!PKGBUILD
+!alterlinux-mirrorlist-update
+!alterlinux-mirrorlist.service
+!mirrorlist-alter
+!.gitignore

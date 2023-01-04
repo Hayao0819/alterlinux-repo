@@ -118,6 +118,10 @@ else
 fi
 
 
+#-- Warnings --#
+MsgWarn "Do not use this script in production environment."
+MsgWarn "This script is not stable and not tested."
+
 #-- Set SFTP Commands --#
 RunSftpCmd cd "$(dirname "$RemoteRepoPath")"
 if [[ "$Backup" = true ]]; then
